@@ -1,0 +1,16 @@
+#account-balance {
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  background: #ffffff;
+  color: black;
+}
+
+#coins {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.coin-type {
+  border-bottom: 1px solid black;
+}
