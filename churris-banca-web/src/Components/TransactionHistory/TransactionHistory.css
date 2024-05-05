@@ -1,0 +1,48 @@
+#transaction-history {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+}
+
+.card {
+  display: flex;
+  justify-content: space-between;
+  border-radius: 10px;
+  background: #ffffff;
+  color: black;
+}
+
+#coin {
+  display: flex;
+  align-items: center;
+  margin-left: 5px;
+}
+
+#summary {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-left: 10%;
+}
+
+#smaller-text {
+  font-size: smaller;
+}
+
+#amount {
+  display: flex;
+  align-items: center;
+  margin-right: 5px;
+}
+
+.green-text {
+  color: #28a745;
+}
+
+.red-text {
+  color: #dc3545;
+}
+
+.div-line {
+  border: 1px solid black;
+}
