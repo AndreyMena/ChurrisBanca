@@ -1,0 +1,41 @@
+#header {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 5px;
+  background: #ffffff;
+  color: black;
+}
+
+#logo-search {
+  display: flex;
+  align-items: center;
+  margin-left: 5px;
+}
+
+#searchEngine {
+  text-indent: 5px;
+  margin-left: 5px;
+  margin-top: 5px;
+  border-radius: 50px;
+  border: none;
+  background: #e4e6e9;
+}
+
+#menu {
+  display: flex;
+  margin-right: 15%;
+  justify-content: space-evenly;
+  width: 50%;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid black;
+}
+
+#profile-image {
+  display: flex;
+  align-items: center;
+  margin-right: 5px;
+}
