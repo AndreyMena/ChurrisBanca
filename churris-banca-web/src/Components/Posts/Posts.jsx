@@ -1,6 +1,9 @@
 import React from "react";
 import Head from "./Head";
 import Description from "./Description";
+import Img from "./Img";
+import Reactions from "./Reactions";
+import "./Posts.css";
 
 const Posts = () => {
   return (
@@ -9,9 +12,9 @@ const Posts = () => {
 
       <Description />
 
-      <div>
-        <img src="" width="50%" height="200" />
-      </div>
+      <Img />
+
+      <Reactions />
     </div>
   );
 };

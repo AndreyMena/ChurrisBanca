@@ -61,3 +61,31 @@
 .blue-text {
   color: #395996;
 }
+
+/*Reactions*/
+#reactions {
+}
+
+#amount-reactions {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 5px;
+}
+
+.reaction {
+  display: flex;
+  align-items: center;
+}
+
+.div-line {
+  margin-left: 20px;
+  margin-right: 20px;
+  border: 1px solid #dadde1;
+}
+
+#buttons-reactions {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
