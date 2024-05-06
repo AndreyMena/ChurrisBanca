@@ -2,6 +2,7 @@ import React from "react";
 import { IoHomeOutline } from "react-icons/io5";
 import { FaMoneyBillWave } from "react-icons/fa";
 import "./Header.css";
+import SearchEngine from "../Tags/SearchEngine";
 
 export default function Header() {
   return (
@@ -10,7 +11,7 @@ export default function Header() {
         <text>
           <b>Churris Banca</b>
         </text>
-        <input placeholder={`Search`} id="searchEngine" />
+        <SearchEngine text="Buscar" id="search-engine" />
       </div>
       <div id="menu">
         <div className="icon">
