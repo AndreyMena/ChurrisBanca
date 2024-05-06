@@ -6,7 +6,7 @@ import "./CreatePost.css";
 const CreatePost = () => {
   return (
     <div id="create-post">
-      <div id="profile-picture">
+      <div className="profile-picture">
         <CgProfile />
       </div>
       <SearchEngine text="¿Qué estás pensando, User?" id="search-engine" />
