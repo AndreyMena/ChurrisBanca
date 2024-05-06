@@ -1,5 +1,6 @@
 #posts {
   display: flex;
+  flex-direction: column;
   margin-top: 20px;
   border-radius: 10px;
   background: #ffffff;
@@ -47,4 +48,16 @@
 
 #three-dots {
   margin-right: 5px;
+}
+
+/*Description*/
+#description {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-left: 5px;
+}
+
+.blue-text {
+  color: #395996;
 }
