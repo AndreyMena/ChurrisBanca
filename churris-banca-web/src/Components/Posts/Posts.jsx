@@ -1,17 +1,16 @@
 import React from "react";
 import Head from "./Head";
+import Description from "./Description";
 
 const Posts = () => {
   return (
     <div id="posts">
       <Head />
 
-      <div id="description">
-        <text>Insert text here</text>
-        <br />
-        <text className="blue-text">#tagOne #tagTwo #tagThree</text>
-        <br />
-        <text className="blue-text">https://enter-url.com</text>
+      <Description />
+
+      <div>
+        <img src="" width="50%" height="200" />
       </div>
     </div>
   );
