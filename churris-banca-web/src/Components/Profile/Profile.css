@@ -1,0 +1,36 @@
+#profile {
+  margin: 20px;
+  height: 90%;
+  border-radius: 10px;
+  color: black;
+  background-color: #ffffff;
+}
+
+#profile-picture {
+  display: flex;
+  justify-content: center;
+}
+
+#img {
+  width: 250px;
+  height: 250px;
+}
+
+#information {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  height: 65%;
+}
+
+.specific-information {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 5px;
+}
+
+.text {
+  margin-left: 5px;
+}
