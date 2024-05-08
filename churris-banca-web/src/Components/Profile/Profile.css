@@ -34,3 +34,8 @@
 .text {
   margin-left: 5px;
 }
+
+.user-information-icons {
+  border-radius: 10%;
+  margin: 5%;
+}
