@@ -1,6 +1,6 @@
 import React from "react";
 import { CgProfile } from "react-icons/cg";
-import { CiMail, CiCircleInfo } from "react-icons/ci";
+// import { CiCircleInfo } from "react-icons/ci";
 import TextField from '@mui/material/TextField';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import PasswordOutlinedIcon from '@mui/icons-material/PasswordOutlined';
