@@ -1,9 +1,7 @@
 import React from "react";
 import { CgProfile } from "react-icons/cg";
 import { CiMail, CiCircleInfo } from "react-icons/ci";
-import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
-import EditIcon from '@mui/icons-material/Edit';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import PasswordOutlinedIcon from '@mui/icons-material/PasswordOutlined';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
@@ -11,13 +9,11 @@ import PhoneAndroidOutlinedIcon from '@mui/icons-material/PhoneAndroidOutlined';
 
 import "./Profile.css";
 
-const onCLickHandle = () => {
-
-}
+import UserInformationField from "../UserInformationField/UserInformationField";
 
 const Profile = () => {
   return (
-    <div id="profile">
+    <div id="profile-container">
       <div id="big-profile-picture">
         <CgProfile id="img" />
       </div>
@@ -29,43 +25,32 @@ const Profile = () => {
           }}
           variant="standard"
         />
-      <div id="information">
-        <div className="specific-information">
+
+      <div id="user-information-container">
+        <div className="user-specific-information-container">
           <PersonOutlineOutlinedIcon className="user-information-icons" fontSize="large" />
-          <TextField disabled id="username-text-field" label="Username"  variant="standard" />
-          <IconButton>
-            <EditIcon color="action" />
-          </IconButton>
+          <UserInformationField id="username-text-field" label="Username"></UserInformationField>
         </div>
 
-        <div className="specific-information">
+        <div className="user-specific-information-container">
           <PasswordOutlinedIcon className="user-information-icons" fontSize="large" />
-          <TextField disabled id="password-text-field" label="Password" variant="standard" />
-          <IconButton>
-            <EditIcon color="action"/>
-          </IconButton>
+          <UserInformationField id="password-text-field" label="Password"></UserInformationField>
         </div>
 
-        <div className="specific-information">
+        <div className="user-specific-information-container">
           <EmailOutlinedIcon className="user-information-icons" fontSize="large" />
-          <TextField disabled id="email-text-field" label="Email" variant="standard" />
-          <IconButton>
-            <EditIcon color="action"/>
-          </IconButton>
+          <UserInformationField id="email-text-field" label="Email"></UserInformationField>
         </div>
 
-        <div className="specific-information">
+        <div className="user-specific-information-container">
           <PhoneAndroidOutlinedIcon className="user-information-icons" fontSize="large" />
-          <TextField disabled id="phone-number-text-field" label="Cell phone number" variant="standard" />
-          <IconButton>
-            <EditIcon color="action"/>
-          </IconButton>
+          <UserInformationField id="phone-number-text-field" label="Cell phone number"></UserInformationField>
         </div>
 
-        <div className="specific-information">
+        {/* <div className="user-specific-information">
           <CiCircleInfo />
           <text className="text">Extra info</text>
-        </div>
+        </div> */}
       </div>
     </div>
   );
