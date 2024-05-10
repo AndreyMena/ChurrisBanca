@@ -1,4 +1,4 @@
-#profile {
+#profile-container {
   margin: 20px;
   height: 90%;
   border-radius: 10px;
@@ -16,21 +16,21 @@
   height: 250px;
 }
 
-#information {
+#user-information-container {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
-  height: 65%;
+  height: 50%;
 }
 
-.specific-information {
+.user-specific-information-container {
   display: flex;
+  flex-direction: row;
   align-items: center;
-  justify-content: center;
-  margin: 5px;
+  margin: 2% 1% 2%;
 }
 
-.text {
+/* .text {
   margin-left: 5px;
-}
+} */
