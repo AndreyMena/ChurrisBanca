@@ -1,41 +1,36 @@
-#header {
+#header-container {
   display: flex;
   justify-content: space-between;
+  padding-top: 5px;
   padding-bottom: 5px;
   background: #ffffff;
   color: black;
+  margin: 0 10px 10px 10px;
+  border-radius: 10px;
 }
 
-#logo-search {
+#logo-search-container {
   display: flex;
   align-items: center;
-  margin-left: 5px;
+  justify-content: space-between;
+  margin-right: 2%;
+  margin-left: 2%;
+  width: 30%;
 }
 
-#search-engine {
+/* #search-engine {
   text-indent: 5px;
   margin-left: 5px;
   margin-top: 5px;
   border-radius: 50px;
   border: none;
   background: #e4e6e9;
-}
+} */
 
-#menu {
+#menu-container {
   display: flex;
-  margin-right: 15%;
-  justify-content: space-evenly;
-  width: 50%;
-}
-
-.icon {
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid black;
-}
-
-#profile-image {
-  display: flex;
-  align-items: center;
-  margin-right: 5px;
+  justify-content: space-between;
+  margin-right: 2%;
+  margin-left: 2%;
+  width: 30%;
 }
