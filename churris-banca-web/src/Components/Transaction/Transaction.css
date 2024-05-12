@@ -1,23 +1,22 @@
-#account-container {
+#transactions-history-container {
   display: flex;
   flex-direction: row;
   align-items: center;
   border-radius: 10px;
   background: #ffffff;
   color: black;
-  padding: 5px;
-  margin-top: 15px;
-  margin-bottom: 15px;
+  margin: 10px 15px 10px 15px;
+  padding: 2px;
 }
 
-#account-id-container {
+.transaction-information-container {
   display: flex;
   flex-direction: column;
-  width: 50%;
+  width: 30%;
 }
 
-#account-balance-container {
+#transaction-central-information-container {
   display: flex;
   flex-direction: column;
-  width: 50%;
+  width: 40%;
 }

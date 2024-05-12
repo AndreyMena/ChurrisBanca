@@ -31,8 +31,8 @@ const Header = () => {
   return (
     <div id="header-container">
       <div id="logo-search-container">
-        <Button size="large" variant="text" onClick={handleHomeClick} style={{ fontWeight: 'bold', fontSize: "20px"}}>Churris Banca</Button>
-        <SearchEngine text="Buscar" id="search-engine" />
+        <Button size="large" variant="text" onClick={handleHomeClick} style={{ fontWeight: 'bold', fontSize: "30px"}}>Churris Banca</Button>
+        {/* <SearchEngine text="Buscar" id="search-engine" /> */}
       </div>
 
       <div id="menu-container">

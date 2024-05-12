@@ -1,0 +1,9 @@
+#pagination-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+  border-radius: 10px;
+  background: #ffffff;
+  color: black;
+  padding: 5px;
+}

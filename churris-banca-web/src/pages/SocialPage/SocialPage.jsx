@@ -1,6 +1,6 @@
 import React from "react";
 import Header from "../../Components/Header/Header";
-import Pagination from "../../Components/Pagination/Pagination";
+import PaginationBar from "../../Components/PaginationBar/PaginationBar";
 import CreatePost from "../../Components/CreatePost/CreatePost";
 import Posts from "../../Components/Posts/Posts";
 
@@ -14,7 +14,7 @@ const SocialPage = () => {
 
         <Posts />
 
-        <Pagination />
+        <PaginationBar />
       </div>
     </>
   );

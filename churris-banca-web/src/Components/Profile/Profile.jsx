@@ -28,22 +28,22 @@ const Profile = () => {
 
       <div id="user-information-container">
         <div className="user-specific-information-container">
-          <PersonOutlineOutlinedIcon className="user-information-icons" fontSize="large" />
+          <PersonOutlineOutlinedIcon className="user-information-icons" fontSize="large" color="primary" />
           <UserInformationField id="username-text-field" label="Username"></UserInformationField>
         </div>
 
         <div className="user-specific-information-container">
-          <PasswordOutlinedIcon className="user-information-icons" fontSize="large" />
+          <PasswordOutlinedIcon className="user-information-icons" fontSize="large" color="primary" />
           <UserInformationField id="password-text-field" label="Password"></UserInformationField>
         </div>
 
         <div className="user-specific-information-container">
-          <EmailOutlinedIcon className="user-information-icons" fontSize="large" />
+          <EmailOutlinedIcon className="user-information-icons" fontSize="large" color="primary" />
           <UserInformationField id="email-text-field" label="Email"></UserInformationField>
         </div>
 
         <div className="user-specific-information-container">
-          <PhoneAndroidOutlinedIcon className="user-information-icons" fontSize="large" />
+          <PhoneAndroidOutlinedIcon className="user-information-icons" fontSize="large" color="primary" />
           <UserInformationField id="phone-number-text-field" label="Cell phone number"></UserInformationField>
         </div>
 

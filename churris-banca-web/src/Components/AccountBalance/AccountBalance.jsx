@@ -1,18 +1,22 @@
 import React from "react";
+import  Typography from '@mui/material/Typography';
+
 import "./AccountBalance.css";
 
 const AccountBalance = () => {
+  // Hay que recibir el mensaje desde el servidor que contiene los datos del balance/saldo de la cuenta obtenidos desde la base de datos y asignar esos datos a las siguientes variables para luego renderizar el componente AccountBalance ya con esos datos.
+  const accountId = "XXXXXXXXXX";
+  const typeCurrency = "Churruminos";
+  const accountBalance = "Ch 15,500.00";
+
   return (
-    <div id="account-balance">
-      <text>Balance churriminos</text>
-      <text>Ch15,500.00</text>
-      <div id="coins">
-        <div className="coin-type">
-          <text>Churriminos</text>
-        </div>
-        <div className="coin-type">
-          <text>Euros</text>
-        </div>
+    <div id="account-container">
+      <div id="account-id-container">
+        <Typography>Account ID: {accountId}</Typography>
+      </div>
+      <div id="account-balance-container">
+        <Typography>Balance of {typeCurrency}</Typography>
+        <Typography>{accountBalance}</Typography>
       </div>
     </div>
   );
