@@ -6,10 +6,11 @@ import UserProfile from "./pages/UserProfile/UserProfile";
 function App() {
   return (
     <div className="App">
-      <UserProfile />
+      <Login />
     </div>
   );
 }
+//<UserProfile />
 //<Login />
 
 export default App;
