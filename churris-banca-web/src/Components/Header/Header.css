@@ -1,8 +1,6 @@
 #header-container {
   display: flex;
   justify-content: space-between;
-  padding-top: 5px;
-  padding-bottom: 5px;
   background: #ffffff;
   color: black;
   margin: 0 10px 10px 10px;
