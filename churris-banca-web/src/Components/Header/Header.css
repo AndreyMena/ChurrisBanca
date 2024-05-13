@@ -32,3 +32,9 @@
   margin-left: 2%;
   width: 30%;
 }
+
+.icon-is-selected {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #1976d2;
+}

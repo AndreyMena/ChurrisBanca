@@ -36,17 +36,23 @@ const Header = () => {
       </div>
 
       <div id="menu-container">
-        <IconButton className="icon-button-header" color="primary" onClick={handleTransactionsClick}>
-          <AccountBalanceOutlinedIcon fontSize="large"></AccountBalanceOutlinedIcon>
-        </IconButton>
+        <div className="icon-is-selected">
+          <IconButton className="icon-button-header" color="primary" onClick={handleTransactionsClick}>
+            <AccountBalanceOutlinedIcon fontSize="large"></AccountBalanceOutlinedIcon>
+          </IconButton>
+        </div>
 
-        <IconButton className="icon-button-header" color="primary" onClick={handleSocialClick}>
-          <Diversity3OutlinedIcon fontSize="large"></Diversity3OutlinedIcon>
-        </IconButton>
-
-        <IconButton className="icon-button-header" color="primary" onClick={handleProfileClick}>
-          <AccountCircleOutlinedIcon fontSize="large"></AccountCircleOutlinedIcon>
-        </IconButton>
+        <div className="icon-is-selected">
+          <IconButton className="icon-button-header" color="primary" onClick={handleSocialClick}>
+            <Diversity3OutlinedIcon fontSize="large"></Diversity3OutlinedIcon>
+          </IconButton>
+        </div>
+        
+        <div className="icon-is-selected">
+          <IconButton className="icon-button-header" color="primary" onClick={handleProfileClick}>
+            <AccountCircleOutlinedIcon fontSize="large"></AccountCircleOutlinedIcon>
+          </IconButton>
+        </div>
       </div>
     </div>
   );
