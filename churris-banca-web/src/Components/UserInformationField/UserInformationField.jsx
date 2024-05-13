@@ -6,15 +6,12 @@ import Button from "@mui/material/Button";
 
 import "./UserInformationField.css";
 
-const UserInformationField = (props) => {
+const UserInformationField = ({id, label, defaultValue, type = "text"}) => {
   const [isTextFieldDisabled, setIsTextFieldDisabled] = useState(true);
   const [isEditIconVisible, setIsEditIconVisible] = useState(true);
   const [isSaveButtonVisible, setIsSaveButtonVisible] = useState(false);
   const [text, setText] = useState('');
   // const [answer, setAnswer] = useState('');
-
-  const id = props.id;
-  const label = props.label;
 
   const handleEnableTextField = () => {
     setIsTextFieldDisabled(false);
@@ -64,7 +61,9 @@ const UserInformationField = (props) => {
         className="user-information-editing-components"
         disabled={isTextFieldDisabled}
         id={id}
+        type={type}
         label={label}
+        defaultValue={defaultValue}
         variant="standard"
         onChange={handleChange}
       />
