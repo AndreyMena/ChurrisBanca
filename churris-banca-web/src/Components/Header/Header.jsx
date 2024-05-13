@@ -13,11 +13,11 @@ const Header = () => {
   const navigate = useNavigate();
 
   const handleHomeClick = () => {
-    navigate('/');
+    navigate('/bankingPage');
   }
 
   const handleTransactionsClick = () => {
-    navigate('/');
+    navigate('/bankingPage');
   }
   
   const handleSocialClick = () => {
