@@ -4,11 +4,10 @@ import Profile from "../../Components/Profile/Profile";
 
 const UserProfile = () => {
   return (
-    <>
+    <div>
       <Header />
-
       <Profile />
-    </>
+    </div>
   );
 };
 

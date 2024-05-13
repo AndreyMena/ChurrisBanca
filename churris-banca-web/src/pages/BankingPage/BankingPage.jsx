@@ -1,22 +1,25 @@
 import React from "react";
-import Header from "../../Components/Header/Header";
-import Pagination from "../../Components/Pagination/Pagination";
 import AccountBalance from "../../Components/AccountBalance/AccountBalance";
-import TransactionHistory from "../../Components/TransactionHistory/TransactionHistory";
+import Header from "../../Components/Header/Header";
+import PaginationBar from "../../Components/PaginationBar/PaginationBar";
+import Transaction from "../../Components/Transaction/Transaction";
 
 const BankingPage = () => {
   return (
-    <>
+    <div id="banking-page-container">
       <Header />
-
       <div className="container">
-        <AccountBalance />
-
-        <TransactionHistory />
-
-        <Pagination />
+        <AccountBalance></AccountBalance>
+        <Transaction></Transaction>
+        <Transaction></Transaction>
+        <Transaction></Transaction>
+        <Transaction></Transaction>
+        <Transaction></Transaction>
+        <Transaction></Transaction>
+        <Transaction></Transaction>
+        <PaginationBar></PaginationBar>
       </div>
-    </>
+    </div>
   );
 };
 

@@ -1,12 +1,21 @@
 import "./App.css";
-import Login from "./Components/Login/Login";
-import BankingPage from "./pages/BankingPage/BankingPage";
-import UserProfile from "./pages/UserProfile/UserProfile";
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import BankingPage from "./pages/BankingPage/BankingPage.jsx";
+import Login from "./Components/Login/Login.jsx";
+import SocialPage from "./pages/SocialPage/SocialPage.jsx";
+import UserProfile from "./pages/UserProfile/UserProfile.jsx";
 
 function App() {
   return (
     <div className="App">
-      <Login />
+      <Router>
+        <Routes>
+          <Route path="/" element={<Login />} ></Route>
+          <Route path="/bankingPage" element={<BankingPage />} ></Route>
+          <Route path="/socialPage" element={<SocialPage/>} ></Route>
+          <Route path="/userProfile" element={<UserProfile/>} ></Route>
+        </Routes>
+      </Router>
     </div>
   );
 }
