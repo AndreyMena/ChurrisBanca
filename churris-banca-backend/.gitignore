@@ -1,0 +1,4 @@
+/node_modules
+
+# Posteriormente este se oculta, unicamente se pone en la maquina
+#.env
