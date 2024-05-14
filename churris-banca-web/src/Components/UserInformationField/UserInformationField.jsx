@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from 'prop-types'
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
@@ -6,15 +7,12 @@ import Button from "@mui/material/Button";
 
 import "./UserInformationField.css";
 
-const UserInformationField = (props) => {
+const UserInformationField = ({id, label, defaultValue, type = "text"}) => {
   const [isTextFieldDisabled, setIsTextFieldDisabled] = useState(true);
   const [isEditIconVisible, setIsEditIconVisible] = useState(true);
   const [isSaveButtonVisible, setIsSaveButtonVisible] = useState(false);
   const [text, setText] = useState('');
   // const [answer, setAnswer] = useState('');
-
-  const id = props.id;
-  const label = props.label;
 
   const handleEnableTextField = () => {
     setIsTextFieldDisabled(false);
@@ -64,7 +62,9 @@ const UserInformationField = (props) => {
         className="user-information-editing-components"
         disabled={isTextFieldDisabled}
         id={id}
+        type={type}
         label={label}
+        defaultValue={defaultValue}
         variant="standard"
         onChange={handleChange}
       />
@@ -75,5 +75,12 @@ const UserInformationField = (props) => {
     </div>
   );
 };
+
+UserInformationField.propTypes = {
+  id: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  defaultValue: PropTypes.string.isRequired,
+  type: PropTypes.string
+}
 
 export default UserInformationField;
