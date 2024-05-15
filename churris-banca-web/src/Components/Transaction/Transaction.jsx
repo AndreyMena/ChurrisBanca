@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from 'prop-types'
 import  Typography from '@mui/material/Typography';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import "./Transaction.css"
@@ -31,5 +32,14 @@ const Transaction = ({transactionID, transactionType, transactionUser, transacti
     </div >
   );
 };
+
+Transaction.propTypes = {
+  transactionID: PropTypes.string.isRequired,
+  transactionType: PropTypes.string.isRequired,
+  transactionUser: PropTypes.string.isRequired,
+  transactionDate: PropTypes.string.isRequired,
+  transactionTime: PropTypes.string.isRequired,
+  transactionAmount: PropTypes.number.isRequired
+}
 
 export default Transaction;
