@@ -8,6 +8,7 @@ import Transaction from "../../Components/Transaction/Transaction";
 const data = [
   {
     transactionID: "87654321", 
+    transactionType: "received",
     transactionUser: "Paulina Rodriguez Jimenez", 
     transactionDate: "11-04-2024", 
     transactionTime: "13:08", 
@@ -15,6 +16,7 @@ const data = [
 },
 {
   transactionID: "56781234", 
+  transactionType: "sent",
   transactionUser: "Roberto Chavez Madriz", 
   transactionDate: "12-02-2022", 
   transactionTime: "12:12", 
@@ -22,6 +24,7 @@ const data = [
 },
 {
   transactionID: "43215678", 
+  transactionType: "received",
   transactionUser: "Ramina Chavez Gonzalez", 
   transactionDate: "12-03-2021", 
   transactionTime: "10:25", 
@@ -29,6 +32,7 @@ const data = [
 },
 {
   transactionID: "13572468", 
+  transactionType: "sent",
   transactionUser: "Mario Bermudez Fuentes", 
   transactionDate: "15-02-2023", 
   transactionTime: "09:09", 
@@ -36,6 +40,7 @@ const data = [
 },
 {
   transactionID: "97531246", 
+  transactionType: "received",
   transactionUser: "Maria Rodriguez Hernandez", 
   transactionDate: "12-10-2022", 
   transactionTime: "15:20", 
@@ -43,6 +48,7 @@ const data = [
 },
 {
   transactionID: "11223344", 
+  transactionType: "sent",
   transactionUser: "Josefo Villareal Sanchez", 
   transactionDate: "07-01-2020", 
   transactionTime: "18:00", 
@@ -50,6 +56,7 @@ const data = [
 },
 {
   transactionID: "12356748", 
+  transactionType: "received",
   transactionUser: "Fernando Villareal Sibaja", 
   transactionDate: "01-04-2021", 
   transactionTime: "20:20", 
@@ -64,7 +71,7 @@ const BankingPage = () => {
       <div className="container">
         <AccountBalance></AccountBalance>
           {data.map((transaction) => (
-            <Transaction key={transaction.transactionID} transactionID={transaction.transactionID} transactionUser={transaction.transactionUser}
+            <Transaction key={transaction.transactionID} transactionID={transaction.transactionID} transactionType={transaction.transactionType} transactionUser={transaction.transactionUser}
               transactionDate={transaction.transactionDate} transactionTime={transaction.transactionTime} transactionAmount={transaction.transactionAmount}/>
           ))}
 
