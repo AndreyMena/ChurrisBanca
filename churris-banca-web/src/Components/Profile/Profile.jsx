@@ -4,7 +4,6 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import PasswordOutlinedIcon from '@mui/icons-material/PasswordOutlined';
 import PhoneAndroidOutlinedIcon from '@mui/icons-material/PhoneAndroidOutlined';
-import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import UserInformationField from "../UserInformationField/UserInformationField";
 import "./Profile.css";
  

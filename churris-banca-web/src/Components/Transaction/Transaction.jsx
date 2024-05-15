@@ -1,34 +1,45 @@
 import React from "react";
+import PropTypes from 'prop-types'
 import  Typography from '@mui/material/Typography';
-
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import "./Transaction.css"
 
-const Transaction = () => {
+const Transaction = ({transactionID, transactionType, transactionUser, transactionDate, transactionTime, transactionAmount}) => {
   // Hay que recibir el mensaje desde el servidor que contiene los datos del balance/saldo de la cuenta obtenidos desde la base de datos y asignar esos datos a las siguientes variables para luego renderizar el componente AccountBalance ya con esos datos.
-  const transactionIconType = "->Ch";
-  const transactionID = "12345678";
-  const transactionType = "Transaction received";
-  const transactionUSer = "Ricargo Villalon"
-  const transactionDate = "11-03-2024"
-  const transactionTime = "13:05"
-  const transactionAmount = "Ch 5,000.00"
-
   return (
     < div id="transactions-history-container" >
       <div className="transaction-information-container">
-        <Typography>{transactionIconType}</Typography>
+        {
+          transactionType === 'received' ? 
+            <Typography id="coin" style={{ color: '#28a745'}}><ArrowForwardIcon/>Ch</Typography> : 
+            <Typography id="coin" style={{ color: '#dc3545'}}>Ch<ArrowForwardIcon/></Typography>
+        }
         <Typography>id: {transactionID}</Typography>
       </div>
       <div id="transaction-central-information-container">
-        <Typography>{transactionType}</Typography>
-        <Typography>{transactionUSer}</Typography>
+        <Typography>Transaction {transactionType === 'received' ? 'received' : 'sent'}</Typography>
+        <Typography>{transactionUser}</Typography>
         <Typography>{transactionDate} {transactionTime}</Typography>
       </div>
       <div className="transaction-information-container">
-        <Typography>{transactionAmount}</Typography>
+        {
+          transactionType === 'received' ? 
+            <Typography style={{ color: '#28a745'}}>+ Ch {transactionAmount} </Typography> : 
+            <Typography style={{ color: '#dc3545'}}>- Ch {transactionAmount} </Typography>
+        }
+        
       </div>
     </div >
   );
 };
+
+Transaction.propTypes = {
+  transactionID: PropTypes.string.isRequired,
+  transactionType: PropTypes.string.isRequired,
+  transactionUser: PropTypes.string.isRequired,
+  transactionDate: PropTypes.string.isRequired,
+  transactionTime: PropTypes.string.isRequired,
+  transactionAmount: PropTypes.number.isRequired
+}
 
 export default Transaction;
