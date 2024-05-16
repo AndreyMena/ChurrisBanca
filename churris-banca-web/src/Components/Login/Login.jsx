@@ -1,21 +1,26 @@
 import React from 'react'
 //import './Login.css'
-import { useRef, useState, useEffect, useContext } from 'react'
-import AuthContext from '../../context/AuthProvider';
-
+import { useRef, useState, useEffect } from 'react'
+import useAuth from '../../hooks/useAuth';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from '../../api/axios';
 
 const LOGIN_URL = '/auth';  //TODO: Colocar en un .env, apunta al backend node
 
 const Login = () => {
-  const { setAuth } = useContext(AuthContext);
+  const { setAuth } = useAuth();
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = /*location.state?.from?.pathname ||*/ "/socialPage";
+  
+  
   const userRef = useRef();
   const errRef = useRef();
 
   const [user, setUser] = useState('');
   const [pwd, setPwd] = useState('');
   const [errMsg, setErrMsg] = useState('');
-  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     userRef.current.focus();
@@ -41,7 +46,7 @@ const Login = () => {
       setAuth({user, pwd, accessToken});
       setUser('');
       setPwd('');
-      setSuccess(true);
+      navigate(from, {replace: true});
     } catch (err) {
       if (!err?.response) {
         setErrMsg('No server Response');
@@ -56,15 +61,6 @@ const Login = () => {
 
   return (
     <>
-      {success ? (
-        <section>
-          <h1>You are logged in</h1>
-          <br />
-          <p>
-            <a href ="">Home</a>
-          </p>
-        </section>
-      ) : (
       <section>
         <p ref={errRef} className={errMsg ? "errmsg": "offscreen"} 
         aria-live="assertive">{errMsg}</p>
@@ -92,30 +88,8 @@ const Login = () => {
           <button>Sign in</button>
         </form>
       </section>
-      )}
     </>
   )
 }
 
 export default Login
-/*
-export const Login = () => {
-  return (
-    <div className='container'>
-        <div className='header'>
-            <div className='text'>Login</div>
-        </div>
-        <div className='form'>
-            <div className='input'>
-                <input type="email" onChange='' placeholder="Email"/>
-            </div>
-            <div className='input'>
-                <input type="password" onChange='' placeholder="Password"/>
-            </div>
-            <input type="submit" />
-        </div>
-    </div>
-  )
-}
-*/
-//onChange={(e)=>setEmail(e.target.value)}
