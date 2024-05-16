@@ -4,6 +4,10 @@ import  Typography from '@mui/material/Typography';
 
 import "./AccountBalance.css";
 
+export const handleAccountBalance = (messageFromServer) => {
+
+}
+
 const AccountBalance = () => {
   // Hay que recibir el mensaje desde el servidor que contiene los datos del balance/saldo de la cuenta obtenidos desde la base de datos y asignar esos datos a las siguientes variables para luego renderizar el componente AccountBalance ya con esos datos.
   const [accountId, setAccountId] = useState("XXXXXXXXXX");

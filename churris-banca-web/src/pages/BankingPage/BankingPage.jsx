@@ -4,6 +4,10 @@ import Header from "../../Components/Header/Header";
 import PaginationBar from "../../Components/PaginationBar/PaginationBar";
 import Transaction from "../../Components/Transaction/Transaction";
 
+export const handleTransactions = (messageFromServer) => {
+
+}
+
 // Elimminar despues
 const data = [
   {

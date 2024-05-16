@@ -7,6 +7,10 @@ import PhoneAndroidOutlinedIcon from '@mui/icons-material/PhoneAndroidOutlined';
 import UserInformationField from "../UserInformationField/UserInformationField";
 import "./Profile.css";
  
+export const handleAccountBalance = (messageFromServer) => {
+
+}
+
 // Elimminar despues
 const data = {
   fullName: "Pablo Rodriguez Jimenez",
@@ -14,6 +18,7 @@ const data = {
   password: "Casa123!",
   cellphoneNumber: "12345678"
 }
+
 const Profile = () => {
   return (
     <div id="profile-container">

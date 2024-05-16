@@ -1,23 +1,26 @@
-import React from "react";
 import axios from "axios";
-import AccountBalance from "../AccountBalance/AccountBalance";
+import handleAccountBalance from "../AccountBalance/AccountBalance";
+import handleUserInformation from "../Profile/Profile";
 
 const identifyMessage = (messageFromServer) => {
-  const handlersMap = {
-    // Handlers de la página de perfil de usuario.
-    handlerUserInformation: handlerUserInformation(),
+  const handleMap = {
+    // Handle de la página de la página social.
 
-    // Handlers de la página de la página bancaria.
-    
 
-    // Handlers de la página de la página social.
+    // Handle de la página de la página bancaria.
+    handleAccountBalance: handleAccountBalance(messageFromServer),
+    handleTransactions: handleTransactions(messageFromServer),
 
+    // Handle de la página de perfil de usuario.
+    handleUserInformation: handleUserInformation(messageFromServer),
     
     default: console.log("Handler no encontrado.")
   }
 
-  if(handlersMap[messageFromServer.type]) {
-    handlersMap.default;
+  if (handleMap[messageFromServer.type]) {
+    console.log("Handle encontrado")
+  } else {
+    console.log("Handle no encontrado")
   }
 }
 
@@ -28,7 +31,7 @@ const sendMessageToServer = (messageToServer) => {
     })
     .catch(error => {
       // Maneja los errores si la solicitud falla
-      console.error("Error al realizar la conexión o recibir el mensjase del servidor:", error);
+      console.error("Error al realizar la conexión o recibir el mensaje del servidor:", error);
     }
   );
 }
