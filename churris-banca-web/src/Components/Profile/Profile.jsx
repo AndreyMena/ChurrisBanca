@@ -1,13 +1,15 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
+import { clientServerContext } from "../../context/ClientServerContext";
 import TextField from '@mui/material/TextField';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import PasswordOutlinedIcon from '@mui/icons-material/PasswordOutlined';
 import PhoneAndroidOutlinedIcon from '@mui/icons-material/PhoneAndroidOutlined';
 import UserInformationField from "../UserInformationField/UserInformationField";
+
 import "./Profile.css";
  
-export const handleAccountBalance = (messageFromServer) => {
+export const handleUserInformation = (messageFromServer) => {
 
 }
 
@@ -20,6 +22,18 @@ const data = {
 }
 
 const Profile = () => {
+  const { sendMessageToServer } = useContext(clientServerContext);
+
+  const messageToServer = {
+    type: "getUserInformation",
+    user: "userName",
+    password: "password"
+  };
+
+  useEffect(() => {
+    const serverResponse = sendMessageToServer(messageToServer);
+  }, []);
+
   return (
     <div id="profile-container">
       <div id="big-profile-picture">

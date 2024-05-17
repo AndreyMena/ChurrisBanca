@@ -14,7 +14,7 @@ const identifyMessage = (messageFromServer) => {
     // Handle de la página de perfil de usuario.
     handleUserInformation: handleUserInformation(messageFromServer),
     
-    default: console.log("Handler no encontrado.")
+    default: console.log("Handle no encontrado.")
   }
 
   if (handleMap[messageFromServer.type]) {
