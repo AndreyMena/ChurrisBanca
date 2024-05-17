@@ -1,10 +1,8 @@
 import React from "react";
-import { clientServerContext } from "../../context/ClientServerContext";
 import axios from "axios";
+import { clientServerContext } from "../../context/ClientServerContext";
 
 const ClientServerProvider = ({ children }) => {
-	
-
 	const sendMessageToServer = (messageToServer) => {
 		axios.post("/ruta-al-servidor", messageToServer)
 			.then(response => {

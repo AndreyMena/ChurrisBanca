@@ -1,18 +1,14 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { clientServerContext } from "../../context/ClientServerContext";
-import TextField from '@mui/material/TextField';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import PasswordOutlinedIcon from '@mui/icons-material/PasswordOutlined';
 import PhoneAndroidOutlinedIcon from '@mui/icons-material/PhoneAndroidOutlined';
+import TextField from '@mui/material/TextField';
 import UserInformationField from "../UserInformationField/UserInformationField";
 
 import "./Profile.css";
  
-export const handleUserInformation = (messageFromServer) => {
-
-}
-
 // Elimminar despues
 const data = {
   fullName: "Pablo Rodriguez Jimenez",
@@ -24,6 +20,8 @@ const data = {
 const Profile = () => {
   const { sendMessageToServer } = useContext(clientServerContext);
 
+  const [fullName, setFullName] = useState("Pablo Rodriguez Jimenez");
+
   const messageToServer = {
     type: "getUserInformation",
     user: "userName",
@@ -32,6 +30,10 @@ const Profile = () => {
 
   useEffect(() => {
     const serverResponse = sendMessageToServer(messageToServer);
+    if (serverResponse != null) {
+      setFullName(serverResponse.fullName)
+      // Cambiar el valor de los userInformationField con la respuesta del server
+    }
   }, []);
 
   return (
