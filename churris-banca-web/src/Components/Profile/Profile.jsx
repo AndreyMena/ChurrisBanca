@@ -71,11 +71,6 @@ const Profile = () => {
           <PhoneAndroidOutlinedIcon className="user-information-icons" fontSize="large" color="primary" />
           <UserInformationField id="phone-number-text-field" label="Cell phone number" defaultValue={data.cellphoneNumber} onChange={setCellphoneNumber}/>
         </div>
-
-        {/* <div className="user-specific-information">
-          <CiCircleInfo />
-          <text className="text">Extra info</text>
-        </div> */}
       </div>
     </div>
   );

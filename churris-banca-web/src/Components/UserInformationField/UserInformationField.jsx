@@ -12,7 +12,6 @@ const UserInformationField = ({id, label, defaultValue, onChange, type = "text"}
   const [isEditIconVisible, setIsEditIconVisible] = useState(true);
   const [isSaveButtonVisible, setIsSaveButtonVisible] = useState(false);
   const [text, setText] = useState('');
-  // const [answer, setAnswer] = useState('');
 
   const handleEnableTextField = () => {
     setIsTextFieldDisabled(false);
@@ -24,33 +23,9 @@ const UserInformationField = ({id, label, defaultValue, onChange, type = "text"}
     setText(event.target.value);
   }
 
-  // Código para mandar mensaje a un servidor locar de Node.js
-
-  // const sendMessageToServer = (event) => {
-  //   event.preventDefault();
-
-  //   fetch('http://localhost:3001/ruta', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json'
-  //     },
-  //     body: JSON.stringify({ texto: text })
-  //   })
-  //   .then(response => response.text())
-  //   .then(data => {
-  //     setAnswer(data);
-  //     console.log(data);
-  //   })
-  //   .catch(error => {
-  //     console.error('Error al enviar la solicitud:', error);
-  //   });
-  // };
-
   const handleSaveClick = (event) => {
     console.log(text);
-
-    // sendMessageToServer(event);
-
+    
     setIsTextFieldDisabled(true);
     setIsEditIconVisible(true);
     setIsSaveButtonVisible(false);
