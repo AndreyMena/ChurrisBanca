@@ -3,10 +3,11 @@ import Header from "../../Components/Header/Header";
 import PaginationBar from "../../Components/PaginationBar/PaginationBar";
 import CreatePost from "../../Components/CreatePost/CreatePost";
 import Posts from "../../Components/Posts/Posts";
+import ClientServerProvider from "../../Components/Providers/ClientServerProvider";
 
 const SocialPage = () => {
   return (
-    <>
+    <ClientServerProvider>
       <Header />
 
       <div className="container">
@@ -16,7 +17,7 @@ const SocialPage = () => {
 
         <PaginationBar />
       </div>
-    </>
+    </ClientServerProvider>
   );
 };
 

@@ -1,18 +1,17 @@
 import React, { useState } from "react";
-import PropTypes from 'prop-types'
-import TextField from '@mui/material/TextField';
+import Button from "@mui/material/Button";
 import IconButton from '@mui/material/IconButton';
 import EditIcon from '@mui/icons-material/Edit';
-import Button from "@mui/material/Button";
+import PropTypes from 'prop-types'
+import TextField from '@mui/material/TextField';
 
 import "./UserInformationField.css";
 
-const UserInformationField = ({id, label, defaultValue, type = "text"}) => {
+const UserInformationField = ({id, label, defaultValue, onChange, type = "text"}) => {
   const [isTextFieldDisabled, setIsTextFieldDisabled] = useState(true);
   const [isEditIconVisible, setIsEditIconVisible] = useState(true);
   const [isSaveButtonVisible, setIsSaveButtonVisible] = useState(false);
   const [text, setText] = useState('');
-  // const [answer, setAnswer] = useState('');
 
   const handleEnableTextField = () => {
     setIsTextFieldDisabled(false);
@@ -24,33 +23,9 @@ const UserInformationField = ({id, label, defaultValue, type = "text"}) => {
     setText(event.target.value);
   }
 
-  // Código para mandar mensaje a un servidor locar de Node.js
-
-  // const sendMessageToServer = (event) => {
-  //   event.preventDefault();
-
-  //   fetch('http://localhost:3001/ruta', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json'
-  //     },
-  //     body: JSON.stringify({ texto: text })
-  //   })
-  //   .then(response => response.text())
-  //   .then(data => {
-  //     setAnswer(data);
-  //     console.log(data);
-  //   })
-  //   .catch(error => {
-  //     console.error('Error al enviar la solicitud:', error);
-  //   });
-  // };
-
   const handleSaveClick = (event) => {
     console.log(text);
-
-    // sendMessageToServer(event);
-
+    
     setIsTextFieldDisabled(true);
     setIsEditIconVisible(true);
     setIsSaveButtonVisible(false);
@@ -66,7 +41,7 @@ const UserInformationField = ({id, label, defaultValue, type = "text"}) => {
         label={label}
         defaultValue={defaultValue}
         variant="standard"
-        onChange={handleChange}
+        onChange={(e) => onChange(e.target.value)}
       />
       {isEditIconVisible && <IconButton className="user-information-editing-components" onClick={handleEnableTextField}>
         <EditIcon color="action"/>
