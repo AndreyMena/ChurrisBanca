@@ -7,10 +7,12 @@ import UserProfile from "./pages/UserProfile/UserProfile.jsx";
 import Layout from "./Components/Layout/Layout.jsx";
 import RequireAuth from "./Components/Auth/RequireAuth.js";
 import Missing from "./Components/Auth/Missing.js";
+import { AuthProvider } from "./context/AuthProvider";
 
 function App() {
   return (
     <div className="App">
+      <AuthProvider>
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route path="/login" element={<Login />} ></Route>
@@ -33,6 +35,8 @@ function App() {
             <Route path="*" element={<Missing />} />
           </Route>
         </Routes>
+
+      </AuthProvider>
     </div>
   );
 }
