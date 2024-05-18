@@ -7,7 +7,7 @@ import TextField from '@mui/material/TextField';
 
 import "./UserInformationField.css";
 
-const UserInformationField = ({id, label, defaultValue, type = "text"}) => {
+const UserInformationField = ({id, label, defaultValue, onChange, type = "text"}) => {
   const [isTextFieldDisabled, setIsTextFieldDisabled] = useState(true);
   const [isEditIconVisible, setIsEditIconVisible] = useState(true);
   const [isSaveButtonVisible, setIsSaveButtonVisible] = useState(false);
@@ -66,7 +66,7 @@ const UserInformationField = ({id, label, defaultValue, type = "text"}) => {
         label={label}
         defaultValue={defaultValue}
         variant="standard"
-        onChange={handleChange}
+        onChange={(e) => onChange(e.target.value)}
       />
       {isEditIconVisible && <IconButton className="user-information-editing-components" onClick={handleEnableTextField}>
         <EditIcon color="action"/>
