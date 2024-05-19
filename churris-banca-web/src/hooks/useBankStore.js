@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "../api/axios";
 
-const initialState = {
+const initialStateBankAccount = {
   id: 0,
   userName: "",
   accountStatus: 0,
@@ -9,7 +9,8 @@ const initialState = {
 };
 
 export const useBankStore = () => {
-  const [bankAccount, setbankAccount] = useState(initialState);
+  const [bankAccount, setbankAccount] = useState(initialStateBankAccount);
+  const [transactions, setTransactions] = useState([]);
 
   const startLoadingBankAccount = async (bankAccountId) => {
     try {
@@ -20,9 +21,20 @@ export const useBankStore = () => {
     }
   };
 
+  const startLoadingTransactions = async (userName) => {
+    try {
+      const { data } = await axios.get(`bank/transactions/${userName}`);
+      setTransactions(data.transactions);
+    } catch (error) {
+      console.log("Error loading transactions", error);
+    }
+  };
+
   return {
     bankAccount,
+    transactions,
 
     startLoadingBankAccount,
+    startLoadingTransactions,
   };
 };
