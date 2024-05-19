@@ -3,6 +3,7 @@ import { Button } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import axios from "axios";
+import SendMoneyPopup from "../SendMoneyPopup/SendMoneyPopup";
 import "./AccountBalance.css";
 
 export const handleAccountBalance = (messageFromServer) => {};
@@ -12,6 +13,7 @@ const AccountBalance = () => {
   const [accountId, setAccountId] = useState("XXXXXXXXXX");
   const [typeCurrency, setTypeCurrency] = useState("Churruminos");
   const [accountBalance, setAaccountBalance] = useState("Ch 15,500.00");
+  const [openPopup, setOpenPopup] = useState(false);
 
   const userCredentials = {
     type: "getUserAccountBalance",
@@ -44,13 +46,21 @@ const AccountBalance = () => {
       });
   }, []);
 
+  const handleOpenPopup = () => {
+    setOpenPopup(true);
+  };
+
+  const handleClosePopup = () => {
+    setOpenPopup(false);
+  };
+
   return (
     <div id="account-container">
       <div className="info">
         <Typography>Account ID: {accountId}</Typography>
       </div>
       <div className="info">
-        <Button id="button-send-money">
+        <Button id="button-send-money" onClick={handleOpenPopup}>
           <div id="info-button">
             Send money
             <div id="icon">
@@ -64,6 +74,11 @@ const AccountBalance = () => {
         <Typography>Balance of {typeCurrency}</Typography>
         <Typography>{accountBalance}</Typography>
       </div>
+
+      <SendMoneyPopup
+        openPopup={openPopup}
+        handleClosePopup={handleClosePopup}
+      />
     </div>
   );
 };

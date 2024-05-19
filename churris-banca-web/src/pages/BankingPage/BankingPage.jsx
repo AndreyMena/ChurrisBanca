@@ -1,5 +1,5 @@
 import React from "react";
-import AccountBalance from "../../Components/AccountBalance/AccountBalance";
+import AccountBalance from "../../Components/Banking/AccountBalance/AccountBalance";
 import Header from "../../Components/Header/Header";
 import PaginationBar from "../../Components/PaginationBar/PaginationBar";
 import Transaction from "../../Components/Transaction/Transaction";

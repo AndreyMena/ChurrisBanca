@@ -1,0 +1,13 @@
+#dropdown-button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#button-next {
+  border-radius: 8px;
+  border: 1px solid #1976d2;
+  color: black;
+  height: 30px;
+  width: 70%;
+}
