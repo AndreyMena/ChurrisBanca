@@ -3,17 +3,22 @@ import { Button } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import axios from "axios";
+import { useBankStore } from "../../../hooks/useBankStore";
 import SendMoneyPopup from "../SendMoneyPopup/SendMoneyPopup";
 import "./AccountBalance.css";
 
 export const handleAccountBalance = (messageFromServer) => {};
 
 const AccountBalance = () => {
-  // Hay que recibir el mensaje desde el servidor que contiene los datos del balance/saldo de la cuenta obtenidos desde la base de datos y asignar esos datos a las siguientes variables para luego renderizar el componente AccountBalance ya con esos datos.
+  const { startLoadingBankAccount, bankAccount } = useBankStore();
+  const [openPopup, setOpenPopup] = useState(false);
+
+  const { id: bankAccountId, currency, accountStatus } = bankAccount;
+
+  /* // Hay que recibir el mensaje desde el servidor que contiene los datos del balance/saldo de la cuenta obtenidos desde la base de datos y asignar esos datos a las siguientes variables para luego renderizar el componente AccountBalance ya con esos datos.
   const [accountId, setAccountId] = useState("XXXXXXXXXX");
   const [typeCurrency, setTypeCurrency] = useState("Churruminos");
   const [accountBalance, setAaccountBalance] = useState(1550000);
-  const [openPopup, setOpenPopup] = useState(false);
 
   const userCredentials = {
     type: "getUserAccountBalance",
@@ -22,7 +27,7 @@ const AccountBalance = () => {
   };
 
   useEffect(() => {
-    /*console.log("use effect");
+    console.log("use effect");
     // Realiza la solicitud al servidor, hay que definir la ruta al servidor
     axios
       .post("/ruta-al-servidor", userCredentials)
@@ -43,8 +48,8 @@ const AccountBalance = () => {
           "Error al realizar la conexión o recibir el texto del servidor:",
           error
         );
-      });*/
-  }, []);
+      });
+  }, []);*/
 
   const handleOpenPopup = () => {
     setOpenPopup(true);
@@ -54,10 +59,14 @@ const AccountBalance = () => {
     setOpenPopup(false);
   };
 
+  useEffect(() => {
+    startLoadingBankAccount(1); // TODO: Modificar
+  }, []);
+
   return (
     <div id="account-container">
       <div className="info">
-        <Typography>Account ID: {accountId}</Typography>
+        <Typography>Account ID: {bankAccountId}</Typography>
       </div>
       <div className="info">
         <Button id="button-send-money" onClick={handleOpenPopup}>
@@ -71,14 +80,14 @@ const AccountBalance = () => {
         </Button>
       </div>
       <div className="info">
-        <Typography>Balance of {typeCurrency}</Typography>
-        <Typography>Ch{accountBalance}</Typography>
+        <Typography>Balance of {currency}</Typography>
+        <Typography>Ch{accountStatus}</Typography>
       </div>
 
       <SendMoneyPopup
         openPopup={openPopup}
         handleClosePopup={handleClosePopup}
-        accountBalance={accountBalance}
+        accountBalance={accountStatus}
       />
     </div>
   );
