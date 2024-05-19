@@ -73,20 +73,24 @@ const AccountBalance = () => {
           <div id="info-button">
             Send money
             <div id="icon">
-              Ch
+              {currency}
               <ArrowForwardIcon />
             </div>
           </div>
         </Button>
       </div>
       <div className="info">
-        <Typography>Balance of {currency}</Typography>
-        <Typography>Ch{accountStatus}</Typography>
+        <Typography>Balance</Typography>
+        <Typography>
+          {currency}
+          {accountStatus}
+        </Typography>
       </div>
 
       <SendMoneyPopup
         openPopup={openPopup}
         handleClosePopup={handleClosePopup}
+        currency={currency}
         accountBalance={accountStatus}
       />
     </div>

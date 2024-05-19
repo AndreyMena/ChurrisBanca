@@ -9,8 +9,6 @@ import {
 import "./SendMoneyPopup.css";
 import { useBankStore } from "../../../hooks/useBankStore";
 
-const contacts = ["contacto1", "contacto2"]; // Borrar después
-
 const ContactsDropdown = ({ handleNextStage }) => {
   const {
     startLoadingBankAccountUsernames,
