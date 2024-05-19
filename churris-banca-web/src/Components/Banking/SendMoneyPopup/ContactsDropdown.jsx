@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   DialogContent,
@@ -7,15 +7,26 @@ import {
   MenuItem,
 } from "@mui/material";
 import "./SendMoneyPopup.css";
+import { useBankStore } from "../../../hooks/useBankStore";
 
 const contacts = ["contacto1", "contacto2"]; // Borrar después
 
 const ContactsDropdown = ({ handleNextStage }) => {
+  const {
+    startLoadingBankAccountUsernames,
+    bankAccountUsernames,
+    setBankAccountUsernames,
+  } = useBankStore();
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedContact, setSelectedContact] = useState("Contacts");
 
   const handleOpenDropdown = (event) => {
     setAnchorEl(event.currentTarget);
+
+    const updatedBankAccountUsernames = bankAccountUsernames.filter(
+      (userName) => userName !== "roberto.chavez.madriz"
+    ); // TODO: Modificar
+    setBankAccountUsernames(updatedBankAccountUsernames);
   };
 
   const handleCloseDropdown = () => {
@@ -26,6 +37,10 @@ const ContactsDropdown = ({ handleNextStage }) => {
     setSelectedContact(contact);
     handleCloseDropdown();
   };
+
+  useEffect(() => {
+    startLoadingBankAccountUsernames();
+  }, []);
 
   return (
     <>
@@ -39,12 +54,12 @@ const ContactsDropdown = ({ handleNextStage }) => {
           open={Boolean(anchorEl)}
           onClose={handleCloseDropdown}
         >
-          {contacts.map((contact) => (
+          {bankAccountUsernames.map((userName) => (
             <MenuItem
-              key={contact}
-              onClick={() => handleSelectContact(contact)}
+              key={userName}
+              onClick={() => handleSelectContact(userName)}
             >
-              {contact}
+              {userName}
             </MenuItem>
           ))}
         </Menu>
