@@ -21,7 +21,7 @@ export const useAuthStore = () => {
 
       const accessToken = response?.data?.accessToken;
 
-      setAuth({ user, pwd, accessToken });
+      setAuth({ user, accessToken });
       setMsg("Login Successful");
     } catch (err) {
       if (!err?.response) {

@@ -7,12 +7,13 @@ import Diversity3OutlinedIcon from '@mui/icons-material/Diversity3Outlined';
 import IconButton from '@mui/material/IconButton';
 import SearchEngine from "../Tags/SearchEngine";
 import AuthContext from "../../context/AuthProvider";
+import useLogout from "../../hooks/useLogout";
 
 import "./Header.css";
 
 const Header = () => {
   const navigate = useNavigate();
-  const { setAuth } = useContext(AuthContext);
+  const logout = useLogout();
 
   const handleHomeClick = () => {
     navigate('/bankingPage');
@@ -30,10 +31,8 @@ const Header = () => {
     navigate('/userProfile');
   } 
 
-  const logout = async () => {
-    // if used in more components, this should be in context 
-    // axios to /logout endpoint 
-    setAuth({});
+  const signOut = async () => {
+    await logout();
     navigate('/login');
   }
 
@@ -64,7 +63,7 @@ const Header = () => {
         </div>        
         
         <div className="icon-is-selected">
-          <button onClick={logout}>Sign Out</button>
+          <button onClick={signOut}>Sign Out</button>
         </div>
       </div>
     </div>
