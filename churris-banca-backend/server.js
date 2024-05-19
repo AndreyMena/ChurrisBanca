@@ -26,6 +26,8 @@ app.use(cors(corsOptions));
 
 // Express formateo de las URLs
 app.use(express.urlencoded({ extended: false }));
+
+// Lectura y parseo del body
 // Las pasa a json
 app.use(express.json());
 
@@ -42,6 +44,8 @@ app.use("/auth", require("./routes/auth"));
 //app.use('/register', require('./routes/register'));  //TODO, mejor implementarlo para agregar y hashear pass de nuevos users
 app.use("/refresh", require("./routes/refresh"));
 app.use("/logout", require("./routes/logout"));
+
+app.use("/bank", require("./routes/bank"));
 
 //Otro middleware para los web tokens, necesario para quitar o no sesion
 //en caso de querer hacer request ya deslogeado
