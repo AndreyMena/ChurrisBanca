@@ -6,6 +6,6 @@ const { Router } = require("express");
 const router = Router();
 const { getBankAccountById } = require("../controllers/bankController");
 
-router.get("/:idBankAccount", getBankAccountById);
+router.get("/:bankAccountId", getBankAccountById);
 
 module.exports = router;

@@ -7,10 +7,10 @@ const bankAccounts = [
 ];
 
 const getBankAccountById = (req, res = response) => {
-  const idBankAccount = parseInt(req.params.idBankAccount, 10);
+  const bankAccountId = parseInt(req.params.bankAccountId, 10);
 
   const bankAccount = bankAccounts.find(
-    (bankAccount) => bankAccount.id === idBankAccount
+    (bankAccount) => bankAccount.id === bankAccountId
   );
 
   if (bankAccount) {
