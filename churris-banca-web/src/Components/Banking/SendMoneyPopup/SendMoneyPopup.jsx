@@ -1,56 +1,48 @@
 import React, { useState } from "react";
-import {
-  Button,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  Menu,
-  MenuItem,
-} from "@mui/material";
+import { Dialog } from "@mui/material";
+import ContactsDropdown from "./ContactsDropdown";
 import "./SendMoneyPopup.css";
+import MoneyAmount from "./MoneyAmount";
 
-const contacts = ["contacto1", "contacto2"]; // Borrar después
+const SendMoneyPopup = ({ openPopup, handleClosePopup, accountBalance }) => {
+  const [stage, setStage] = useState(1);
+  const [selectedContact, setSelectedContact] = useState(null);
 
-const SendMoneyPopup = ({ openPopup, handleClosePopup }) => {
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [selectedContact, setSelectedContact] = useState("Contacts");
-
-  const handleOpenDropdown = (event) => {
-    setAnchorEl(event.currentTarget);
+  const handleNextStage = () => {
+    setStage(stage + 1);
   };
 
-  const handleCloseDropdown = () => {
-    setAnchorEl(null);
-  };
-
-  const handleSelectContact = (contact) => {
+  const handlePrevStage = (contact) => {
     setSelectedContact(contact);
-    handleCloseDropdown();
+    setStage(stage - 1);
+  };
+
+  const handleSelectedContact = (contact) => {
+    setSelectedContact(contact);
+    handleNextStage();
+  };
+
+  const renderContent = () => {
+    switch (stage) {
+      case 1:
+        return <ContactsDropdown handleNextStage={handleSelectedContact} />;
+      case 2:
+        return (
+          <MoneyAmount
+            contact={selectedContact}
+            accountBalance={accountBalance}
+            handlePrevStage={handlePrevStage}
+            handleNextStage={handleNextStage}
+          />
+        );
+      case 3:
+        return <h1>Certificado</h1>;
+    }
   };
 
   return (
     <Dialog open={openPopup} onClose={handleClosePopup}>
-      <DialogTitle>Select a contact</DialogTitle>
-      <DialogContent>
-        <div id="dropdown-button-container">
-          <Button onClick={handleOpenDropdown}>{selectedContact}</Button>
-          <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={handleCloseDropdown}
-          >
-            {contacts.map((contact) => (
-              <MenuItem
-                key={contact}
-                onClick={() => handleSelectContact(contact)}
-              >
-                {contact}
-              </MenuItem>
-            ))}
-          </Menu>
-          <Button id="button-next">Next</Button>
-        </div>
-      </DialogContent>
+      {renderContent()}
     </Dialog>
   );
 };

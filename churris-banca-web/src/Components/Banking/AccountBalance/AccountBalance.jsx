@@ -12,7 +12,7 @@ const AccountBalance = () => {
   // Hay que recibir el mensaje desde el servidor que contiene los datos del balance/saldo de la cuenta obtenidos desde la base de datos y asignar esos datos a las siguientes variables para luego renderizar el componente AccountBalance ya con esos datos.
   const [accountId, setAccountId] = useState("XXXXXXXXXX");
   const [typeCurrency, setTypeCurrency] = useState("Churruminos");
-  const [accountBalance, setAaccountBalance] = useState("Ch 15,500.00");
+  const [accountBalance, setAaccountBalance] = useState(1550000);
   const [openPopup, setOpenPopup] = useState(false);
 
   const userCredentials = {
@@ -22,7 +22,7 @@ const AccountBalance = () => {
   };
 
   useEffect(() => {
-    console.log("use effect");
+    /*console.log("use effect");
     // Realiza la solicitud al servidor, hay que definir la ruta al servidor
     axios
       .post("/ruta-al-servidor", userCredentials)
@@ -43,7 +43,7 @@ const AccountBalance = () => {
           "Error al realizar la conexión o recibir el texto del servidor:",
           error
         );
-      });
+      });*/
   }, []);
 
   const handleOpenPopup = () => {
@@ -72,12 +72,13 @@ const AccountBalance = () => {
       </div>
       <div className="info">
         <Typography>Balance of {typeCurrency}</Typography>
-        <Typography>{accountBalance}</Typography>
+        <Typography>Ch{accountBalance}</Typography>
       </div>
 
       <SendMoneyPopup
         openPopup={openPopup}
         handleClosePopup={handleClosePopup}
+        accountBalance={accountBalance}
       />
     </div>
   );

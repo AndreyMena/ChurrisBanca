@@ -4,10 +4,51 @@
   align-items: center;
 }
 
-#button-next {
+/*ContactsDropdown*/
+
+#contact {
+  color: black;
+}
+
+#btn-contacts-dropdown {
   border-radius: 8px;
   border: 1px solid #1976d2;
-  color: black;
   height: 30px;
   width: 70%;
+}
+
+/*MoneyAmount*/
+
+#amount-errormsg {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#amount {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#coin-amount {
+  margin-right: 5px;
+}
+
+#error-msg {
+  color: red;
+  margin-top: 5;
+}
+
+#buttons-container {
+  display: flex;
+  justify-content: center;
+}
+
+#buttons-container .btn {
+  border-radius: 8px;
+  border: 1px solid #1976d2;
+  height: 30px;
+  width: 40%;
+  margin: 5px;
 }
