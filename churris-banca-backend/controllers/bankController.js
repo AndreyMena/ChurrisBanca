@@ -4,6 +4,12 @@ const { response } = require("express");
 const bankAccounts = [
   { id: 1, userName: "jose.castro", accountStatus: 1550000, currency: "Ch" },
   { id: 2, userName: "maria.hernandez", accountStatus: 150000, currency: "€" },
+  {
+    id: 2,
+    userName: "roberto.chavez.madriz",
+    accountStatus: 150000,
+    currency: "Ch",
+  },
 ];
 
 // Elimminar despues
@@ -87,7 +93,7 @@ const getBankAccountById = (req, res = response) => {
   }
 
   res.status(400).json({
-    message: "Bank account not found",
+    message: "Bank accounts not found",
   });
 };
 
@@ -111,7 +117,22 @@ const getTransactionsByUserName = (req, res = response) => {
   });
 };
 
+const getBankAccountUsernames = (req, res = response) => {
+  bankAccountUsernames = bankAccounts.map((account) => account.userName);
+
+  if (bankAccountUsernames) {
+    return res.status(200).json({
+      bankAccountUsernames: bankAccountUsernames,
+    });
+  }
+
+  res.status(400).json({
+    message: "No bank account usernames found",
+  });
+};
+
 module.exports = {
   getBankAccountById,
   getTransactionsByUserName,
+  getBankAccountUsernames,
 };
