@@ -8,6 +8,7 @@ import Layout from "./Components/Layout/Layout.jsx";
 import RequireAuth from "./Components/Auth/RequireAuth.js";
 import Missing from "./Components/Auth/Missing.js";
 import { AuthProvider } from "./context/AuthProvider";
+import PersistLogin from "./Components/Auth/PersistLogin.js";
 
 function App() {
   return (
@@ -23,12 +24,14 @@ function App() {
             <Route path="/userProfile" element={<UserProfile/>} ></Route>
 
 
-            {/*Las rutas que coloquen dentro de esto requeriran estar logeado*/}
-            <Route element={<RequireAuth />}>
-              <Route path="/" />
-              <Route path="/bankingPage" element={<BankingPage />} ></Route>
-              <Route path="/socialPage" element={<SocialPage/>} ></Route>
-              <Route path="/userProfile" element={<UserProfile/>} ></Route>
+            <Route element={<PersistLogin />}>
+              {/*Las rutas que coloquen dentro de esto requeriran estar logeado*/}
+              <Route element={<RequireAuth />}>
+                <Route path="/" />
+                <Route path="/bankingPage" element={<BankingPage />} ></Route>
+                <Route path="/socialPage" element={<SocialPage/>} ></Route>
+                <Route path="/userProfile" element={<UserProfile/>} ></Route>
+              </Route>
             </Route>
 
             {/* catch all */}
