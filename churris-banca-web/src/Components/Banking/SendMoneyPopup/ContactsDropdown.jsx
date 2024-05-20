@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import "./SendMoneyPopup.css";
 import { useBankStore } from "../../../hooks/useBankStore";
+import useAuth from "../../../hooks/useAuth";
 
 const ContactsDropdown = ({ handleNextStage }) => {
   const {
@@ -15,6 +16,7 @@ const ContactsDropdown = ({ handleNextStage }) => {
     bankAccountUsernames,
     setBankAccountUsernames,
   } = useBankStore();
+  const { auth } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedContact, setSelectedContact] = useState("Contacts");
 
@@ -22,8 +24,8 @@ const ContactsDropdown = ({ handleNextStage }) => {
     setAnchorEl(event.currentTarget);
 
     const updatedBankAccountUsernames = bankAccountUsernames.filter(
-      (userName) => userName !== "roberto.chavez.madriz"
-    ); // TODO: Modificar
+      (userName) => userName !== auth.user
+    );
     setBankAccountUsernames(updatedBankAccountUsernames);
   };
 

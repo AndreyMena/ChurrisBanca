@@ -1,12 +1,14 @@
 import React, { useEffect } from "react";
 import Transaction from "../Transaction/Transaction";
 import { useBankStore } from "../../../hooks/useBankStore";
+import useAuth from "../../../hooks/useAuth";
 
 const TransactionList = () => {
   const { startLoadingTransactions, transactions } = useBankStore();
+  const { auth } = useAuth();
 
   useEffect(() => {
-    startLoadingTransactions("roberto.chavez.madriz"); // TODO: Modificar
+    startLoadingTransactions(auth.user);
   }, []);
 
   return (
