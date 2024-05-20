@@ -5,6 +5,7 @@ import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined
 import Button from '@mui/material/Button';
 import Diversity3OutlinedIcon from '@mui/icons-material/Diversity3Outlined';
 import IconButton from '@mui/material/IconButton';
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import SearchEngine from "../Tags/SearchEngine";
 import AuthContext from "../../context/AuthProvider";
 import useLogout from "../../hooks/useLogout";
@@ -63,7 +64,9 @@ const Header = () => {
         </div>        
         
         <div className="icon-is-selected">
-          <button onClick={signOut}>Sign Out</button>
+          <IconButton className="icon-button-header" color="primary" onClick={signOut}>
+            <LogoutOutlinedIcon fontSize="large"></LogoutOutlinedIcon>
+          </IconButton>
         </div>
       </div>
     </div>
