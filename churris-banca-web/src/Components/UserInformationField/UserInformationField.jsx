@@ -55,19 +55,12 @@ const UserInformationField = ({
         onChange={handleChange}
       />
       {isEditIconVisible && (
-        <IconButton
-          className="user-information-editing-components"
-          onClick={handleEnableTextField}
-        >
+        <IconButton onClick={handleEnableTextField}>
           <EditIcon color="action" />
         </IconButton>
       )}
       {isSaveButtonVisible && (
-        <Button
-          className="user-information-editing-components"
-          variant="outlined"
-          onClick={handleSaveClick}
-        >
+        <Button variant="outlined" onClick={handleSaveClick}>
           Save
         </Button>
       )}

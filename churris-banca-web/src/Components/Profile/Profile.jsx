@@ -42,7 +42,6 @@ const Profile = () => {
 
   return (
     <div id="profile-container">
-      <h1>{name}</h1>
       <div id="big-profile-picture">
         <AccountCircleIcon id="img" />
       </div>
