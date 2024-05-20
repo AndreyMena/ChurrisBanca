@@ -79,24 +79,6 @@ const transactionsExamples = [
   },
 ];
 
-const getBankAccountByUsername = (req, res = response) => {
-  const userName = req.params.bankAccountUsername;
-
-  const bankAccount = bankAccounts.find(
-    (bankAccount) => bankAccount.userName === userName
-  );
-
-  if (bankAccount) {
-    return res.status(200).json({
-      bankAccount: bankAccount,
-    });
-  }
-
-  res.status(400).json({
-    message: "Bank accounts not found",
-  });
-};
-
 const getTransactionsByUserName = (req, res = response) => {
   const userName = req.params.userName;
 
@@ -132,7 +114,6 @@ const getBankAccountUsernames = (req, res = response) => {
 };
 
 module.exports = {
-  getBankAccountByUsername,
   getTransactionsByUserName,
   getBankAccountUsernames,
 };

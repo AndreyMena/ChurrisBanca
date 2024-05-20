@@ -1,45 +1,43 @@
 import React, { useContext, useEffect, useState } from "react";
-import { clientServerContext } from "../../context/ClientServerContext";
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
-import PasswordOutlinedIcon from '@mui/icons-material/PasswordOutlined';
-import PhoneAndroidOutlinedIcon from '@mui/icons-material/PhoneAndroidOutlined';
-import TextField from '@mui/material/TextField';
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
+import PasswordOutlinedIcon from "@mui/icons-material/PasswordOutlined";
+import PhoneAndroidOutlinedIcon from "@mui/icons-material/PhoneAndroidOutlined";
 import UserInformationField from "../UserInformationField/UserInformationField";
-
+import { useAccountStore } from "../../hooks/useAccountStore";
+import useAuth from "../../hooks/useAuth";
+import { clientServerContext } from "../../context/ClientServerContext";
 import "./Profile.css";
- 
-// Elimminar despues
-const data = {
-  fullName: "Pablo Rodriguez Jimenez",
-  email: "pablo@gmail.com",
-  password: "Casa123!",
-  cellphoneNumber: "12345678"
-}
+import { Typography } from "@mui/material";
 
 const Profile = () => {
-  const { sendMessageToServer } = useContext(clientServerContext);
+  //const { sendMessageToServer } = useContext(clientServerContext);
 
-  const [fullName, setFullName] = useState(data.fullName);
-  const [email, setEmail] = useState(data.email);
-  const [password, setPassword] = useState(data.password);
-  const [cellphoneNumber, setCellphoneNumber] = useState(data.cellphoneNumber);
+  const { startLoadingAccount, account } = useAccountStore();
+  const { auth } = useAuth();
+  const { name, lastName, email, phoneNumber } = account;
 
+  const [userName, setUserName] = useState("");
+  const [userLastName, setUserLastName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+  const [userPhoneNumber, setUserPhoneNumber] = useState("");
+  const [password, setPassword] = useState("");
 
-  const messageToServer = {
+  /*const messageToServer = {
     type: "getUserInformation",
     user: "userName",
-    password: "password"
-  };
+    password: "password",
+  };*/
 
   useEffect(() => {
-    const serverResponse = sendMessageToServer(messageToServer);
+    /*const serverResponse = sendMessageToServer(messageToServer);
     if (serverResponse != null) {
       setFullName(serverResponse.fullName);
       setEmail(serverResponse.email);
       setPassword(serverResponse.password);
       setCellphoneNumber(serverResponse.cellphoneNumber);
-    }
+    }*/
+    startLoadingAccount(auth.user);
   }, []);
 
   return (
@@ -47,29 +45,58 @@ const Profile = () => {
       <div id="big-profile-picture">
         <AccountCircleIcon id="img" />
       </div>
-      <TextField
-          id="standard-read-only-input"
-          defaultValue={data.fullName}
-          InputProps={{
-            readOnly: true,
-          }}
-          variant="standard"
-        />
+      <Typography
+        id="standard-read-only-input"
+        InputProps={{
+          readOnly: true,
+        }}
+        variant="standard"
+      >
+        {name + " " + lastName}
+      </Typography>
 
       <div id="user-information-container">
         <div className="user-specific-information-container">
-          <EmailOutlinedIcon className="user-information-icons" fontSize="large" color="primary" />
-          <UserInformationField id="email-text-field" label="Email" defaultValue={data.email} onChange={setEmail}/>
+          <EmailOutlinedIcon
+            className="user-information-icons"
+            fontSize="large"
+            color="primary"
+          />
+          <UserInformationField
+            id="email-text-field"
+            label="Email"
+            defaultValue={email}
+            onChange={setUserEmail}
+          />
         </div>
 
         <div className="user-specific-information-container">
-          <PasswordOutlinedIcon className="user-information-icons" fontSize="large" color="primary" />
-          <UserInformationField id="password-text-field" label="Password" defaultValue={data.password} type="password" onChange={setPassword}/>
+          <PasswordOutlinedIcon
+            className="user-information-icons"
+            fontSize="large"
+            color="primary"
+          />
+          <UserInformationField
+            id="password-text-field"
+            label="Password"
+            defaultValue={password}
+            type="password"
+            onChange={setPassword}
+          />
         </div>
 
         <div className="user-specific-information-container">
-          <PhoneAndroidOutlinedIcon className="user-information-icons" fontSize="large" color="primary" />
-          <UserInformationField id="phone-number-text-field" label="Cell phone number" defaultValue={data.cellphoneNumber} onChange={setCellphoneNumber}/>
+          <PhoneAndroidOutlinedIcon
+            className="user-information-icons"
+            fontSize="large"
+            color="primary"
+          />
+          <UserInformationField
+            id="phone-number-text-field"
+            label="Cell phone number"
+            defaultValue={phoneNumber}
+            onChange={setUserPhoneNumber}
+          />
         </div>
       </div>
     </div>

@@ -2,4 +2,9 @@
   display: flex;
   flex-direction: row;
   margin-left: 2%;
+  width: 100%;
+}
+
+.user-information-editing-components {
+  width: 100%;
 }
