@@ -3,7 +3,7 @@ import { Button } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import axios from "axios";
-import { useBankStore } from "../../../hooks/useBankStore";
+import { useAccountStore } from "../../../hooks/useAccountStore";
 import useAuth from "../../../hooks/useAuth";
 import SendMoneyPopup from "../SendMoneyPopup/SendMoneyPopup";
 import "./AccountBalance.css";
@@ -11,11 +11,11 @@ import "./AccountBalance.css";
 //export const handleAccountBalance = (messageFromServer) => {};
 
 const AccountBalance = () => {
-  const { startLoadingBankAccount, bankAccount } = useBankStore();
+  const { startLoadingAccount, account } = useAccountStore();
   const { auth } = useAuth();
   const [openPopup, setOpenPopup] = useState(false);
 
-  const { id: bankAccountId, currency, accountStatus } = bankAccount;
+  const { id: bankAccountId, currency, accountStatus } = account;
 
   /* // Hay que recibir el mensaje desde el servidor que contiene los datos del balance/saldo de la cuenta obtenidos desde la base de datos y asignar esos datos a las siguientes variables para luego renderizar el componente AccountBalance ya con esos datos.
   const [accountId, setAccountId] = useState("XXXXXXXXXX");
@@ -62,7 +62,7 @@ const AccountBalance = () => {
   };
 
   useEffect(() => {
-    startLoadingBankAccount(auth.user);
+    startLoadingAccount(auth.user);
   }, []);
 
   return (
