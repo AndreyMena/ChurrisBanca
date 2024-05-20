@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
@@ -27,6 +27,7 @@ const UserInformationField = ({
 
   const handleChange = (event) => {
     setText(event.target.value);
+    onChange(event.target.value);
   };
 
   const handleSaveClick = (event) => {
@@ -37,6 +38,10 @@ const UserInformationField = ({
     setIsSaveButtonVisible(false);
   };
 
+  useEffect(() => {
+    setText(defaultValue);
+  }, [defaultValue]);
+
   return (
     <div className="user-information-editing-container">
       <TextField
@@ -45,9 +50,9 @@ const UserInformationField = ({
         id={id}
         type={type}
         label={label}
-        value={defaultValue}
+        value={text}
         variant="standard"
-        onChange={(e) => onChange(e.target.value)}
+        onChange={handleChange}
       />
       {isEditIconVisible && (
         <IconButton
