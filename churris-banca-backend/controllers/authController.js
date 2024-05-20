@@ -1,13 +1,5 @@
-//TODO Cambiar por la base mariaDB
-const usersDB = {
-    users: require('../model/users.json'),
-    setUsers: function (data) { this.users = data }
-}
-
 const bcrypt = require('bcrypt');  //Encriptador y desemcriptador
 const jwt = require('jsonwebtoken');  //Tokens para la sesion
-const fsPromises = require('fs').promises;
-const path = require('path');
 const pool = require('../config/dbConnection');
 
 const handleLogin = async (req, res) => {
@@ -34,17 +26,15 @@ const handleLogin = async (req, res) => {
         );
         
         // Guarda refreshToken del usuario
-        // TODO: por ahora escribe en JSON, luego cambiar a la Base
         const sqlQuery = 'UPDATE USUARIO SET RefreshToken = ? WHERE Email = ?';
         await pool.query(sqlQuery, [refreshToken, foundUser[0].Email]);
 
         // Se crea el cookie con el refreshtoken, httpOnly para que no lo saquen con
         // JS, el calculo del max age es para 1 dia.
-        //Quitar secure si probamos con postman o thunderclient, pero hay q volverlo a poner
+        // Quitar secure si probamos con postman o thunderclient, pero hay q volverlo a poner
         res.cookie('jwt', refreshToken, { httpOnly: true, secure: true, sameSite: 'None', maxAge: 24 * 60 * 60 * 1000 });
 
         // Send authorization roles and access token to user
-        // TODO: Acordarme de no guardar el token en el storage del front, si no en memoria
         res.json({ accessToken });
     } else {
         res.sendStatus(401);
