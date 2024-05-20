@@ -4,13 +4,15 @@ import Typography from "@mui/material/Typography";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import axios from "axios";
 import { useBankStore } from "../../../hooks/useBankStore";
+import useAuth from "../../../hooks/useAuth";
 import SendMoneyPopup from "../SendMoneyPopup/SendMoneyPopup";
 import "./AccountBalance.css";
 
-export const handleAccountBalance = (messageFromServer) => {};
+//export const handleAccountBalance = (messageFromServer) => {};
 
 const AccountBalance = () => {
   const { startLoadingBankAccount, bankAccount } = useBankStore();
+  const { auth } = useAuth();
   const [openPopup, setOpenPopup] = useState(false);
 
   const { id: bankAccountId, currency, accountStatus } = bankAccount;
@@ -60,7 +62,7 @@ const AccountBalance = () => {
   };
 
   useEffect(() => {
-    startLoadingBankAccount(1); // TODO: Modificar
+    startLoadingBankAccount(auth.user);
   }, []);
 
   return (
