@@ -6,10 +6,10 @@ const useRefreshToken = () => {
 
     const refresh = async () => {
         const response = await axios.get('/refresh', {
-            withCredentials: true
+            withCredentials: true  //Importante, permite enviar cookie donde se encuentra el refreshToken
         });
         setAuth(prev => {
-            return { ...prev, accessToken: response.data.accessToken }  //Actualiza el token viejo con el nuevo
+            return { ...prev, user: response.data.user, accessToken: response.data.accessToken }  //Actualiza el token viejo con el nuevo
         });
         return response.data.accessToken;
     }
