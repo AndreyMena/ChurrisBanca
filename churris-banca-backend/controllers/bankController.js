@@ -79,11 +79,11 @@ const transactionsExamples = [
   },
 ];
 
-const getBankAccountById = (req, res = response) => {
-  const bankAccountId = parseInt(req.params.bankAccountId, 10);
+const getBankAccountByUsername = (req, res = response) => {
+  const userName = req.params.bankAccountUsername;
 
   const bankAccount = bankAccounts.find(
-    (bankAccount) => bankAccount.id === bankAccountId
+    (bankAccount) => bankAccount.userName === userName
   );
 
   if (bankAccount) {
@@ -132,7 +132,7 @@ const getBankAccountUsernames = (req, res = response) => {
 };
 
 module.exports = {
-  getBankAccountById,
+  getBankAccountByUsername,
   getTransactionsByUserName,
   getBankAccountUsernames,
 };
