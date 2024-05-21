@@ -22,7 +22,7 @@ const CreatePost = () => {
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton>
-                  <InsertPhotoOutlinedIcon ></InsertPhotoOutlinedIcon>
+                  <InsertPhotoOutlinedIcon fontSize="large"></InsertPhotoOutlinedIcon>
                 </IconButton>
               </InputAdornment>
             ),

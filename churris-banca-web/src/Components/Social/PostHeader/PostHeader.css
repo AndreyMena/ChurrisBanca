@@ -1,0 +1,6 @@
+#post-header-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 10px 0 10px 0;
+}
