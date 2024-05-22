@@ -1,23 +1,25 @@
 import React from "react";
-import Header from "../../Components/Header/Header";
-import PaginationBar from "../../Components/PaginationBar/PaginationBar";
+import Box from "@mui/material/Box";
 import CreatePost from "../../Components/Social/CreatePost/CreatePost";
+import Container from "@mui/material/Container";
+import Header from "../../Components/Header/Header";
 import Post from "../../Components/Social/Post/Post";
-import Posts from "../../Components/Social/Posts/Posts";
 import ClientServerProvider from "../../Components/Providers/ClientServerProvider";
 
 const SocialPage = () => {
   return (
     <ClientServerProvider>
       <Header />
-
       <div className="container">
         <CreatePost />
-
-        <Post />
-
-        <PaginationBar />
       </div>
+      <Container maxWidth="xl" style={{ height: '100vh', overflowY: 'auto' }}>
+        <Box>
+          <Post />
+          <Post />
+          <Post />
+        </Box>
+      </Container>
     </ClientServerProvider>
   );
 };
