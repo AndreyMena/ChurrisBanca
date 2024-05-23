@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Post from "../Post/Post";
-import { useSocialStore } from "../../../hooks/useSocialStore";
 import useAuth from "../../../hooks/useAuth";
+import { useSocialStore } from "../../../hooks/useSocialStore";
 
 const PostsList = () => {
 	const { startLoadingPosts, posts } = useSocialStore();

@@ -6,7 +6,6 @@ import Button from '@mui/material/Button';
 import Diversity3OutlinedIcon from '@mui/icons-material/Diversity3Outlined';
 import IconButton from '@mui/material/IconButton';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
-import SearchEngine from "../Tags/SearchEngine";
 import AuthContext from "../../context/AuthProvider";
 import useLogout from "../../hooks/useLogout";
 
@@ -41,7 +40,6 @@ const Header = () => {
     <div id="header-container">
       <div id="logo-search-container">
         <Button size="large" variant="text" onClick={handleHomeClick} style={{ fontWeight: 'bold', fontSize: "30px"}}>Churris Banca</Button>
-        {/* <SearchEngine text="Buscar" id="search-engine" /> */}
       </div>
 
       <div id="menu-container">
