@@ -6,21 +6,20 @@ import Typography from "@mui/material/Typography";
 
 import "./PostReactions.css"
 
-const PostReaction = () => {
-
+const PostReaction = ({postLikes, postDislikes}) => {
   return (
     <div id="post-reactions-container">
       <div className="reaction-item-container">
       <IconButton>
         <ThumbUpOutlinedIcon></ThumbUpOutlinedIcon>
       </IconButton>
-      <Typography>500</Typography>
+      <Typography>{postLikes}</Typography>
       </div>
       <div className="reaction-item-container">
       <IconButton>
         <ThumbDownOutlinedIcon></ThumbDownOutlinedIcon>
       </IconButton>
-      <Typography>500</Typography>
+      <Typography>{postDislikes}</Typography>
       </div>
     </div>
   );
