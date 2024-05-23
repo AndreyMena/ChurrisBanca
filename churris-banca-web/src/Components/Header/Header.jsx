@@ -8,12 +8,13 @@ import IconButton from '@mui/material/IconButton';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import AuthContext from "../../context/AuthProvider";
 import useLogout from "../../hooks/useLogout";
-
+import useAuth from "../../hooks/useAuth";
 import "./Header.css";
 
 const Header = () => {
   const navigate = useNavigate();
   const logout = useLogout();
+  const {auth} = useAuth();
 
   const handleHomeClick = () => {
     navigate('/bankingPage');
@@ -65,6 +66,10 @@ const Header = () => {
           <IconButton className="icon-button-header" color="primary" onClick={signOut}>
             <LogoutOutlinedIcon fontSize="large"></LogoutOutlinedIcon>
           </IconButton>
+        </div>
+        
+        <div className="icon-is-selected">
+          <button>{auth?.user}</button>
         </div>
       </div>
     </div>
