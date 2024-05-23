@@ -1,0 +1,12 @@
+#post-reactions-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  margin: 10px 0 10px 0;
+}
+
+.reaction-item-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
