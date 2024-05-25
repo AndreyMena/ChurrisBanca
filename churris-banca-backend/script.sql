@@ -1,5 +1,5 @@
 CREATE TABLE USUARIO (
-    Nickname VARCHAR(20) PRIMARY KEY,
+    Nickname VARCHAR(25) PRIMARY KEY,
     Contrasena VARCHAR(255) NOT NULL,
     Nombre VARCHAR(25) NOT NULL,
     Apellidos VARCHAR(25) NOT NULL,
