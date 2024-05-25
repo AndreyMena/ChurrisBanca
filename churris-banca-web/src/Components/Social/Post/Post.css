@@ -1,0 +1,10 @@
+#post-container {
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  border-radius: 10px;
+  color: black;
+  background: #ffffff;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
