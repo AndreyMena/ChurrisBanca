@@ -2,10 +2,10 @@ import { useState } from "react";
 import axios from "../api/axios";
 
 const initialStateAccount = {
-  id: 0,
-  userName: "",
-  accountStatus: 0,
-  currency: "",
+  Nombre: "",
+  Apellidos: "",
+  Email: "",
+  Celular: "",
 };
 
 export const useAccountStore = () => {
