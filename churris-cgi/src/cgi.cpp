@@ -12,6 +12,32 @@ const char* USERNAME = "churris_cgi";
 const char* PASSWORD = "Abc123$%";
 const char* SCHEMA = "churris_banking";
 
+
+string decodeUriArgument(const string& argument)
+{
+    string decoded;
+    char ch;
+    long unsigned int i; 
+    int j;
+	
+    for (i = 0; i < argument.length(); i++) 
+	{
+        if (int(argument[i]) == 37)
+		{
+            sscanf(argument.substr(i + 1, 2).c_str(), "%x", &j);
+            ch = static_cast<char>(j);
+            decoded += ch;
+            i = i + 2;
+			
+        }else if(argument[i] == '+'){
+            decoded += ' ';
+        }else{
+            decoded += argument[i];
+        }
+    }
+    return decoded;
+}
+
 string getCgiReply(string reply)
 {
     ostringstream cgiReply;
@@ -36,7 +62,7 @@ void submitQuery(const string& query)
     // Validaciones
     if( query.empty() )
     {
-        //cout << "\t- ERROR: Input was empty" << endl;
+        cout << getCgiReply("Empty query...");
     }
     else
     {
@@ -106,17 +132,18 @@ void submitQuery(const string& query)
 int main()
 {
     string query;
-
-    while (true)
-    {
-        while (cin.peek() == EOF) {
-            // Esperar 100 milisegundos antes de intentar de nuevo
-            this_thread::sleep_for(chrono::milliseconds(100));
-        }
-
-        getline(cin, query);
-        submitQuery(query);
+    getline(cin, query);
+    
+    // We must read 'input_data' from the URL
+    string::size_type pos = query.find("input_data=");
+    
+    if (pos != string::npos) {
+        query = decodeUriArgument(query.substr(pos + 11));
+    }else{
+        query = "";
     }
+    
+    submitQuery(query);
 
     return 0;
 }

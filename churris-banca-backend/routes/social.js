@@ -5,8 +5,16 @@
 
 const { Router } = require("express");
 const router = Router();
-const { getPostsByUserName } = require("../controllers/socialController");
+const {
+  getAccountByUsername,
+  putAccountByUsername,
+  getPostsByUserName,
+  getAccounts,
+} = require("../controllers/socialController");
 
+router.get("/:accountUsername", getAccountByUsername);
+router.put("/user/:accountUsername", putAccountByUsername);
 router.get("/posts/:userName", getPostsByUserName);
+router.get("/", getAccounts);
 
 module.exports = router;

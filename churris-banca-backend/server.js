@@ -46,8 +46,6 @@ app.use("/refresh", require("./routes/refresh"));
 app.use("/logout", require("./routes/logout"));
 
 app.use("/bank", require("./routes/bank"));
-app.use("/account", require("./routes/account"));
-
 app.use("/social", require("./routes/social"));
 
 //Otro middleware para los web tokens, necesario para quitar o no sesion

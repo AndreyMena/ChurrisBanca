@@ -2,7 +2,7 @@ const { response } = require("express");
 
 // Borrar después
 const bankAccounts = [
-  { id: 1, userName: "jose.castro", accountStatus: 1550000, currency: "Ch" },
+  { id: 1, userName: "andre.villegas", accountStatus: 1550000, currency: "Ch" },
   { id: 2, userName: "maria.hernandez", accountStatus: 150000, currency: "€" },
   {
     id: 2,
@@ -17,7 +17,7 @@ const transactionsExamples = [
   {
     transactionID: "87654321",
     originAccount: "paulina.rodriguez.jimenez", // Me lo envió
-    targetAccount: "roberto.chavez.madriz",
+    targetAccount: "andre.villegas",
     transactionType: "received",
     transactionDate: "11-04-2024",
     transactionTime: "13:08",
@@ -25,7 +25,7 @@ const transactionsExamples = [
   },
   {
     transactionID: "56781234",
-    originAccount: "roberto.chavez.madriz", // Lo envío
+    originAccount: "andre.villegas", // Lo envío
     targetAccount: "paulina.rodriguez.jimenez",
     transactionType: "sent",
     transactionDate: "12-02-2022",
@@ -35,7 +35,7 @@ const transactionsExamples = [
   {
     transactionID: "43215678",
     originAccount: "ramina.chavez.gonzalez", // Me lo envió
-    targetAccount: "roberto.chavez.madriz",
+    targetAccount: "andre.villegas",
     transactionType: "received",
     transactionDate: "12-03-2021",
     transactionTime: "10:25",
@@ -43,7 +43,7 @@ const transactionsExamples = [
   },
   {
     transactionID: "13572468",
-    originAccount: "roberto.chavez.madriz", // Lo envío
+    originAccount: "andre.villegas", // Lo envío
     targetAccount: "mario.bermudez.fuentes",
     transactionType: "sent",
     transactionDate: "15-02-2023",
@@ -53,7 +53,7 @@ const transactionsExamples = [
   {
     transactionID: "97531246",
     originAccount: "maria.rodriguez.hernandez", // Me lo envió
-    targetAccount: "roberto.chavez.madriz",
+    targetAccount: "andre.villegas",
     transactionType: "received",
     transactionDate: "12-10-2022",
     transactionTime: "15:20",
@@ -61,7 +61,7 @@ const transactionsExamples = [
   },
   {
     transactionID: "11223344",
-    originAccount: "roberto.chavez.madriz", // Lo envío
+    originAccount: "andre.villegas", // Lo envío
     targetAccount: "josefo.villareal.sanchez",
     transactionType: "sent",
     transactionDate: "07-01-2020",
@@ -78,6 +78,24 @@ const transactionsExamples = [
     transactionAmount: 10200,
   },
 ];
+
+const getBankAccountByUsername = (req, res = response) => {
+  const userName = req.params.bankAccountUsername;
+
+  const bankAccount = bankAccounts.find(
+    (bankAccount) => bankAccount.userName === userName
+  );
+
+  if (bankAccount) {
+    return res.status(200).json({
+      bankAccount: bankAccount,
+    });
+  }
+
+  res.status(400).json({
+    message: "Bank accounts not found",
+  });
+};
 
 const getTransactionsByUserName = (req, res = response) => {
   const userName = req.params.userName;
@@ -99,21 +117,7 @@ const getTransactionsByUserName = (req, res = response) => {
   });
 };
 
-const getBankAccountUsernames = (req, res = response) => {
-  bankAccountUsernames = bankAccounts.map((account) => account.userName);
-
-  if (bankAccountUsernames) {
-    return res.status(200).json({
-      bankAccountUsernames: bankAccountUsernames,
-    });
-  }
-
-  res.status(400).json({
-    message: "No bank account usernames found",
-  });
-};
-
 module.exports = {
+  getBankAccountByUsername,
   getTransactionsByUserName,
-  getBankAccountUsernames,
 };
