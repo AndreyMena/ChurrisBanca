@@ -11,6 +11,7 @@ const initialStateAccount = {
 const useSocialStore = () => {
   const [account, setAccount] = useState(initialStateAccount);
   const [posts, setPosts] = useState([]);
+  const [accounts, setAccounts] = useState([]);
 
   /* Profile */
   const startLoadingAccount = async (accountUsername) => {
@@ -43,13 +44,26 @@ const useSocialStore = () => {
     }
   };
 
+  const startLoadingAccounts = async () => {
+    try {
+      const { data } = await axios.get("social/accounts");
+      setAccounts(data.accounts);
+    } catch (error) {
+      console.log("Error loading bank account usernames");
+    }
+  };
+
   return {
     account,
     posts,
+    accounts,
+
+    setAccounts,
 
     startLoadingAccount,
     startUpdatingValueAccount,
     startLoadingPosts,
+    startLoadingAccounts,
   };
 };
 
