@@ -15,7 +15,7 @@ const Profile = () => {
 
   const { startLoadingAccount, account } = useAccountStore();
   const { auth } = useAuth();
-  const { name, lastName, email, phoneNumber } = account;
+  const { Nombre, Apellidos, Email, Celular } = account;
 
   const [userName, setUserName] = useState("");
   const [userLastName, setUserLastName] = useState("");
@@ -52,7 +52,7 @@ const Profile = () => {
         }}
         variant="standard"
       >
-        {name + " " + lastName}
+        {Nombre + " " + Apellidos}
       </Typography>
 
       <div id="user-information-container">
@@ -65,7 +65,7 @@ const Profile = () => {
           <UserInformationField
             id="email-text-field"
             label="Email"
-            defaultValue={email}
+            defaultValue={Email}
             onChange={setUserEmail}
           />
         </div>
@@ -94,7 +94,7 @@ const Profile = () => {
           <UserInformationField
             id="phone-number-text-field"
             label="Cell phone number"
-            defaultValue={phoneNumber}
+            defaultValue={Celular}
             onChange={setUserPhoneNumber}
           />
         </div>
