@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:3500';  //Verificar puerto
+const BASE_URL = 'http://localhost:3003';  //Verificar puerto
 
 //Probablemente sea bueno pasarlo a un .env
 

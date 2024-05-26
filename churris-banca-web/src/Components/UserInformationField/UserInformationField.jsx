@@ -1,35 +1,49 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "@mui/material/Button";
-import IconButton from '@mui/material/IconButton';
-import EditIcon from '@mui/icons-material/Edit';
-import PropTypes from 'prop-types'
-import TextField from '@mui/material/TextField';
-
+import IconButton from "@mui/material/IconButton";
+import EditIcon from "@mui/icons-material/Edit";
+import PropTypes from "prop-types";
+import TextField from "@mui/material/TextField";
+import useAuth from "../../hooks/useAuth";
+import useSocialStore from "../../hooks/useSocialStore";
 import "./UserInformationField.css";
 
-const UserInformationField = ({id, label, defaultValue, onChange, type = "text"}) => {
+const UserInformationField = ({
+  id,
+  label,
+  defaultValue,
+  onChange,
+  type = "text",
+}) => {
+  const { startUpdatingValueAccount } = useSocialStore();
+  const { auth } = useAuth();
   const [isTextFieldDisabled, setIsTextFieldDisabled] = useState(true);
   const [isEditIconVisible, setIsEditIconVisible] = useState(true);
   const [isSaveButtonVisible, setIsSaveButtonVisible] = useState(false);
-  const [text, setText] = useState('');
+  const [text, setText] = useState("");
 
   const handleEnableTextField = () => {
     setIsTextFieldDisabled(false);
     setIsEditIconVisible(false);
     setIsSaveButtonVisible(true);
-  }
+  };
 
   const handleChange = (event) => {
     setText(event.target.value);
-  }
+    onChange(event.target.value);
+  };
 
-  const handleSaveClick = (event) => {
-    console.log(text);
-    
+  const handleSaveClick = () => {
+    startUpdatingValueAccount(auth.user, text, label);
+
     setIsTextFieldDisabled(true);
     setIsEditIconVisible(true);
     setIsSaveButtonVisible(false);
-  }
+  };
+
+  useEffect(() => {
+    setText(defaultValue);
+  }, [defaultValue]);
 
   return (
     <div className="user-information-editing-container">
@@ -39,14 +53,20 @@ const UserInformationField = ({id, label, defaultValue, onChange, type = "text"}
         id={id}
         type={type}
         label={label}
-        defaultValue={defaultValue}
+        value={text}
         variant="standard"
-        onChange={(e) => onChange(e.target.value)}
+        onChange={handleChange}
       />
-      {isEditIconVisible && <IconButton className="user-information-editing-components" onClick={handleEnableTextField}>
-        <EditIcon color="action"/>
-      </IconButton>}
-      {isSaveButtonVisible && <Button className="user-information-editing-components" variant="outlined" onClick={handleSaveClick}>Save</Button>}
+      {isEditIconVisible && (
+        <IconButton onClick={handleEnableTextField}>
+          <EditIcon color="action" />
+        </IconButton>
+      )}
+      {isSaveButtonVisible && (
+        <Button variant="outlined" onClick={handleSaveClick}>
+          Save
+        </Button>
+      )}
     </div>
   );
 };
@@ -55,7 +75,7 @@ UserInformationField.propTypes = {
   id: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   defaultValue: PropTypes.string.isRequired,
-  type: PropTypes.string
-}
+  type: PropTypes.string,
+};
 
 export default UserInformationField;

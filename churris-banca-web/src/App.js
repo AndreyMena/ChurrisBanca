@@ -18,11 +18,6 @@ function App() {
           <Route path="/" element={<Layout />}>
             <Route path="/login" element={<Login />} ></Route>
 
-            {/*Eliminar esto y dejar las de abajo para que haya q estar logeado*/}
-            <Route path="/bankingPage" element={<BankingPage />} ></Route>
-            <Route path="/socialPage" element={<SocialPage/>} ></Route>
-            <Route path="/userProfile" element={<UserProfile/>} ></Route>
-
 
             <Route element={<PersistLogin />}>
               {/*Las rutas que coloquen dentro de esto requeriran estar logeado*/}

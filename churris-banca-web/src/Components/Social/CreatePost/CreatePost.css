@@ -1,0 +1,22 @@
+#create-post-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  border-radius: 10px;
+  height: 75px;
+  padding-left: 15px;
+  padding-right: 15px;
+  background: #ffffff;
+  color: black;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.create-post-item-container {
+  margin-left: 2%;
+  margin-right: 2%;
+}
+
+.custom-text-field .MuiFilledInput-root {
+  border-radius: 20px;
+}
