@@ -6,13 +6,13 @@ export const useAuthStore = () => {
   const { setAuth } = useAuth();
   const [msg, setMsg] = useState("");
 
-  const startLogin = async ({ user, pwd }) => {
+  const startLogin = async ({ email, pwd }) => {
     try {
       setMsg("");
 
       const response = await axios.post(
         "/auth",
-        JSON.stringify({ user, pwd }),
+        JSON.stringify({ email, pwd }),
         {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
@@ -20,8 +20,9 @@ export const useAuthStore = () => {
       );
 
       const accessToken = response?.data?.accessToken;
+      const user = response?.data?.user;
 
-      setAuth({ user, accessToken });
+      setAuth({ email, accessToken, user });
       setMsg("Login Successful");
     } catch (err) {
       if (!err?.response) {
