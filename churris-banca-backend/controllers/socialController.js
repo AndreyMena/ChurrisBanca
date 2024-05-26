@@ -1,11 +1,12 @@
 const { response } = require("express");
+const pool = require("../config/dbConnection");
 
 const getAccountByUsername = async (req, res = response) => {
   const userName = req.params.accountUsername;
 
-  /*const sqlQuery =
+  const sqlQuery =
     "SELECT Nombre, Apellidos, Email, Celular FROM USUARIO WHERE NickName=?";
-  const account = await pool.query(sqlQuery, userName);*/
+  const account = await pool.query(sqlQuery, userName);
 
   if (account) {
     return res.status(200).json({

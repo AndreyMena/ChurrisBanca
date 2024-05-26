@@ -5,12 +5,12 @@ import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import PasswordOutlinedIcon from "@mui/icons-material/PasswordOutlined";
 import PhoneAndroidOutlinedIcon from "@mui/icons-material/PhoneAndroidOutlined";
 import UserInformationField from "../UserInformationField/UserInformationField";
-import { useAccountStore } from "../../hooks/useAccountStore";
+import useSocialStore from "../../hooks/useSocialStore";
 import useAuth from "../../hooks/useAuth";
 import "./Profile.css";
 
 const Profile = () => {
-  const { startLoadingAccount, account } = useAccountStore();
+  const { startLoadingAccount, account } = useSocialStore();
   const { auth } = useAuth();
   const { Nombre, Apellidos, Email, Celular } = account;
 

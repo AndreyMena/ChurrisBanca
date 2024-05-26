@@ -30,9 +30,7 @@ const UserInformationField = ({
     onChange(event.target.value);
   };
 
-  const handleSaveClick = (event) => {
-    console.log(text);
-
+  const handleSaveClick = () => {
     setIsTextFieldDisabled(true);
     setIsEditIconVisible(true);
     setIsSaveButtonVisible(false);
