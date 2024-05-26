@@ -4,7 +4,8 @@ import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import PropTypes from "prop-types";
 import TextField from "@mui/material/TextField";
-
+import useAuth from "../../hooks/useAuth";
+import useSocialStore from "../../hooks/useSocialStore";
 import "./UserInformationField.css";
 
 const UserInformationField = ({
@@ -14,6 +15,8 @@ const UserInformationField = ({
   onChange,
   type = "text",
 }) => {
+  const { startUpdatingValueAccount } = useSocialStore();
+  const { auth } = useAuth();
   const [isTextFieldDisabled, setIsTextFieldDisabled] = useState(true);
   const [isEditIconVisible, setIsEditIconVisible] = useState(true);
   const [isSaveButtonVisible, setIsSaveButtonVisible] = useState(false);
@@ -31,6 +34,8 @@ const UserInformationField = ({
   };
 
   const handleSaveClick = () => {
+    startUpdatingValueAccount(auth.user, text, label);
+
     setIsTextFieldDisabled(true);
     setIsEditIconVisible(true);
     setIsSaveButtonVisible(false);
