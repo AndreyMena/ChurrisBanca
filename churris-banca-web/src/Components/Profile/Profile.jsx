@@ -1,4 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Typography } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import PasswordOutlinedIcon from "@mui/icons-material/PasswordOutlined";
@@ -6,13 +7,9 @@ import PhoneAndroidOutlinedIcon from "@mui/icons-material/PhoneAndroidOutlined";
 import UserInformationField from "../UserInformationField/UserInformationField";
 import { useAccountStore } from "../../hooks/useAccountStore";
 import useAuth from "../../hooks/useAuth";
-import { clientServerContext } from "../../context/ClientServerContext";
 import "./Profile.css";
-import { Typography } from "@mui/material";
 
 const Profile = () => {
-  //const { sendMessageToServer } = useContext(clientServerContext);
-
   const { startLoadingAccount, account } = useAccountStore();
   const { auth } = useAuth();
   const { Nombre, Apellidos, Email, Celular } = account;
@@ -23,20 +20,7 @@ const Profile = () => {
   const [userPhoneNumber, setUserPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
 
-  /*const messageToServer = {
-    type: "getUserInformation",
-    user: "userName",
-    password: "password",
-  };*/
-
   useEffect(() => {
-    /*const serverResponse = sendMessageToServer(messageToServer);
-    if (serverResponse != null) {
-      setFullName(serverResponse.fullName);
-      setEmail(serverResponse.email);
-      setPassword(serverResponse.password);
-      setCellphoneNumber(serverResponse.cellphoneNumber);
-    }*/
     startLoadingAccount(auth.user);
   }, []);
 
