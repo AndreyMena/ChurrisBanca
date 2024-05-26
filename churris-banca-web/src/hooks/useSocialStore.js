@@ -46,7 +46,7 @@ const useSocialStore = () => {
 
   const startLoadingAccounts = async () => {
     try {
-      const { data } = await axios.get("social/accounts");
+      const { data } = await axios.get("social/");
       setAccounts(data.accounts);
     } catch (error) {
       console.log("Error loading bank account usernames");
