@@ -19,6 +19,14 @@ const getAccountByUsername = async (req, res = response) => {
   });
 };
 
+const putAccountByUsername = async (req, res = response) => {
+  const userName = req.params.accountUsername;
+  const { data, label } = req.body;
+
+  const sqlQuery = `UPDATE USUARIO SET ${label}=? WHERE NickName=?`;
+  await pool.query(sqlQuery, [data, userName]);
+};
+
 // TODO
 const getPostsByUserName = (req, res = response) => {
   const userName = req.params.userName;
@@ -30,5 +38,6 @@ const getPostsByUserName = (req, res = response) => {
 
 module.exports = {
   getAccountByUsername,
+  putAccountByUsername,
   getPostsByUserName,
 };
