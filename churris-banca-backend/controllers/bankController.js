@@ -2,7 +2,7 @@ const { response } = require("express");
 
 // Borrar después
 const bankAccounts = [
-  { id: 1, userName: "jose.castro", accountStatus: 1550000, currency: "Ch" },
+  { id: 1, userName: "andre.villegas", accountStatus: 1550000, currency: "Ch" },
   { id: 2, userName: "maria.hernandez", accountStatus: 150000, currency: "€" },
   {
     id: 2,
@@ -11,7 +11,7 @@ const bankAccounts = [
     currency: "Ch",
   },
 ];
-andre.villegas;
+
 // Elimminar despues
 const transactionsExamples = [
   {

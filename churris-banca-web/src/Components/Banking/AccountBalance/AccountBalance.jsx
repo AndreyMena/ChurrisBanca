@@ -2,17 +2,17 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@mui/material";
 import Typography from "@mui/material/Typography";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import useSocialStore from "../../../hooks/useSocialStore";
 import useAuth from "../../../hooks/useAuth";
+import { useBankStore } from "../../../hooks/useBankStore";
 import SendMoneyPopup from "../SendMoneyPopup/SendMoneyPopup";
 import "./AccountBalance.css";
 
 const AccountBalance = () => {
-  const { startLoadingAccount, account } = useSocialStore();
+  const { startLoadingBankAccount, bankAccount } = useBankStore();
   const { auth } = useAuth();
   const [openPopup, setOpenPopup] = useState(false);
 
-  const { id: bankAccountId, currency, accountStatus } = account;
+  const { id: bankAccountId, currency, accountStatus } = bankAccount;
 
   const handleOpenPopup = () => {
     setOpenPopup(true);
@@ -23,7 +23,7 @@ const AccountBalance = () => {
   };
 
   useEffect(() => {
-    startLoadingAccount(auth.user);
+    startLoadingBankAccount(auth.user);
   }, []);
 
   return (

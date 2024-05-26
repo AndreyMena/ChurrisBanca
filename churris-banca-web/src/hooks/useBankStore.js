@@ -13,12 +13,12 @@ export const useBankStore = () => {
   const [transactions, setTransactions] = useState([]);
   const [bankAccountUsernames, setBankAccountUsernames] = useState([]);
 
-  const startLoadingBankAccount = async (bankAccountId) => {
+  const startLoadingBankAccount = async (bankAccountUsername) => {
     try {
-      const { data } = await axios.get(`bank/account/${bankAccountId}`);
+      const { data } = await axios.get(`bank/account/${bankAccountUsername}`);
       setbankAccount(data.bankAccount);
     } catch (error) {
-      console.log("Error loading bank account", error);
+      console.log("Error loading bank account");
     }
   };
 
@@ -27,7 +27,7 @@ export const useBankStore = () => {
       const { data } = await axios.get(`bank/transactions/${userName}`);
       setTransactions(data.transactions);
     } catch (error) {
-      console.log("Error loading transactions", error);
+      console.log("Error loading transactions");
     }
   };
 
@@ -36,7 +36,7 @@ export const useBankStore = () => {
       const { data } = await axios.get("bank/accounts");
       setBankAccountUsernames(data.bankAccountUsernames);
     } catch (error) {
-      console.log("Error loading bank account usernames", error);
+      console.log("Error loading bank account usernames");
     }
   };
 
