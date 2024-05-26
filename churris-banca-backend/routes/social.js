@@ -15,6 +15,6 @@ const {
 router.get("/:accountUsername", getAccountByUsername);
 router.put("/user/:accountUsername", putAccountByUsername);
 router.get("/posts/:userName", getPostsByUserName);
-router.get("/accounts", getAccounts);
+router.get("/", getAccounts);
 
 module.exports = router;
