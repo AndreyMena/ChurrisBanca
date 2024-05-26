@@ -1,6 +1,6 @@
 import React from "react";
+import Header from "../../Components/Common/Header/Header";
 import AccountBalance from "../../Components/Banking/AccountBalance/AccountBalance";
-import Header from "../../Components/Header/Header";
 import PaginationBar from "../../Components/PaginationBar/PaginationBar";
 import TransactionList from "../../Components/Banking/TransactionList/TransactionList";
 
