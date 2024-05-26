@@ -15,7 +15,7 @@ const getAccountByUsername = async (req, res = response) => {
   }
 
   res.status(400).json({
-    message: "Accounts not found",
+    message: "Account not found",
   });
 };
 
@@ -36,8 +36,24 @@ const getPostsByUserName = (req, res = response) => {
   });
 };
 
+const getAccounts = async (req, res = response) => {
+  const sqlQuery = "SELECT Nickname, Nombre, Apellidos FROM USUARIO";
+  const accounts = await pool.query(sqlQuery);
+
+  if (accounts) {
+    return res.status(200).json({
+      accounts: accounts,
+    });
+  }
+
+  res.status(400).json({
+    message: "No bank account usernames found",
+  });
+};
+
 module.exports = {
   getAccountByUsername,
   putAccountByUsername,
   getPostsByUserName,
+  getAccounts,
 };

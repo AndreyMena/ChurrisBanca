@@ -5,12 +5,12 @@
 const { Router } = require("express");
 const router = Router();
 const {
+  getBankAccountByUsername,
   getTransactionsByUserName,
-  getBankAccountUsernames,
 } = require("../controllers/bankController");
 
-router.get("/transactions/:userName", getTransactionsByUserName);
+router.get("/account/:bankAccountUsername", getBankAccountByUsername);
 
-router.get("/accounts", getBankAccountUsernames);
+router.get("/transactions/:userName", getTransactionsByUserName);
 
 module.exports = router;
