@@ -3,7 +3,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import PasswordOutlinedIcon from "@mui/icons-material/PasswordOutlined";
 import PhoneAndroidOutlinedIcon from "@mui/icons-material/PhoneAndroidOutlined";
-import UserInformationField from "../UserInformationField/UserInformationField";
+import UserInformationField from "./UserInformationField/UserInformationField";
 import { useAccountStore } from "../../hooks/useAccountStore";
 import useAuth from "../../hooks/useAuth";
 import { clientServerContext } from "../../context/ClientServerContext";
