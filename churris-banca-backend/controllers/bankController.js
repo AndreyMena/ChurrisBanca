@@ -121,48 +121,43 @@ const getTransactionsByUserName = (req, res = response) => {
 
 const puTransaction = (req, res = response) => {
   const userName = req.params.userName;
+  const keyFilePath = req.file.path;
+  console.log(keyFilePath);
 
-  // Convertir el objeto de `req.body` a un JSON string
-  const bodyString = JSON.stringify(req.body);
-
-  // Parsear el JSON string de nuevo a un objeto para limpiar el '[Object: null prototype]'
-  const key = JSON.parse(bodyString);
-
-  // Imprimir el objeto limpio y el userName
-  console.log(key, userName);
-
-  // TODO Cambiar
-  const certFilePath = "/etc/ssl/crt/" + userName + ".crt";
-  const cert = fs.readFileSync(certFilePath, "utf-8");
-  console.log(cert);
+  const certFilePath = "/etc/ssl/crt/" + userName + ".crt"; // TODO Cambiar
+  if (!fs.existsSync(certFilePath)) {
+    throw new Error("No certificate found for this user");
+  }
+  //const cert = fs.readFileSync(certFilePath, "utf-8");
+  //console.log(cert);
 
   // Validar la clave privada contra el certificado
   openssl.exec(
     "x509",
     {
-      in: cert,
+      in: certFilePath,
       noout: true,
       mod: true,
     },
     (err, certMod) => {
       if (err) {
-        throw new Error("Error al extraer el módulo del certificado");
+        throw new Error("Error extracting certificate modulus");
       }
 
       openssl.exec(
         "rsa",
         {
-          in: key,
+          in: keyFilePath,
           noout: true,
           mod: true,
         },
         (err, keyMod) => {
           if (err) {
-            throw new Error("Error al extraer el módulo de la clave privada");
+            throw new Error("Error extracting private key modulus");
           }
 
           if (certMod.trim() !== keyMod.trim()) {
-            throw new Error("La clave privada no corresponde al certificado");
+            throw new Error("Private key does not match the certificate");
           }
         }
       );
