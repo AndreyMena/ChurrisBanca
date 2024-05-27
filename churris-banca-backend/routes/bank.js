@@ -16,11 +16,11 @@ const storage = multer.diskStorage({
     cb(null, 'uploads/');
   },
   filename: (req, file, cb) => {
-    cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    cb(null, file.originalname);
   },
 });
 
-const upload = multer({ dest: "uploads/" });
+const upload = multer({ storage: storage });
 
 router.get("/account/:bankAccountUsername", getBankAccountByUsername);
 router.get("/transactions/:userName", getTransactionsByUserName);
