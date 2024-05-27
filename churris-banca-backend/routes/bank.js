@@ -12,6 +12,6 @@ const {
 
 router.get("/account/:bankAccountUsername", getBankAccountByUsername);
 router.get("/transactions/:userName", getTransactionsByUserName);
-router.post("/transaction", puTransaction);
+router.post("/transaction/:userName", puTransaction);
 
 module.exports = router;
