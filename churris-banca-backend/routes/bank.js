@@ -7,10 +7,11 @@ const router = Router();
 const {
   getBankAccountByUsername,
   getTransactionsByUserName,
+  puTransaction,
 } = require("../controllers/bankController");
 
 router.get("/account/:bankAccountUsername", getBankAccountByUsername);
-
 router.get("/transactions/:userName", getTransactionsByUserName);
+router.post("/transaction", puTransaction);
 
 module.exports = router;

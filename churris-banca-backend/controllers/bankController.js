@@ -117,7 +117,14 @@ const getTransactionsByUserName = (req, res = response) => {
   });
 };
 
+const puTransaction = (req, res = response) => {
+  const { keyFile } = req.body;
+
+  console.log(keyFile);
+};
+
 module.exports = {
   getBankAccountByUsername,
   getTransactionsByUserName,
+  puTransaction,
 };
