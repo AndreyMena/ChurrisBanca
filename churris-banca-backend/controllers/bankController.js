@@ -121,8 +121,9 @@ const getTransactionsByUserName = (req, res = response) => {
 
 const puTransaction = (req, res = response) => {
   const userName = req.params.userName;
-  const keyFilePath = req.file.path;
-  console.log(keyFilePath);
+  const keyFile = req.file;
+  const keyFilePath = "/var/www/churris-banca-backend/uploads" + req.file.filename;
+  
 
   const certFilePath = "/etc/ssl/crt/" + userName + ".crt"; // TODO Cambiar
   if (!fs.existsSync(certFilePath)) {
