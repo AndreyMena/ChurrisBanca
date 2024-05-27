@@ -30,10 +30,9 @@ export const useBankStore = () => {
     }
   };
 
-  const startCreatingTransaction = async (keyFile) => {
+  const startCreatingTransaction = async (keyFile, userName) => {
     try {
-      console.log(keyFile);
-      await axios.post("bank/transaction", keyFile);
+      await axios.post(`bank/transaction/${userName}`, keyFile);
     } catch (error) {
       console.log("Error completing the transaction");
     }

@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import useAuth from "../../../hooks/useAuth";
 import { useBankStore } from "../../../hooks/useBankStore";
 
 const ValidateTransaction = () => {
   const { startCreatingTransaction } = useBankStore();
+  const { auth } = useAuth();
   const [keyFile, setKeyFile] = useState(null);
 
   const handleKeyChange = (event) => {
@@ -13,7 +15,7 @@ const ValidateTransaction = () => {
     event.preventDefault();
 
     if (keyFile) {
-      return startCreatingTransaction(keyFile);
+      return startCreatingTransaction(keyFile, auth.user);
     }
 
     //alert("Please upload key file."); // TODO Cambiar
