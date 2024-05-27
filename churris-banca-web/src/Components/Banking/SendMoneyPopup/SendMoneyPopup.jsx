@@ -3,6 +3,7 @@ import { Dialog } from "@mui/material";
 import ContactsDropdown from "./ContactsDropdown";
 import "./SendMoneyPopup.css";
 import MoneyAmount from "./MoneyAmount";
+import ValidateTransaction from "./ValidateTransaction";
 
 const SendMoneyPopup = ({ openPopup, handleClosePopup, accountBalance }) => {
   const [stage, setStage] = useState(1);
@@ -36,7 +37,7 @@ const SendMoneyPopup = ({ openPopup, handleClosePopup, accountBalance }) => {
           />
         );
       case 3:
-        return <h1>Certificado</h1>;
+        return <ValidateTransaction />;
     }
   };
 
