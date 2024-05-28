@@ -121,25 +121,22 @@ const getTransactionsByUserName = (req, res = response) => {
 
 const puTransaction = (req, res = response) => {
   const userName = req.params.userName;
-  const keyFile = req.file;
-  const keyFilePath = "/var/www/churris-banca-backend/uploads/" + req.file.filename;
-  console.log(keyFile);
-  console.log(keyFilePath);
 
+  const keyFilePath = "/var/www/churris-banca-backend/uploads/" + req.file.filename; // TODO Cambiar
+  if (!fs.existsSync(keyFilePath)) {
+    throw new Error("No private key found for this user");
+  }
   const certFilePath = "/etc/ssl/crt/" + userName + ".crt"; // TODO Cambiar
   if (!fs.existsSync(certFilePath)) {
     throw new Error("No certificate found for this user");
   }
-  //const cert = fs.readFileSync(certFilePath, "utf-8");
-  //console.log(cert);
 
-  // Validar la clave privada contra el certificado
   openssl.exec(
     "x509",
     {
       in: certFilePath,
       noout: true,
-      mod: true,
+      modulus: true,
     },
     (err, certMod) => {
       if (err) {
@@ -151,19 +148,23 @@ const puTransaction = (req, res = response) => {
         {
           in: keyFilePath,
           noout: true,
-          mod: true,
+          modulus: true,
         },
         (err, keyMod) => {
           if (err) {
             throw new Error("Error extracting private key modulus");
           }
 
-          if (certMod.trim() !== keyMod.trim()) {
-            throw new Error("Private key does not match the certificate");
+          if (certMod.includes(keyMod)) {
+            console.log("La llave privada coincide con el certificado.");
+          } else {
+            console.log("La llave privada no coincide con el certificado.");
           }
         }
       );
     }
+
+    //TODO Borrar el archivo
   );
 };
 
