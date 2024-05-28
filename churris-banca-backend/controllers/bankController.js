@@ -160,11 +160,15 @@ const puTransaction = (req, res = response) => {
           } else {
             console.log("La llave privada no coincide con el certificado.");
           }
+
+          fs.unlink(keyFilePath, (err) => {
+            if (err) {
+              console.log("Error deleting the file");
+            }
+          });
         }
       );
     }
-
-    //TODO Borrar el archivo
   );
 };
 
