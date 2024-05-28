@@ -15,7 +15,10 @@ const ValidateTransaction = () => {
     event.preventDefault();
 
     if (keyFile) {
-      return startCreatingTransaction(keyFile, auth.user);
+      const formData = new FormData();
+      formData.append("key", keyFile);
+
+      return startCreatingTransaction(formData, auth.user);
     }
 
     //alert("Please upload key file."); // TODO Cambiar
@@ -29,7 +32,7 @@ const ValidateTransaction = () => {
       </label>*/}
       <label>
         Key:
-        <input type="file" accept=".key" onChange={handleKeyChange} />
+        <input type="file" name="key" accept=".key" onChange={handleKeyChange} />
       </label>
       <button type="submit">Submit Transaction</button>
     </form>
