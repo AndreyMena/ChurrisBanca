@@ -10,11 +10,10 @@ import useAuth from "../../../hooks/useAuth";
 import useSocialStore from "../../../hooks/useSocialStore";
 import "./SendMoneyPopup.css";
 
-const ContactsDropdown = ({ handleNextStage }) => {
+const ContactsDropdown = ({ handleNextStage, selectedContact, setSelectedContact }) => {
   const { startLoadingAccounts, accounts, setAccounts } = useSocialStore();
   const { auth } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
-  const [selectedContact, setSelectedContact] = useState("Contacts");
 
   const handleOpenDropdown = (event) => {
     setAnchorEl(event.currentTarget);
