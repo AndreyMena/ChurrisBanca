@@ -124,11 +124,11 @@ const puTransaction = (req, res = response) => {
   const destinationAccountNickname = req.body.nicknameCuentaDestino;
   const amount = req.body.amount;
   
-  const keyFilePath = "/var/www/churris-banca-backend/uploads/" + req.file.filename; // TODO Cambiar
+  const keyFilePath = process.env.KEY_FILE_PATH + req.file.filename;
   if (!fs.existsSync(keyFilePath)) {
     throw new Error("No private key found for this user");
   }
-  const certFilePath = "/etc/ssl/crt/" + userName + ".crt"; // TODO Cambiar
+  const certFilePath = process.env.CERT_FILE_PATH + userName + ".crt";
   if (!fs.existsSync(certFilePath)) {
     throw new Error("No certificate found for this user");
   }
@@ -175,6 +175,13 @@ const puTransaction = (req, res = response) => {
 
 
   const timestamp = new Date();
+
+  console.log(destinationAccountNickname);
+  console.log(amount);
+  console.log(timestamp);
+
+  //const sqlQuery = "INSERT INTO TRANSACCION (NicknameCuentaOrigen, NicknameCuentaDestino, Monto, FechaHora) VALUES(?, ?, ?, ?)";
+  //await pool.query(sqlQuery, [userName, destinationAccountNickname, amount, timestamp]);
 };
 
 module.exports = {
