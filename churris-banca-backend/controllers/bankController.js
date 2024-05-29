@@ -121,7 +121,9 @@ const getTransactionsByUserName = (req, res = response) => {
 
 const puTransaction = (req, res = response) => {
   const userName = req.params.userName;
-
+  const destinationAccountNickname = req.body.nicknameCuentaDestino;
+  const amount = req.body.amount;
+  
   const keyFilePath = "/var/www/churris-banca-backend/uploads/" + req.file.filename; // TODO Cambiar
   if (!fs.existsSync(keyFilePath)) {
     throw new Error("No private key found for this user");
@@ -170,6 +172,9 @@ const puTransaction = (req, res = response) => {
       );
     }
   );
+
+
+  const timestamp = new Date();
 };
 
 module.exports = {
