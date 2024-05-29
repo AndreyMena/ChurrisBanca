@@ -6,7 +6,6 @@ import PostReaction from "../PostReactions/PostReactions";
 import "./Post.css"
 
 const Post = ({postUserImage, postUser, postContent, postImage, postLikes, postDislikes}) => {
-
   return (
     <div id="post-container">
       <PostHeader postUserImage={postUserImage} postUser={postUser}></PostHeader>
