@@ -1,19 +1,20 @@
 import React, { useState } from "react";
 import { Dialog } from "@mui/material";
 import ContactsDropdown from "./ContactsDropdown";
-import "./SendMoneyPopup.css";
 import MoneyAmount from "./MoneyAmount";
+import ValidateTransaction from "./ValidateTransaction";
+import "./SendMoneyPopup.css";
 
 const SendMoneyPopup = ({ openPopup, handleClosePopup, accountBalance }) => {
   const [stage, setStage] = useState(1);
-  const [selectedContact, setSelectedContact] = useState(null);
+  const [selectedContact, setSelectedContact] = useState("Contacts");
+  const [amount, setAmount] = useState("");
 
   const handleNextStage = () => {
     setStage(stage + 1);
   };
 
-  const handlePrevStage = (contact) => {
-    setSelectedContact(contact);
+  const handlePrevStage = () => {
     setStage(stage - 1);
   };
 
@@ -25,7 +26,7 @@ const SendMoneyPopup = ({ openPopup, handleClosePopup, accountBalance }) => {
   const renderContent = () => {
     switch (stage) {
       case 1:
-        return <ContactsDropdown handleNextStage={handleSelectedContact} />;
+        return <ContactsDropdown handleNextStage={handleSelectedContact} selectedContact={selectedContact} setSelectedContact={setSelectedContact} />;
       case 2:
         return (
           <MoneyAmount
@@ -33,10 +34,12 @@ const SendMoneyPopup = ({ openPopup, handleClosePopup, accountBalance }) => {
             accountBalance={accountBalance}
             handlePrevStage={handlePrevStage}
             handleNextStage={handleNextStage}
+            amount={amount}
+            setAmount={setAmount}
           />
         );
       case 3:
-        return <h1>Certificado</h1>;
+        return (<ValidateTransaction selectedContact={selectedContact} amount={amount} handlePrevStage={handlePrevStage}/>);
     }
   };
 
