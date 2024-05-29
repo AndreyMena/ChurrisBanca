@@ -8,11 +8,11 @@ const PostContent = ({ postContent, postImage }) => {
   // TODO: Borrar este código y cambiarlo por el comentado cuando la conexión React-Node-MariaDB funcione.
   return (
     <div id="post-content-container">
-      <Typography id="text">Content of post.</Typography>
+      <Typography id="text">{postContent}</Typography>
       <Box
         id="image-box"
         component="img"
-        src="https://ps.w.org/user-avatar-reloaded/assets/icon-128x128.png?rev=2540745"
+        src={postImage}
       ></Box>
 
       {/* <Typography>{postContent}</Typography>
