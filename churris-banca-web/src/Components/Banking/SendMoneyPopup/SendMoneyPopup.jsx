@@ -8,6 +8,7 @@ import ValidateTransaction from "./ValidateTransaction";
 const SendMoneyPopup = ({ openPopup, handleClosePopup, accountBalance }) => {
   const [stage, setStage] = useState(1);
   const [selectedContact, setSelectedContact] = useState(null);
+  const [amount, setAmount] = useState("");
 
   const handleNextStage = () => {
     setStage(stage + 1);
@@ -34,10 +35,12 @@ const SendMoneyPopup = ({ openPopup, handleClosePopup, accountBalance }) => {
             accountBalance={accountBalance}
             handlePrevStage={handlePrevStage}
             handleNextStage={handleNextStage}
+            amount={amount}
+            setAmount={setAmount}
           />
         );
       case 3:
-        return <ValidateTransaction />;
+        return <ValidateTransaction selectedContact={selectedContact} amount={amount}/>;
     }
   };
 

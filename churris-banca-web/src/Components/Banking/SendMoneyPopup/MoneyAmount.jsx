@@ -13,8 +13,9 @@ const MoneyAmount = ({
   accountBalance,
   handlePrevStage,
   handleNextStage,
+  amount,
+  setAmount,
 }) => {
-  const [amount, setAmount] = useState("");
   const [errorMessage, setErrorMessage] = useState(false);
 
   useEffect(() => {

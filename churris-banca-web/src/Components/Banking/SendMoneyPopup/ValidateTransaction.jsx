@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import useAuth from "../../../hooks/useAuth";
 import { useBankStore } from "../../../hooks/useBankStore";
 
-const ValidateTransaction = () => {
+const ValidateTransaction = ({selectedContact, amount}) => {
   const { startCreatingTransaction } = useBankStore();
   const { auth } = useAuth();
   const [keyFile, setKeyFile] = useState(null);
@@ -17,6 +17,8 @@ const ValidateTransaction = () => {
     if (keyFile) {
       const formData = new FormData();
       formData.append("key", keyFile);
+      formData.append("nicknameCuentaDestino", selectedContact);
+      formData.append("amount", amount);
 
       return startCreatingTransaction(formData, auth.user);
     }
@@ -26,10 +28,6 @@ const ValidateTransaction = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      {/*<label>
-        Certificate:
-        <input type="file" accept=".crt" />
-      </label>*/}
       <label>
         Key:
         <input type="file" name="key" accept=".key" onChange={handleKeyChange} />
