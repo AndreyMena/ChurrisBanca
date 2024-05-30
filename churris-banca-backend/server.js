@@ -10,7 +10,10 @@ const corsOptions = require("./config/corsOptions");
 const verifyJWT = require("./middleware/verifyJWT");
 const cookieParser = require("cookie-parser");
 const credentials = require("./middleware/credentials");
+var fs = require("fs");
+const https = require("https");
 const mariadb = require("mariadb");
+const { Certificate } = require("crypto");
 //const connectDB = require('./config/dbConn');  //Aqui ira la conexion con mariadb
 
 // Se llamara al metodo de dbConn a MariaDB
@@ -64,7 +67,9 @@ app.all("*", (req, res) => {
 });
 
 // Escuchar peticiones
-//TODO: Encerrar esto en una promesa q se hace solo si se conecto bien a mariadb
-app.listen(process.env.PORT, () =>
+https.createServer({
+  cert: fs.readFileSync("churris-banca.crt"),
+  key: fs.readFileSync("churris-banca.key")
+}, app).listen(process.env.PORT, () =>
   console.log(`Server running on port ${process.env.PORT}`)
 );
