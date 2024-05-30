@@ -123,8 +123,22 @@ const puTransaction = (req, res = response) => {
   const userName = req.params.userName;
   const destinationAccountNickname = req.body.nicknameCuentaDestino;
   const amount = req.body.amount;
+
+  validateKey(req.file.filename, userName);
   
-  const keyFilePath = process.env.KEY_FILE_PATH + req.file.filename;
+  const timestamp = new Date();
+
+  console.log(userName);
+  console.log(destinationAccountNickname);
+  console.log(amount);
+  console.log(timestamp);
+
+  //const sqlQuery = "INSERT INTO TRANSACCION (NicknameCuentaOrigen, NicknameCuentaDestino, Monto, FechaHora) VALUES(?, ?, ?, ?)";
+  //await pool.query(sqlQuery, [userName, destinationAccountNickname, amount, timestamp]);
+};
+
+const validateKey  = (fileName, userName) => {
+  const keyFilePath = process.env.KEY_FILE_PATH + fileName;
   if (!fs.existsSync(keyFilePath)) {
     throw new Error("No private key found for this user");
   }
@@ -172,17 +186,7 @@ const puTransaction = (req, res = response) => {
       );
     }
   );
-
-
-  const timestamp = new Date();
-
-  console.log(destinationAccountNickname);
-  console.log(amount);
-  console.log(timestamp);
-
-  //const sqlQuery = "INSERT INTO TRANSACCION (NicknameCuentaOrigen, NicknameCuentaDestino, Monto, FechaHora) VALUES(?, ?, ?, ?)";
-  //await pool.query(sqlQuery, [userName, destinationAccountNickname, amount, timestamp]);
-};
+}
 
 module.exports = {
   getBankAccountByUsername,
