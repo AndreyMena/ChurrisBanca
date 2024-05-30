@@ -120,7 +120,7 @@ const getTransactionsByUserName = (req, res = response) => {
 };
 
 const puTransaction = (req, res = response) => {
-  const userName = req.params.userName;
+  const userName = req.body.userName;
   const destinationAccountNickname = req.body.nicknameCuentaDestino;
   const amount = req.body.amount;
 
