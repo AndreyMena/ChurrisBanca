@@ -6,14 +6,14 @@ import Button from "@mui/material/Button";
 import Diversity3OutlinedIcon from "@mui/icons-material/Diversity3Outlined";
 import IconButton from "@mui/material/IconButton";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
-import useLogout from "../../hooks/useLogout";
-import useAuth from "../../hooks/useAuth";
+import AuthContext from "../../../context/AuthProvider";
+import useLogout from "../../../hooks/useLogout";
+
 import "./Header.css";
 
 const Header = () => {
   const navigate = useNavigate();
   const logout = useLogout();
-  const { auth } = useAuth();
 
   const handleHomeClick = () => {
     navigate("/bankingPage");
@@ -88,10 +88,6 @@ const Header = () => {
           >
             <LogoutOutlinedIcon fontSize="large"></LogoutOutlinedIcon>
           </IconButton>
-        </div>
-
-        <div className="icon-is-selected">
-          <button>{auth?.user}</button>
         </div>
       </div>
     </div>

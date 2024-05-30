@@ -8,7 +8,7 @@ const initialStateAccount = {
   Celular: "",
 };
 
-const useSocialStore = () => {
+export const useSocialStore = () => {
   const [account, setAccount] = useState(initialStateAccount);
   const [posts, setPosts] = useState([]);
   const [accounts, setAccounts] = useState([]);
