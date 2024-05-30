@@ -30,11 +30,24 @@ export const useBankStore = () => {
     }
   };
 
+  const startCreatingTransaction = async (key, userName) => {
+    try {
+      await axios.post(`bank/transaction/${userName}`, key, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+    } catch (error) {
+      console.log("Error completing the transaction");
+    }
+  };
+
   return {
     bankAccount,
     transactions,
 
     startLoadingBankAccount,
     startLoadingTransactions,
+    startCreatingTransaction,
   };
 };

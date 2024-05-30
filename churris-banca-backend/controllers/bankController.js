@@ -1,4 +1,6 @@
 const { response } = require("express");
+const openssl = require("openssl-wrapper");
+const fs = require("fs");
 
 // Borrar después
 const bankAccounts = [
@@ -117,7 +119,73 @@ const getTransactionsByUserName = (req, res = response) => {
   });
 };
 
+const puTransaction = (req, res = response) => {
+  const userName = req.params.userName;
+  const destinationAccountNickname = req.body.nicknameCuentaDestino;
+  const amount = req.body.amount;
+  
+  const keyFilePath = process.env.KEY_FILE_PATH + req.file.filename;
+  if (!fs.existsSync(keyFilePath)) {
+    throw new Error("No private key found for this user");
+  }
+  const certFilePath = process.env.CERT_FILE_PATH + userName + ".crt";
+  if (!fs.existsSync(certFilePath)) {
+    throw new Error("No certificate found for this user");
+  }
+
+  openssl.exec(
+    "x509",
+    {
+      in: certFilePath,
+      noout: true,
+      modulus: true,
+    },
+    (err, certMod) => {
+      if (err) {
+        throw new Error("Error extracting certificate modulus");
+      }
+
+      openssl.exec(
+        "rsa",
+        {
+          in: keyFilePath,
+          noout: true,
+          modulus: true,
+        },
+        (err, keyMod) => {
+          if (err) {
+            throw new Error("Error extracting private key modulus");
+          }
+
+          if (certMod.includes(keyMod)) {
+            console.log("La llave privada coincide con el certificado.");
+          } else {
+            console.log("La llave privada no coincide con el certificado.");
+          }
+
+          fs.unlink(keyFilePath, (err) => {
+            if (err) {
+              console.log("Error deleting the file");
+            }
+          });
+        }
+      );
+    }
+  );
+
+
+  const timestamp = new Date();
+
+  console.log(destinationAccountNickname);
+  console.log(amount);
+  console.log(timestamp);
+
+  //const sqlQuery = "INSERT INTO TRANSACCION (NicknameCuentaOrigen, NicknameCuentaDestino, Monto, FechaHora) VALUES(?, ?, ?, ?)";
+  //await pool.query(sqlQuery, [userName, destinationAccountNickname, amount, timestamp]);
+};
+
 module.exports = {
   getBankAccountByUsername,
   getTransactionsByUserName,
+  puTransaction,
 };
