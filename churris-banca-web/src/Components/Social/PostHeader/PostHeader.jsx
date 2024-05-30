@@ -5,11 +5,12 @@ import Typography from "@mui/material/Typography";
 
 import "./PostHeader.css"
 
-const PostHeader = ({postUserImage, postUser}) => {
+const PostHeader = ({postUserImage, postUser, postDateTime}) => {
   return (
     <div id="post-header-container">      
       <Box id="image-user-box" component="img" src={postUserImage}></Box>
       <Typography> {postUser}</Typography>
+      <Typography> {postDateTime}</Typography>
       <Button variant="text">Unfollow</Button>
     </div>
   );
