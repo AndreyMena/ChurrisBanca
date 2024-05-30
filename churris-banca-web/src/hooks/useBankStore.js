@@ -30,9 +30,9 @@ export const useBankStore = () => {
     }
   };
 
-  const startCreatingTransaction = async (key, userName) => {
+  const startCreatingTransaction = async (key) => {
     try {
-      await axios.post(`bank/transaction/${userName}`, key, {
+      await axios.post("bank/transaction", key, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }

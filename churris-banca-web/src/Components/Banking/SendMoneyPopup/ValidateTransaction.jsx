@@ -21,8 +21,9 @@ const ValidateTransaction = ({selectedContact, amount, handlePrevStage}) => {
       formData.append("key", keyFile);
       formData.append("nicknameCuentaDestino", selectedContact);
       formData.append("amount", amount);
+      formData.append("userName", auth.user)
 
-      return startCreatingTransaction(formData, auth.user);
+      return startCreatingTransaction(formData);
     }
 
     //alert("Please upload key file."); // TODO Cambiar
