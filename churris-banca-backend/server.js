@@ -69,7 +69,8 @@ app.all("*", (req, res) => {
 // Escuchar peticiones
 https.createServer({
   cert: fs.readFileSync("churris-banca.crt"),
-  key: fs.readFileSync("churris-banca.key")
+  key: fs.readFileSync("churris-banca.key")//,
+  //ca: fs.readFileSync("rootCACert.crt"),  // Imprecindible al montar en apache
 }, app).listen(process.env.PORT, () =>
   console.log(`Server running on port ${process.env.PORT}`)
 );
