@@ -1,26 +1,23 @@
 import React from "react";
+import Header from "../../Components/Common/Header/Header";
 import AccountBalance from "../../Components/Banking/AccountBalance/AccountBalance";
-import Header from "../../Components/Header/Header";
-import PaginationBar from "../../Components/PaginationBar/PaginationBar";
-import ClientServerProvider from "../../Components/Providers/ClientServerProvider";
+import PaginationBar from "../../Components/Common/PaginationBar/PaginationBar";
 import TransactionList from "../../Components/Banking/TransactionList/TransactionList";
 
 export const handleTransactions = (messageFromServer) => {};
 
 const BankingPage = () => {
   return (
-    <ClientServerProvider>
-      <div id="banking-page-container">
-        <Header />
-        <div className="container">
-          <AccountBalance />
+    <div id="banking-page-container">
+      <Header />
+      <div className="container">
+        <AccountBalance />
 
-          <TransactionList />
+        <TransactionList />
 
-          <PaginationBar />
-        </div>
+        <PaginationBar />
       </div>
-    </ClientServerProvider>
+    </div>
   );
 };
 

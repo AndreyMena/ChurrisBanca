@@ -4,8 +4,8 @@ import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import PropTypes from "prop-types";
 import TextField from "@mui/material/TextField";
-import useAuth from "../../hooks/useAuth";
-import useSocialStore from "../../hooks/useSocialStore";
+import useAuth from "../../../hooks/useAuth";
+import useSocialStore from "../../../hooks/useSocialStore";
 import "./UserInformationField.css";
 
 const UserInformationField = ({
