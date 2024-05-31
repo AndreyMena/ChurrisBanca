@@ -9,6 +9,7 @@ const PostsList = () => {
 
 	useEffect(() => {
 		startLoadingPosts(auth.user);
+		console.log(posts);
 		const intervalId = setInterval(startLoadingPosts, 60000);
     return () => clearInterval(intervalId);
 	}, []);
@@ -21,7 +22,7 @@ const PostsList = () => {
 				postId={post.id}
 				postUserImage="https://ps.w.org/user-avatar-reloaded/assets/icon-128x128.png?rev=2540745"
 				postUser={post.Nickname}
-				pospostDateTime={post.Fecha}
+				postDateTime={post.Fecha}
 				postContent={post.Contenido}
 				postImage="https://ps.w.org/user-avatar-reloaded/assets/icon-128x128.png?rev=2540745"
 				postLikes={post.Likes}
