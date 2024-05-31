@@ -16,6 +16,16 @@
   margin: 5px;
 }
 
+#error-msg {
+  color: red;
+  margin-top: 5px;
+}
+
+#success-msg {
+  color: green;
+  margin-top: 5px;
+}
+
 /*ContactsDropdown*/
 
 #dropdown-button-container {
@@ -51,11 +61,6 @@
 
 #coin-amount {
   margin-right: 5px;
-}
-
-#error-msg {
-  color: red;
-  margin-top: 5;
 }
 
 /*ValidateTransaction*/
