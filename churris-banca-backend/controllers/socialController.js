@@ -53,8 +53,24 @@ const putNewPost = async (req, res = response) => {
   const userName = req.params.userName;
   const postText = req.params.postText;
 
-  const sqlQuery = `NSERT INTO MENSAJE (Nickname, Contenido, Imagen) VALUES ( ?, ?, NULL );`;
+  const sqlQuery = `NSERT INTO MENSAJE (Nickname, Contenido, Imagen) VALUES (?, ?, NULL);`;
   await pool.query(sqlQuery, [userName, postText]);
+}
+
+const putNewLike = async (req, res = response) => {
+  const userName = req.params.userName;
+  const postId = req.params.postId;
+
+  const sqlQuery = `INSERT INTO LIKES (IdMensaje, Nickname) VALUES (?, ?)`;
+  await pool.query(sqlQuery, [postId, userName]);
+}
+
+const putNewDislike = async (req, res = response) => {
+  const userName = req.params.userName;
+  const postId = req.params.postId;
+
+  const sqlQuery = `INSERT INTO DISLIKES (IdMensaje, Nickname) VALUES (?, ?)`;
+  await pool.query(sqlQuery, [postId, userName]);
 }
 
 const getAccounts = async (req, res = response) => {
@@ -77,5 +93,7 @@ module.exports = {
   putAccountByUsername,
   getPostsByUserName,
   putNewPost,
+  putNewLike,
+  putNewDislike,
   getAccounts,
 };
