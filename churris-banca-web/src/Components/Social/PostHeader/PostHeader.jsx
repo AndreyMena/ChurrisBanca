@@ -8,10 +8,10 @@ import "./PostHeader.css"
 const PostHeader = ({postUserImage, postUser, postDateTime}) => {
   return (
     <div id="post-header-container">      
-      <Box id="image-user-box" component="img" src={postUserImage}></Box>
-      <Typography> {postUser}</Typography>
-      <Typography> {postDateTime}</Typography>
-      <Button variant="text">Unfollow</Button>
+      <Box className="post-header-item" id="image-user-box" component="img" src={postUserImage}></Box>
+      <Typography className="post-header-item"> {postUser}</Typography>
+      <Typography className="post-header-item"> {postDateTime}</Typography>
+      <Button className="post-header-item" variant="text">Unfollow</Button>
     </div>
   );
 };
