@@ -48,6 +48,14 @@ const getPostsByUserName = async (req, res = response) => {
   });
 };
 
+const putNewPost = async (req, res = response) => {
+  const userName = req.params.userName;
+  const postText = req.params.postText;
+
+  const sqlQuery = `NSERT INTO MENSAJE (Nickname, Contenido, Imagen) VALUES ( ?, ?, NULL );`;
+  await pool.query(sqlQuery, [userName, postText]);
+}
+
 const getAccounts = async (req, res = response) => {
   const sqlQuery = "SELECT Nickname, Nombre, Apellidos FROM USUARIO";
   const accounts = await pool.query(sqlQuery);
@@ -67,5 +75,6 @@ module.exports = {
   getAccountByUsername,
   putAccountByUsername,
   getPostsByUserName,
+  putNewPost,
   getAccounts,
 };
