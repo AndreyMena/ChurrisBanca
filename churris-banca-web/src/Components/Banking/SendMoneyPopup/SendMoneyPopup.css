@@ -1,10 +1,38 @@
+.css-1t1j96h-MuiPaper-root-MuiDialog-paper {
+  width: 80%; /* Ajusta el ancho según sea necesario */
+}
+
+#buttons-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+#buttons-container .btn {
+  border-radius: 8px;
+  border: 1px solid #1976d2;
+  height: 30px;
+  width: 40%;
+  margin: 5px;
+}
+
+#error-msg {
+  color: red;
+  margin-top: 5px;
+}
+
+#success-msg {
+  color: green;
+  margin-top: 5px;
+}
+
+/*ContactsDropdown*/
+
 #dropdown-button-container {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-
-/*ContactsDropdown*/
 
 #contact {
   color: black;
@@ -35,20 +63,17 @@
   margin-right: 5px;
 }
 
-#error-msg {
-  color: red;
-  margin-top: 5;
-}
+/*ValidateTransaction*/
 
-#buttons-container {
+#form-key {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
-#buttons-container .btn {
-  border-radius: 8px;
-  border: 1px solid #1976d2;
-  height: 30px;
-  width: 40%;
-  margin: 5px;
+#input-key {
+  font-size: 14px;
+  margin-left: 5px;
 }

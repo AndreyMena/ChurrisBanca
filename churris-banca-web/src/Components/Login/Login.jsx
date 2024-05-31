@@ -41,7 +41,7 @@ const Login = () => {
     //TODO: Definir, por ahora evita que se recargue la pagina al submitear por default
     e.preventDefault();
 
-    startLogin({ user: user, pwd: pwd });
+    startLogin({ email: user, pwd: pwd });
   };
 
   return (

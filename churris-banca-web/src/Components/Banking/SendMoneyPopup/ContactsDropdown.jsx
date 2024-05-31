@@ -6,40 +6,35 @@ import {
   Menu,
   MenuItem,
 } from "@mui/material";
-import "./SendMoneyPopup.css";
-import { useBankStore } from "../../../hooks/useBankStore";
 import useAuth from "../../../hooks/useAuth";
+import useSocialStore from "../../../hooks/useSocialStore";
+import "./SendMoneyPopup.css";
 
-const ContactsDropdown = ({ handleNextStage }) => {
-  const {
-    startLoadingBankAccountUsernames,
-    bankAccountUsernames,
-    setBankAccountUsernames,
-  } = useBankStore();
+const ContactsDropdown = ({ handleNextStage, selectedContact, setSelectedContact }) => {
+  const { startLoadingAccounts, accounts, setAccounts } = useSocialStore();
   const { auth } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
-  const [selectedContact, setSelectedContact] = useState("Contacts");
 
   const handleOpenDropdown = (event) => {
     setAnchorEl(event.currentTarget);
 
-    const updatedBankAccountUsernames = bankAccountUsernames.filter(
-      (userName) => userName !== auth.user
+    const updatedAccounts = accounts.filter(
+      (account) => account.Nickname !== auth.user
     );
-    setBankAccountUsernames(updatedBankAccountUsernames);
+    setAccounts(updatedAccounts);
   };
 
   const handleCloseDropdown = () => {
     setAnchorEl(null);
   };
 
-  const handleSelectContact = (contact) => {
-    setSelectedContact(contact);
+  const handleSelectContact = (name, surnames) => {
+    setSelectedContact(name + " " + surnames);
     handleCloseDropdown();
   };
 
   useEffect(() => {
-    startLoadingBankAccountUsernames();
+    startLoadingAccounts();
   }, []);
 
   return (
@@ -54,12 +49,14 @@ const ContactsDropdown = ({ handleNextStage }) => {
           open={Boolean(anchorEl)}
           onClose={handleCloseDropdown}
         >
-          {bankAccountUsernames.map((userName) => (
+          {accounts.map((account) => (
             <MenuItem
-              key={userName}
-              onClick={() => handleSelectContact(userName)}
+              key={account.Nombre}
+              onClick={() =>
+                handleSelectContact(account.Nombre, account.Apellidos)
+              }
             >
-              {userName}
+              {account.Nombre + " " + account.Apellidos}
             </MenuItem>
           ))}
         </Menu>

@@ -1,21 +1,18 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Typography } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import PasswordOutlinedIcon from "@mui/icons-material/PasswordOutlined";
 import PhoneAndroidOutlinedIcon from "@mui/icons-material/PhoneAndroidOutlined";
-import UserInformationField from "../UserInformationField/UserInformationField";
-import { useAccountStore } from "../../hooks/useAccountStore";
+import UserInformationField from "./UserInformationField/UserInformationField";
+import useSocialStore from "../../hooks/useSocialStore";
 import useAuth from "../../hooks/useAuth";
-import { clientServerContext } from "../../context/ClientServerContext";
 import "./Profile.css";
-import { Typography } from "@mui/material";
 
 const Profile = () => {
-  //const { sendMessageToServer } = useContext(clientServerContext);
-
-  const { startLoadingAccount, account } = useAccountStore();
+  const { startLoadingAccount, account } = useSocialStore();
   const { auth } = useAuth();
-  const { name, lastName, email, phoneNumber } = account;
+  const { Nombre, Apellidos, Email, Celular } = account;
 
   const [userName, setUserName] = useState("");
   const [userLastName, setUserLastName] = useState("");
@@ -23,20 +20,7 @@ const Profile = () => {
   const [userPhoneNumber, setUserPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
 
-  /*const messageToServer = {
-    type: "getUserInformation",
-    user: "userName",
-    password: "password",
-  };*/
-
   useEffect(() => {
-    /*const serverResponse = sendMessageToServer(messageToServer);
-    if (serverResponse != null) {
-      setFullName(serverResponse.fullName);
-      setEmail(serverResponse.email);
-      setPassword(serverResponse.password);
-      setCellphoneNumber(serverResponse.cellphoneNumber);
-    }*/
     startLoadingAccount(auth.user);
   }, []);
 
@@ -52,7 +36,7 @@ const Profile = () => {
         }}
         variant="standard"
       >
-        {name + " " + lastName}
+        {Nombre + " " + Apellidos}
       </Typography>
 
       <div id="user-information-container">
@@ -65,7 +49,7 @@ const Profile = () => {
           <UserInformationField
             id="email-text-field"
             label="Email"
-            defaultValue={email}
+            defaultValue={Email}
             onChange={setUserEmail}
           />
         </div>
@@ -94,7 +78,7 @@ const Profile = () => {
           <UserInformationField
             id="phone-number-text-field"
             label="Cell phone number"
-            defaultValue={phoneNumber}
+            defaultValue={Celular}
             onChange={setUserPhoneNumber}
           />
         </div>
