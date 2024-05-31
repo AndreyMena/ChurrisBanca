@@ -6,7 +6,7 @@ import Typography from "@mui/material/Typography";
 
 import "./PostReactions.css"
 
-const PostReaction = ({postLikes, postDislikes}) => {
+const PostReaction = ({postId, postLikes, postDislikes}) => {
   return (
     <div id="post-reactions-container">
       <div className="reaction-item-container">

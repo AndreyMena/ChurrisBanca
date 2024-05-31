@@ -16,6 +16,7 @@ const PostsList = () => {
 			{posts.map((post, index) => (
 				<Post
 				key={index}
+				postId={post.id}
 				postUserImage="https://ps.w.org/user-avatar-reloaded/assets/icon-128x128.png?rev=2540745"
 				postUser={post.Nickname}
 				pospostDateTime={post.Fecha}

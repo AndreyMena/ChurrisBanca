@@ -20,7 +20,8 @@ const CreatePostPopUp = ({ openPopup, handleClosePopup }) => {
   }
 
   const handleSendPost = () => {
-    sendNewPost(auth.user, text)
+    sendNewPost(auth.user, text);
+    handleClosePopup();
   }
 
   return (
