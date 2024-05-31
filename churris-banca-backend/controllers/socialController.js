@@ -33,6 +33,7 @@ const getPostsByUserName = async (req, res = response) => {
   const sqlQuery = `SELECT m.Id AS PostId, m.Nickname, m.Contenido, m.Imagen, m.Fecha, COALESCE(l.Likes, 0) AS Likes, COALESCE(d.Dislikes, 0) AS Dislikes FROM MENSAJE m LEFT JOIN (SELECT IdMensaje, COUNT(*) AS Likes FROM LIKES GROUP BY IdMensaje) l ON m.Id = l.IdMensaje LEFT JOIN (SELECT IdMensaje, COUNT(*) AS Dislikes FROM DISLIKES GROUP BY IdMensaje) d ON m.Id = d.IdMensaje WHERE m.Nickname = ?;`;
   const posts = await pool.query(sqlQuery, [userName]);
   posts.forEach(post => {
+    post.Fecha = post.Fecha !== undefined ? post.Likes.toString() : "0";
     post.Likes = post.Likes !== undefined ? post.Likes.toString() : "0";
     post.Dislikes = post.Dislikes !== undefined ? post.Dislikes.toString() : "0";
   });
