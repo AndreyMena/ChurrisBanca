@@ -11,6 +11,7 @@ const initialStateBankAccount = {
 export const useBankStore = () => {
   const [bankAccount, setbankAccount] = useState(initialStateBankAccount);
   const [transactions, setTransactions] = useState([]);
+  const [resMsg, setResMsg] = useState("");
 
   const startLoadingBankAccount = async (bankAccountUsername) => {
     try {
@@ -32,19 +33,23 @@ export const useBankStore = () => {
 
   const startCreatingTransaction = async (key) => {
     try {
-      await axios.post("bank/transaction", key, {
+      const {data} = await axios.post("bank/transaction", key, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
+
+      setResMsg(data.message);
+      console.log(data.message);
     } catch (error) {
-      console.log("Error completing the transaction");
+      setResMsg("Error completing the transaction");
     }
   };
 
   return {
     bankAccount,
     transactions,
+    resMsg,
 
     startLoadingBankAccount,
     startLoadingTransactions,

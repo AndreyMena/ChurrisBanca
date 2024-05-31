@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Button, Typography } from "@mui/material";
 import useAuth from "../../../hooks/useAuth";
 import { useBankStore } from "../../../hooks/useBankStore";
 import "./SendMoneyPopup.css";
-import { Button } from "@mui/material";
 
 const ValidateTransaction = ({selectedContact, amount, handlePrevStage}) => {
-  const { startCreatingTransaction } = useBankStore();
+  const { startCreatingTransaction, resMsg } = useBankStore();
   const { auth } = useAuth();
   const [keyFile, setKeyFile] = useState(null);
+  const [showResMsg, setShowResMsg] = useState(false);
 
   const handleKeyChange = (event) => {
     setKeyFile(event.target.files[0]);
@@ -23,11 +24,18 @@ const ValidateTransaction = ({selectedContact, amount, handlePrevStage}) => {
       formData.append("amount", amount);
       formData.append("userName", auth.user)
 
-      return startCreatingTransaction(formData);
+      startCreatingTransaction(formData);
+      setShowResMsg(true);
     }
-
-    //alert("Please upload key file."); // TODO Cambiar
   };
+  
+  useEffect(() => {
+    if (showResMsg) {
+      setTimeout(() => {
+        setShowResMsg(false); // Ocultar mensaje después de 2 segundos
+      }, 2000);
+    }
+  }, [showResMsg]);
 
   return (
     <form id="form-key" onSubmit={handleSubmit}>
@@ -35,6 +43,7 @@ const ValidateTransaction = ({selectedContact, amount, handlePrevStage}) => {
         Key:
         <input id="input-key" type="file" name="key" accept=".key" onChange={handleKeyChange} />
       </label>
+      {showResMsg && resMsg && <Typography id={resMsg === "Transaction succesful" ? "success-msg" : "error-msg"}>{resMsg}</Typography>}
       <div id="buttons-container">
         <Button className="btn" onClick={handlePrevStage}>
               Prev
