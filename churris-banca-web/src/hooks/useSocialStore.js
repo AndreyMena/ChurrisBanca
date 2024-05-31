@@ -52,6 +52,22 @@ export const useSocialStore = () => {
     }
   };
 
+  const sendNewLike = async (userName, postId) => {
+    try {
+      await axios.get(`social/newLike/${userName}/${postId}`);
+    } catch (error) {
+      console.log("Error send new like.", error);
+    }
+  };
+
+  const sendNewDislike = async (userName, postId) => {
+    try {
+      await axios.get(`social/newDislike/${userName}/${postId}`);
+    } catch (error) {
+      console.log("Error send new dislike.", error);
+    }
+  };
+
   const startLoadingAccounts = async () => {
     try {
       const { data } = await axios.get("social/");
@@ -73,6 +89,8 @@ export const useSocialStore = () => {
     startLoadingPosts,
     startLoadingAccounts,
     sendNewPost,
+    sendNewLike,
+    sendNewDislike,
   };
 };
 
