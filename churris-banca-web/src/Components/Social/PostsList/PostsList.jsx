@@ -9,6 +9,8 @@ const PostsList = () => {
 
 	useEffect(() => {
 		startLoadingPosts(auth.user);
+		const intervalId = setInterval(startLoadingPosts, 60000);
+    return () => clearInterval(intervalId);
 	}, []);
 
 	return (
