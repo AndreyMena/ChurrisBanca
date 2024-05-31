@@ -46,8 +46,7 @@ export const useSocialStore = () => {
 
   const sendNewPost = async (userName, postText) => {
     try {
-      const { data } = await axios.get(`social/posts/${userName}`);
-      
+      await axios.get(`social/newPost/${userName}/${postText}`);
     } catch (error) {
       console.log("Error send new post.", error);
     }
@@ -73,6 +72,7 @@ export const useSocialStore = () => {
     startUpdatingValueAccount,
     startLoadingPosts,
     startLoadingAccounts,
+    sendNewPost,
   };
 };
 
