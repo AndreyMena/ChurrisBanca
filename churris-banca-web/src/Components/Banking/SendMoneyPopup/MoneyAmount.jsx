@@ -7,6 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import "./SendMoneyPopup.css";
+import "../../../App.css";
 
 const MoneyAmount = ({
   contact,
