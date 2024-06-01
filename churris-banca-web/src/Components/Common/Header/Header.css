@@ -33,8 +33,11 @@
   width: 30%;
 }
 
-.icon-is-selected {
+.icons {
   display: flex;
   align-items: center;
+}
+
+.icon-active {
   border-bottom: 1px solid #1976d2;
 }
