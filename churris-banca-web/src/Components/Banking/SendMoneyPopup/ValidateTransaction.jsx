@@ -4,6 +4,7 @@ import { UploadOutlined } from "@mui/icons-material";
 import useAuth from "../../../hooks/useAuth";
 import { useBankStore } from "../../../hooks/useBankStore";
 import "./SendMoneyPopup.css";
+import "../../../App.css";
 
 const ValidateTransaction = ({ selectedContact, amount, handlePrevStage }) => {
   const { startCreatingTransaction, resMsg } = useBankStore();
