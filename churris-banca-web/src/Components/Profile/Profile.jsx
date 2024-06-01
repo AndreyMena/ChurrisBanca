@@ -27,13 +27,7 @@ const Profile = () => {
       <div id="big-profile-picture">
         <AccountCircleIcon id="img" />
       </div>
-      <Typography
-        id="standard-read-only-input"
-        InputProps={{
-          readOnly: true,
-        }}
-        variant="standard"
-      >
+      <Typography id="standard-read-only-input" variant="standard">
         {Nombre + " " + Apellidos}
       </Typography>
 
