@@ -31,6 +31,7 @@ const Header = () => {
   };
 
   const signOut = async () => {
+    setActivePage("social");
     await logout();
     navigate("/login");
   };
