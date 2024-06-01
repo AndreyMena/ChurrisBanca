@@ -9,7 +9,7 @@ const getAccountByUsername = async (req, res = response) => {
     }
 
     const sqlQuery =
-      "SELECT Nombre, Apellidos, Email, Celular FROM USUARIO WHERE NickName=?";
+      "SELECT Nombre, Apellidos, Email, Celular, Imagen FROM USUARIO WHERE NickName=?";
     const account = await pool.query(sqlQuery, userName);
     if (account.length <= 0) {
       return res.status(400).json({
