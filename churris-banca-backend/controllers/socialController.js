@@ -82,18 +82,22 @@ const putNewDislike = async (req, res = response) => {
 };
 
 const getAccounts = async (req, res = response) => {
-  const sqlQuery = "SELECT Nickname, Nombre, Apellidos FROM USUARIO";
-  const accounts = await pool.query(sqlQuery);
+  try {
+    const sqlQuery = "SELECT Nickname, Nombre, Apellidos FROM USUARIO";
+    const accounts = await pool.query(sqlQuery);
+    if (accounts.length <= 0) {
+      return res.status(400).json({
+        message: "No bank account usernames found",
+      });
+    }
 
-  if (accounts) {
-    return res.status(200).json({
+    res.status(200).json({
       accounts: accounts,
     });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+    throw new Error(error);
   }
-
-  res.status(400).json({
-    message: "No bank account usernames found",
-  });
 };
 
 module.exports = {

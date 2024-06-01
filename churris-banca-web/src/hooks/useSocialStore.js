@@ -68,6 +68,7 @@ export const useSocialStore = () => {
     }
   };
 
+  /* Banking */
   const startLoadingAccounts = async () => {
     try {
       const { data } = await axios.get("social/");
