@@ -25,7 +25,8 @@ export const useSocialStore = () => {
 
   const startUpdatingValueAccount = async (accountUsername, data, label) => {
     try {
-      await axios.put(`social/user/${accountUsername}`, {
+      await axios.put(`social/user`, {
+        userName: accountUsername,
         data: data,
         label: label === "Cell phone number" ? "Celular" : label,
       });
