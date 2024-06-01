@@ -3,14 +3,34 @@ import PostContent from "../PostContent/PostContent";
 import PostHeader from "../PostHeader/PostHeader";
 import PostReaction from "../PostReactions/PostReactions";
 
-import "./Post.css"
+import "./Post.css";
 
-const Post = ({postId, postUserImage, postUser, postDateTime, postContent, postImage, postLikes, postDislikes}) => {
+const Post = ({
+  postUserImage,
+  postUser,
+  postDateTime,
+  postId,
+  postContent,
+  postImage,
+  postLikes,
+  postDislikes,
+}) => {
   return (
     <div id="post-container">
-      <PostHeader postUserImage={postUserImage} postUser={postUser} postDateTime={postDateTime}></PostHeader>
-      <PostContent postContent={postContent} postImage={postImage}></PostContent>
-      <PostReaction postId={postId} postLikes={postLikes} postDislikes={postDislikes}></PostReaction>
+      <PostHeader
+        postUserImage={postUserImage}
+        postUser={postUser}
+        postDateTime={postDateTime}
+      ></PostHeader>
+      <PostContent
+        postContent={postContent}
+        postImage={postImage}
+      ></PostContent>
+      <PostReaction
+        postId={postId}
+        postLikes={postLikes}
+        postDislikes={postDislikes}
+      ></PostReaction>
     </div>
   );
 };

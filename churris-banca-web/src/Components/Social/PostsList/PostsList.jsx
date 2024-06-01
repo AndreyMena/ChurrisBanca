@@ -4,10 +4,12 @@ import useAuth from "../../../hooks/useAuth";
 import useSocialStore from "../../../hooks/useSocialStore";
 
 const PostsList = () => {
-  const { startLoadingPosts, posts } = useSocialStore();
+  const { startLoadingAccount, account, startLoadingPosts, posts } =
+    useSocialStore();
   const { auth } = useAuth();
 
   useEffect(() => {
+    startLoadingAccount(auth.user);
     startLoadingPosts(auth.user);
     const intervalId = setInterval(startLoadingPosts, 60000);
     return () => clearInterval(intervalId);
@@ -18,10 +20,10 @@ const PostsList = () => {
       {posts.map((post, index) => (
         <Post
           key={index}
-          postId={post.id}
-          postUserImage="https://ps.w.org/user-avatar-reloaded/assets/icon-128x128.png?rev=2540745"
-          postUser={post.Nickname}
+          postUserImage={account.Imagen}
+          postUser={account.Nombre}
           postDateTime={post.Fecha}
+          postId={post.id}
           postContent={post.Contenido}
           postImage="https://ps.w.org/user-avatar-reloaded/assets/icon-128x128.png?rev=2540745"
           postLikes={post.Likes}
