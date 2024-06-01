@@ -41,7 +41,7 @@ export const useSocialStore = () => {
       const { data } = await axios.get(`social/posts/${userName}`);
       setPosts(data.posts);
     } catch (error) {
-      console.log("Error loading posts", error);
+      console.log("Error loading posts");
     }
   };
 
