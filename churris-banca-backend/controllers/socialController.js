@@ -2,60 +2,68 @@ const { response } = require("express");
 const pool = require("../config/dbConnection");
 
 const getAccountByUsername = async (req, res = response) => {
-  const userName = req.params.accountUsername;
+  try {
+    const userName = req.params.accountUsername;
+    if (!userName) {
+      return res.status(400).json({ message: "userName is required" });
+    }
 
-  const sqlQuery =
-    "SELECT Nombre, Apellidos, Email, Celular FROM USUARIO WHERE NickName=?";
-  const account = await pool.query(sqlQuery, userName);
+    const sqlQuery =
+      "SELECT Nombre, Apellidos, Email, Celular FROM USUARIO WHERE NickName=?";
+    const account = await pool.query(sqlQuery, userName);
+    if (account.length <= 0) {
+      return res.status(400).json({
+        message: "Account not found",
+      });
+    }
 
-  if (account) {
-    return res.status(200).json({
+    res.status(200).json({
       account: account[0],
     });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+    throw new Error(error);
   }
-
-  res.status(400).json({
-    message: "Account not found",
-  });
 };
 
 const putAccountByUsername = async (req, res = response) => {
-  const userName = req.params.accountUsername;
-  const { data, label } = req.body;
+  try {
+    const { userName, data, label } = req.body;
+    if (!userName || !data || !label) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
 
-  const sqlQuery = `UPDATE USUARIO SET ${label}=? WHERE NickName=?`;
-  await pool.query(sqlQuery, [data, userName]);
+    // Evitar inyección SQL
+    const validLabels = ["Email", "Celular", "Password"];
+    if (!validLabels.includes(label)) {
+      return res.status(400).json({ message: "Invalid field label" });
+    }
+
+    const sqlQuery = `UPDATE USUARIO SET ${label}=? WHERE NickName=?`;
+    const result = await pool.query(sqlQuery, [data, userName]);
+    if (result.affectedRows === 0) {
+      return res
+        .status(404)
+        .json({ message: "Account not found or no changes made" });
+    }
+
+    res.status(200).json({ message: "Account updated successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+    throw new Error(error);
+  }
 };
 
 const getPostsByUserName = async (req, res = response) => {
   const userName = req.params.userName;
 
-  const sqlQuery = `
-  SELECT 
-    m.Id AS PostId,
-    m.Nickname,
-    m.Contenido,
-    m.Imagen,
-    m.Fecha,
-    COALESCE(l.Likes, 0) AS Likes,
-    COALESCE(d.Dislikes, 0) AS Dislikes
-  FROM MENSAJE m
-  LEFT JOIN (
-    SELECT IdMensaje, COUNT(*) AS Likes
-    FROM LIKES
-    GROUP BY IdMensaje
-  ) l ON m.Id = l.IdMensaje
-  LEFT JOIN (
-    SELECT IdMensaje, COUNT(*) AS Dislikes
-    FROM DISLIKES
-    GROUP BY IdMensaje
-  ) d ON m.Id = d.IdMensaje
-  WHERE m.Nickname = ?;
-  `;
+  const sqlQuery = `SELECT m.Id AS PostId, m.Nickname, m.Contenido, m.Imagen, m.Fecha, COALESCE(l.Likes, 0) AS Likes, COALESCE(d.Dislikes, 0) AS Dislikes FROM MENSAJE m LEFT JOIN (SELECT IdMensaje, COUNT(*) AS Likes FROM LIKES GROUP BY IdMensaje) l ON m.Id = l.IdMensaje LEFT JOIN (SELECT IdMensaje, COUNT(*) AS Dislikes FROM DISLIKES GROUP BY IdMensaje) d ON m.Id = d.IdMensaje WHERE m.Nickname = ?;`;
   const posts = await pool.query(sqlQuery, [userName]);
-  posts.forEach(post => {
+  posts.forEach((post) => {
+    post.Fecha = post.Fecha !== undefined ? post.Likes.toString() : "0";
     post.Likes = post.Likes !== undefined ? post.Likes.toString() : "0";
-    post.Dislikes = post.Dislikes !== undefined ? post.Dislikes.toString() : "0";
+    post.Dislikes =
+      post.Dislikes !== undefined ? post.Dislikes.toString() : "0";
   });
 
   if (posts.length > 0) {
@@ -69,24 +77,55 @@ const getPostsByUserName = async (req, res = response) => {
   });
 };
 
-const getAccounts = async (req, res = response) => {
-  const sqlQuery = "SELECT Nickname, Nombre, Apellidos FROM USUARIO";
-  const accounts = await pool.query(sqlQuery);
+const putNewPost = async (req, res = response) => {
+  const userName = req.params.userName;
+  const postText = req.params.postText;
 
-  if (accounts) {
-    return res.status(200).json({
+  const sqlQuery = `NSERT INTO MENSAJE (Nickname, Contenido, Imagen) VALUES (?, ?, NULL);`;
+  await pool.query(sqlQuery, [userName, postText]);
+};
+
+const putNewLike = async (req, res = response) => {
+  const userName = req.params.userName;
+  const postId = req.params.postId;
+
+  const sqlQuery = `INSERT INTO LIKES (IdMensaje, Nickname) VALUES (?, ?)`;
+  await pool.query(sqlQuery, [postId, userName]);
+};
+
+const putNewDislike = async (req, res = response) => {
+  const userName = req.params.userName;
+  const postId = req.params.postId;
+
+  const sqlQuery = `INSERT INTO DISLIKES (IdMensaje, Nickname) VALUES (?, ?)`;
+  await pool.query(sqlQuery, [postId, userName]);
+};
+
+const getAccounts = async (req, res = response) => {
+  try {
+    const sqlQuery = "SELECT Nickname, Nombre, Apellidos FROM USUARIO";
+    const accounts = await pool.query(sqlQuery);
+    if (accounts.length <= 0) {
+      return res.status(400).json({
+        message: "No bank account usernames found",
+      });
+    }
+
+    res.status(200).json({
       accounts: accounts,
     });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+    throw new Error(error);
   }
-
-  res.status(400).json({
-    message: "No bank account usernames found",
-  });
 };
 
 module.exports = {
   getAccountByUsername,
   putAccountByUsername,
   getPostsByUserName,
+  putNewPost,
+  putNewLike,
+  putNewDislike,
   getAccounts,
 };

@@ -33,14 +33,13 @@ export const useBankStore = () => {
 
   const startCreatingTransaction = async (key) => {
     try {
-      const {data} = await axios.post("bank/transaction", key, {
+      const { data } = await axios.post("bank/transaction", key, {
         headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+          "Content-Type": "multipart/form-data",
+        },
       });
 
       setResMsg(data.message);
-      console.log(data.message);
     } catch (error) {
       setResMsg("Error completing the transaction");
     }

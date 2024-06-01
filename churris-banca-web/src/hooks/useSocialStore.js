@@ -25,7 +25,8 @@ export const useSocialStore = () => {
 
   const startUpdatingValueAccount = async (accountUsername, data, label) => {
     try {
-      await axios.put(`social/user/${accountUsername}`, {
+      await axios.put(`social/user`, {
+        userName: accountUsername,
         data: data,
         label: label === "Cell phone number" ? "Celular" : label,
       });
@@ -44,6 +45,31 @@ export const useSocialStore = () => {
     }
   };
 
+  const sendNewPost = async (userName, postText) => {
+    try {
+      await axios.get(`social/newPost/${userName}/${postText}`);
+    } catch (error) {
+      console.log("Error send new post.", error);
+    }
+  };
+
+  const sendNewLike = async (userName, postId) => {
+    try {
+      await axios.get(`social/newLike/${userName}/${postId}`);
+    } catch (error) {
+      console.log("Error send new like.", error);
+    }
+  };
+
+  const sendNewDislike = async (userName, postId) => {
+    try {
+      await axios.get(`social/newDislike/${userName}/${postId}`);
+    } catch (error) {
+      console.log("Error send new dislike.", error);
+    }
+  };
+
+  /* Banking */
   const startLoadingAccounts = async () => {
     try {
       const { data } = await axios.get("social/");
@@ -64,6 +90,9 @@ export const useSocialStore = () => {
     startUpdatingValueAccount,
     startLoadingPosts,
     startLoadingAccounts,
+    sendNewPost,
+    sendNewLike,
+    sendNewDislike,
   };
 };
 
