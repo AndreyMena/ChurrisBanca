@@ -27,11 +27,31 @@ const getAccountByUsername = async (req, res = response) => {
 };
 
 const putAccountByUsername = async (req, res = response) => {
-  const userName = req.params.accountUsername;
-  const { data, label } = req.body;
+  try {
+    const { userName, data, label } = req.body;
+    if (!userName || !data || !label) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
 
-  const sqlQuery = `UPDATE USUARIO SET ${label}=? WHERE NickName=?`;
-  await pool.query(sqlQuery, [data, userName]);
+    // Evitar inyección SQL
+    const validLabels = ["Email", "Celular", "Password"];
+    if (!validLabels.includes(label)) {
+      return res.status(400).json({ message: "Invalid field label" });
+    }
+
+    const sqlQuery = `UPDATE USUARIO SET ${label}=? WHERE NickName=?`;
+    const result = await pool.query(sqlQuery, [data, userName]);
+    if (result.affectedRows === 0) {
+      return res
+        .status(404)
+        .json({ message: "Account not found or no changes made" });
+    }
+
+    res.status(200).json({ message: "Account updated successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+    throw new Error(error);
+  }
 };
 
 const getPostsByUserName = async (req, res = response) => {
