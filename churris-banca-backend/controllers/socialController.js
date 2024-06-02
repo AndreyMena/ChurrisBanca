@@ -1,5 +1,12 @@
 const { response } = require("express");
+const cloudinary = require("cloudinary").v2;
 const pool = require("../config/dbConnection");
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 const getAccountByUsername = async (req, res = response) => {
   try {
@@ -135,6 +142,14 @@ const deletePost = async (req, res = response) => {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
+    if (urlImage) {
+      const deletePostImageMsg = await deletePostImage(urlImage);
+
+      if (deletePostImageMsg !== "Success deleting image") {
+        return res.status(400).json({ message: deletePostImageMsg });
+      }
+    }
+
     const sqlQuery = `DELETE FROM MENSAJE WHERE Id=?`;
     const result = await pool.query(sqlQuery, postId);
     if (result.affectedRows === 0) {
@@ -147,6 +162,20 @@ const deletePost = async (req, res = response) => {
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
     throw new Error(error);
+  }
+};
+
+const deletePostImage = async (urlImage) => {
+  try {
+    const parts = urlImage.split("/");
+    const fileAndId = parts.slice(-2).join("/");
+    const id = fileAndId.replace(/\.[^/.]+$/, "");
+
+    const result = await cloudinary.uploader.destroy(id);
+    console.log("result", result);
+    return "Success deleting image";
+  } catch (error) {
+    return "Error deleting image";
   }
 };
 
