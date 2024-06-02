@@ -151,7 +151,7 @@ const deletePost = async (req, res = response) => {
     }
 
     const sqlQuery = `DELETE FROM MENSAJE WHERE Id=?`;
-    const result = await pool.query(sqlQuery, postId);
+    const result = await pool.query(sqlQuery, id);
     if (result.affectedRows === 0) {
       return res
         .status(404)
@@ -171,9 +171,12 @@ const deletePostImage = async (urlImage) => {
     const fileAndId = parts.slice(-2).join("/");
     const id = fileAndId.replace(/\.[^/.]+$/, "");
 
-    const result = await cloudinary.uploader.destroy(id);
-    console.log("result", result);
-    return "Success deleting image";
+    const { result } = await cloudinary.uploader.destroy(id);
+    if (result === "ok") {
+      return "Success deleting image";
+    } else {
+      return "Image not found";
+    }
   } catch (error) {
     return "Error deleting image";
   }
