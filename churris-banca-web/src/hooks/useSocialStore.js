@@ -70,11 +70,11 @@ export const useSocialStore = () => {
     }
   };
 
-  const startDeletingPost = async (postId) => {
+  const startDeletingPost = async (payload) => {
     try {
       await axios.delete("social/post", {
         data: {
-          postId: postId,
+          payload: payload,
         },
       });
     } catch (error) {

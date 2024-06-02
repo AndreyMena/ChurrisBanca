@@ -21,9 +21,11 @@ const Post = ({
       <PostHeader
         postUserImage={postUserImage}
         postName={postName}
-        postUser={postUser}
-        postDateTime={postDateTime}
         postId={postId}
+        postUser={postUser}
+        postContent={postContent}
+        postImage={postImage}
+        postDateTime={postDateTime}
       ></PostHeader>
       <PostContent
         postContent={postContent}

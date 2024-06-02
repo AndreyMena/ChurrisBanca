@@ -10,15 +10,25 @@ import useSocialStore from "../../../hooks/useSocialStore";
 const PostHeader = ({
   postUserImage,
   postName,
-  postUser,
-  postDateTime,
   postId,
+  postUser,
+  postContent,
+  postImage,
+  postDateTime,
 }) => {
   const { auth } = useAuth();
   const { startDeletingPost } = useSocialStore();
 
   const handleDeleteClick = () => {
-    startDeletingPost(postId);
+    const payload = {
+      id: postId,
+      nickname: postUser,
+      content: postContent,
+      urlImage: postImage,
+      dateTime: postDateTime,
+    };
+
+    startDeletingPost(payload);
   };
 
   return (

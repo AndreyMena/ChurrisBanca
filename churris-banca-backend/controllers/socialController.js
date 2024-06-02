@@ -130,9 +130,9 @@ const putNewDislike = async (req, res = response) => {
 
 const deletePost = async (req, res = response) => {
   try {
-    const { postId } = req.body;
-    if (!postId) {
-      return res.status(400).json({ message: "Missing post id" });
+    const { id, nickname, content, urlImage, dateTime } = req.body.payload;
+    if (!id || !nickname || !content || !dateTime) {
+      return res.status(400).json({ message: "Missing required fields" });
     }
 
     const sqlQuery = `DELETE FROM MENSAJE WHERE Id=?`;

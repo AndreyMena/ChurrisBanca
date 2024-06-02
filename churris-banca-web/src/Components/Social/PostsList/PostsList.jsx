@@ -22,10 +22,10 @@ const PostsList = () => {
           key={index}
           postUserImage={account.Imagen}
           postName={account.Nombre}
-          postUser={post.Nickname}
-          postDateTime={post.Fecha}
           postId={post.PostId}
+          postUser={post.Nickname}
           postContent={post.Contenido}
+          postDateTime={post.Fecha}
           postImage="https://ps.w.org/user-avatar-reloaded/assets/icon-128x128.png?rev=2540745"
           postLikes={post.Likes}
           postDislikes={post.Dislikes}
