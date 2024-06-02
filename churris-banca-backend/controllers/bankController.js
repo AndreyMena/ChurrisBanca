@@ -1,7 +1,6 @@
 const { response } = require("express");
 const openssl = require("openssl-wrapper");
 const fs = require("fs");
-const { rejects } = require("assert");
 
 // Borrar después
 const bankAccounts = [
@@ -120,23 +119,34 @@ const getTransactionsByUserName = (req, res = response) => {
   });
 };
 
-const puTransaction = async(req, res = response) => {
+const puTransaction = async (req, res = response) => {
   try {
+    if (!req.file) {
+      return res.status(400).json({ message: "Key is required" });
+    }
+
     const userName = req.body.userName;
     const destinationAccountNickname = req.body.nicknameCuentaDestino;
     const amount = req.body.amount;
-
-    if (!req.file) {
-      return res.status(400).json({ message: 'Key is required' });
-    }
-
     if (!userName || !destinationAccountNickname || !amount) {
-      return res.status(400).json({ message: 'Missing required fields' });
+      return res.status(400).json({ message: "Missing required fields" });
     }
 
-    const validateKeyMsg = await validateKey(req.file.filename, userName);
+    const certFilePath = process.env.USER_CERT_FILE_PATH + userName + ".crt";
+    if (!fs.existsSync(certFilePath)) {
+      return res
+        .status(400)
+        .json({ message: "No certificate found for this user" });
+    }
+
+    const validateCertMsg = await validateCert(certFilePath);
+    if (validateCertMsg !== "The certificate is signed by the CA") {
+      return res.status(400).json({ message: validateCertMsg });
+    }
+
+    const validateKeyMsg = await validateKey(req.file.filename, certFilePath);
     if (validateKeyMsg !== "The private key matches the certificate") {
-      return res.status(400).json({message: validateKeyMsg});
+      return res.status(400).json({ message: validateKeyMsg });
     }
 
     const timestamp = new Date();
@@ -149,22 +159,45 @@ const puTransaction = async(req, res = response) => {
 
     //const sqlQuery = "INSERT INTO TRANSACCION (NicknameCuentaOrigen, NicknameCuentaDestino, Monto, FechaHora) VALUES(?, ?, ?, ?)";
     //await pool.query(sqlQuery, [userName, destinationAccountNickname, amount, timestamp]);
-    res.status(200).json({message: "Transaction succesful"})
+    res.status(200).json({ message: "Transaction succesful" });
   } catch (error) {
-    res.status(500).json({message: "Internal server error"});  
+    res.status(500).json({ message: "Internal server error" });
     throw new Error(error);
   }
 };
 
-const validateKey = (fileName, userName) => {
+const validateCert = (certFilePath) => {
   return new Promise((resolve, reject) => {
-    const keyFilePath = process.env.KEY_FILE_PATH + fileName;
+    const caFilePath = process.env.CA_CERT_FILE_PATH;
+    if (!fs.existsSync(caFilePath)) {
+      resolve("No certificate found for the CA");
+    }
+
+    openssl.exec(
+      "verify",
+      {
+        CAfile: caFilePath,
+        cert: certFilePath,
+      },
+      (err, buffer) => {
+        if (err) {
+          resolve("Error verifying the signature");
+        }
+
+        const result = buffer.toString();
+        if (result.includes("OK")) {
+          resolve("The certificate is signed by the CA");
+        }
+      }
+    );
+  });
+};
+
+const validateKey = (fileName, certFilePath) => {
+  return new Promise((resolve, reject) => {
+    const keyFilePath = process.env.USER_KEY_FILE_PATH + fileName;
     if (!fs.existsSync(keyFilePath)) {
       resolve("No private key found for this user");
-    }
-    const certFilePath = process.env.CERT_FILE_PATH + userName + ".crt";
-    if (!fs.existsSync(certFilePath)) {
-      resolve("No certificate found for this user");
     }
 
     openssl.exec(
@@ -187,6 +220,12 @@ const validateKey = (fileName, userName) => {
             modulus: true,
           },
           (err, keyMod) => {
+            fs.unlink(keyFilePath, (err) => {
+              if (err) {
+                resolve("Error deleting the private key");
+              }
+            });
+
             if (err) {
               resolve("Error extracting private key modulus");
             }
@@ -196,18 +235,12 @@ const validateKey = (fileName, userName) => {
             } else {
               resolve("The private key does not match the certificate");
             }
-
-            fs.unlink(keyFilePath, (err) => {
-              if (err) {
-                resolve("Error deleting the private key");
-              }
-            });
           }
         );
       }
     );
-  })
-}
+  });
+};
 
 module.exports = {
   getBankAccountByUsername,
