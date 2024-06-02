@@ -7,6 +7,7 @@ import "./Post.css";
 
 const Post = ({
   postUserImage,
+  postName,
   postUser,
   postDateTime,
   postId,
@@ -19,6 +20,7 @@ const Post = ({
     <div id="post-container">
       <PostHeader
         postUserImage={postUserImage}
+        postName={postName}
         postUser={postUser}
         postDateTime={postDateTime}
       ></PostHeader>

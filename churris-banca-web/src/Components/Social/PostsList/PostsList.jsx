@@ -21,7 +21,8 @@ const PostsList = () => {
         <Post
           key={index}
           postUserImage={account.Imagen}
-          postUser={account.Nombre}
+          postName={account.Nombre}
+          postUser={post.Nickname}
           postDateTime={post.Fecha}
           postId={post.id}
           postContent={post.Contenido}
