@@ -72,8 +72,11 @@ export const useSocialStore = () => {
 
   const startDeletingPost = async (postId) => {
     try {
-      console.log(postId);
-      //await axios.delete();
+      await axios.delete("social/post", {
+        data: {
+          postId: postId,
+        },
+      });
     } catch (error) {
       console.log("Error deleting post");
     }

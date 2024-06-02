@@ -54,6 +54,25 @@ const putAccountByUsername = async (req, res = response) => {
   }
 };
 
+const getAccounts = async (req, res = response) => {
+  try {
+    const sqlQuery = "SELECT Nickname, Nombre, Apellidos FROM USUARIO";
+    const accounts = await pool.query(sqlQuery);
+    if (accounts.length <= 0) {
+      return res.status(400).json({
+        message: "No bank account usernames found",
+      });
+    }
+
+    res.status(200).json({
+      accounts: accounts,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+    throw new Error(error);
+  }
+};
+
 const getPostsByUserName = async (req, res = response) => {
   try {
     const userName = req.params.userName;
@@ -109,19 +128,22 @@ const putNewDislike = async (req, res = response) => {
   await pool.query(sqlQuery, [postId, userName]);
 };
 
-const getAccounts = async (req, res = response) => {
+const deletePost = async (req, res = response) => {
   try {
-    const sqlQuery = "SELECT Nickname, Nombre, Apellidos FROM USUARIO";
-    const accounts = await pool.query(sqlQuery);
-    if (accounts.length <= 0) {
-      return res.status(400).json({
-        message: "No bank account usernames found",
-      });
+    const { postId } = req.body;
+    if (!postId) {
+      return res.status(400).json({ message: "Missing post id" });
     }
 
-    res.status(200).json({
-      accounts: accounts,
-    });
+    const sqlQuery = `DELETE FROM MENSAJE WHERE Id=?`;
+    const result = await pool.query(sqlQuery, postId);
+    if (result.affectedRows === 0) {
+      return res
+        .status(404)
+        .json({ message: "Post not found or no changes made" });
+    }
+
+    res.status(200).json({ message: "Post deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
     throw new Error(error);
@@ -131,9 +153,10 @@ const getAccounts = async (req, res = response) => {
 module.exports = {
   getAccountByUsername,
   putAccountByUsername,
+  getAccounts,
   getPostsByUserName,
   putNewPost,
   putNewLike,
   putNewDislike,
-  getAccounts,
+  deletePost,
 };
