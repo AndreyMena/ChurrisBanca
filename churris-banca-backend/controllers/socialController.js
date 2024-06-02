@@ -89,7 +89,7 @@ const putNewPost = async (req, res = response) => {
   const userName = req.params.userName;
   const postText = req.params.postText;
 
-  const sqlQuery = `NSERT INTO MENSAJE (Nickname, Contenido, Imagen) VALUES (?, ?, NULL);`;
+  const sqlQuery = `INSERT INTO MENSAJE (Nickname, Contenido, Imagen) VALUES (?, ?, NULL);`;
   await pool.query(sqlQuery, [userName, postText]);
 };
 
