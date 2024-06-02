@@ -5,9 +5,21 @@ import Typography from "@mui/material/Typography";
 import DeleteIcon from "@mui/icons-material/Delete";
 import useAuth from "../../../hooks/useAuth";
 import "./PostHeader.css";
+import useSocialStore from "../../../hooks/useSocialStore";
 
-const PostHeader = ({ postUserImage, postName, postUser, postDateTime }) => {
+const PostHeader = ({
+  postUserImage,
+  postName,
+  postUser,
+  postDateTime,
+  postId,
+}) => {
   const { auth } = useAuth();
+  const { startDeletingPost } = useSocialStore();
+
+  const handleDeleteClick = () => {
+    startDeletingPost(postId);
+  };
 
   return (
     <div id="post-header-container">
@@ -28,7 +40,9 @@ const PostHeader = ({ postUserImage, postName, postUser, postDateTime }) => {
             Unfollow
           </Button>
         </div>
-        {postUser === auth.user ? <DeleteIcon id="icon" /> : ""}
+        <Button onClick={handleDeleteClick}>
+          {postUser === auth.user ? <DeleteIcon id="icon" /> : ""}
+        </Button>
       </div>
     </div>
   );

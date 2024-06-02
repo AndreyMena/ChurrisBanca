@@ -23,6 +23,7 @@ const Post = ({
         postName={postName}
         postUser={postUser}
         postDateTime={postDateTime}
+        postId={postId}
       ></PostHeader>
       <PostContent
         postContent={postContent}

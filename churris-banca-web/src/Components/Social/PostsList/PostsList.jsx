@@ -24,7 +24,7 @@ const PostsList = () => {
           postName={account.Nombre}
           postUser={post.Nickname}
           postDateTime={post.Fecha}
-          postId={post.id}
+          postId={post.PostId}
           postContent={post.Contenido}
           postImage="https://ps.w.org/user-avatar-reloaded/assets/icon-128x128.png?rev=2540745"
           postLikes={post.Likes}
