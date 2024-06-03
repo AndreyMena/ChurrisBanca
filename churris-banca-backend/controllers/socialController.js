@@ -123,7 +123,7 @@ const putNewLike = async (req, res = response) => {
   const userName = req.params.userName;
   const postId = req.params.postId;
 
-  const sqlQuery = `INSERT INTO LIKES (IdMensaje, Nickname) VALUES (?, ?)`;
+  const sqlQuery = `INSERT INTO LIKES (IdMensaje, Nickname) VALUES (?, ?);`;
   await pool.query(sqlQuery, [postId, userName]);
 };
 
@@ -131,7 +131,7 @@ const putNewDislike = async (req, res = response) => {
   const userName = req.params.userName;
   const postId = req.params.postId;
 
-  const sqlQuery = `INSERT INTO DISLIKES (IdMensaje, Nickname) VALUES (?, ?)`;
+  const sqlQuery = `INSERT INTO DISLIKES (IdMensaje, Nickname) VALUES (?, ?);`;
   await pool.query(sqlQuery, [postId, userName]);
 };
 
