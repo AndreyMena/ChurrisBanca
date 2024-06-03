@@ -97,10 +97,9 @@ const getPostsByUserName = async (req, res = response) => {
     }
 
     posts.forEach((post) => {
-      post.Fecha = post.Fecha !== undefined ? post.Likes.toString() : "0";
+      post.Fecha = post.Fecha !== undefined ? post.Fecha.toString() : "Sin hora y fecha";
       post.Likes = post.Likes !== undefined ? post.Likes.toString() : "0";
-      post.Dislikes =
-        post.Dislikes !== undefined ? post.Dislikes.toString() : "0";
+      post.Dislikes = post.Dislikes !== undefined ? post.Dislikes.toString() : "0";
     });
 
     res.status(200).json({
