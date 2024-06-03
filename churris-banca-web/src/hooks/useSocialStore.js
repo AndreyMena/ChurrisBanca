@@ -13,7 +13,7 @@ export const useSocialStore = () => {
   const [posts, setPosts] = useState([]);
   const [accounts, setAccounts] = useState([]);
 
-  /* Profile */
+  /* Profile, social */
   const startLoadingAccount = async (accountUsername) => {
     try {
       const { data } = await axios.get(`social/${accountUsername}`);
@@ -23,6 +23,7 @@ export const useSocialStore = () => {
     }
   };
 
+  /* Profile */
   const startUpdatingValueAccount = async (accountUsername, data, label) => {
     try {
       await axios.put(`social/user`, {
@@ -30,7 +31,7 @@ export const useSocialStore = () => {
         data: data,
         label: label === "Cell phone number" ? "Celular" : label,
       });
-    } catch {
+    } catch (error) {
       console.log("Error updating bank account");
     }
   };
@@ -41,7 +42,7 @@ export const useSocialStore = () => {
       const { data } = await axios.get(`social/posts/${userName}`);
       setPosts(data.posts);
     } catch (error) {
-      console.log("Error loading posts", error);
+      console.log("Error loading posts");
     }
   };
 
@@ -69,6 +70,18 @@ export const useSocialStore = () => {
     }
   };
 
+  const startDeletingPost = async (payload) => {
+    try {
+      await axios.delete("social/post", {
+        data: {
+          payload: payload,
+        },
+      });
+    } catch (error) {
+      console.log("Error deleting post");
+    }
+  };
+
   /* Banking */
   const startLoadingAccounts = async () => {
     try {
@@ -88,11 +101,14 @@ export const useSocialStore = () => {
 
     startLoadingAccount,
     startUpdatingValueAccount,
+
     startLoadingPosts,
-    startLoadingAccounts,
     sendNewPost,
     sendNewLike,
     sendNewDislike,
+    startDeletingPost,
+
+    startLoadingAccounts,
   };
 };
 
