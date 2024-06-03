@@ -15,7 +15,13 @@ const PostReaction = ({postId, postLikes, postDislikes}) => {
   const [disliked, setDisliked] = useState(false);
 
   const handleLike = () => {
-    sendNewLike(auth.user, postId);
+    const payload = {
+      userName: auth.user,
+      postId: postId,
+    };
+
+    sendNewLike(payload);
+
     setLiked(!liked);
     if (disliked) setDisliked(false);
   };

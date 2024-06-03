@@ -120,8 +120,7 @@ const putNewPost = async (req, res = response) => {
 };
 
 const putNewLike = async (req, res = response) => {
-  const userName = req.params.userName;
-  const postId = req.params.postId;
+  const { userName, postId } = req.body;
 
   const sqlQuery = `INSERT INTO LIKES (IdMensaje, Nickname) VALUES (?, ?);`;
   await pool.query(sqlQuery, [postId, userName]);

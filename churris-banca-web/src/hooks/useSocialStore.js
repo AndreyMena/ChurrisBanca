@@ -54,9 +54,9 @@ export const useSocialStore = () => {
     }
   };
 
-  const sendNewLike = async (userName, postId) => {
+  const sendNewLike = async (payload) => {
     try {
-      await axios.get(`social/newLike/${userName}/${postId}`);
+      await axios.put(`social/newLike`, payload);
     } catch (error) {
       console.log("Error send new like.", error);
     }

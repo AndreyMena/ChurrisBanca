@@ -21,7 +21,7 @@ router.put("/user", putAccountByUsername);
 router.get("/", getAccounts);
 router.get("/posts/:userName", getPostsByUserName);
 router.put("/newPost/:userName:postText", putNewPost);
-router.put("/newLike/:userName:postId", putNewLike);
+router.put("/newLike", putNewLike);
 router.put("/newDislike/:userName:postId", putNewDislike);
 router.delete("/post", deletePost);
 
