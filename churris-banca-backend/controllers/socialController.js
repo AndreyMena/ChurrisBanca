@@ -120,10 +120,24 @@ const putNewPost = async (req, res = response) => {
 };
 
 const putNewLike = async (req, res = response) => {
-  const { userName, postId } = req.body;
+  try {
+    const { userName, postId } = req.body;
+    if (!userName || !postId) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
 
-  const sqlQuery = `INSERT INTO LIKES (IdMensaje, Nickname) VALUES (?, ?);`;
-  await pool.query(sqlQuery, [postId, userName]);
+    const sqlQuery = `INSERT INTO LIKES (IdMensaje, Nickname) VALUES (?, ?);`;
+    await pool.query(sqlQuery, [postId, userName]);
+
+    res.status(200).json({ message: "Like updated successfully" });
+  } catch (error) {
+    if (error.errno === 1452) { // 1452 signaling a violation of a foreign key constraint
+      return res.status(400).json({ message: "Message not found or no changes made" });
+    }
+
+    res.status(500).json({ message: "Internal server error" });
+    throw new Error(error);
+  }
 };
 
 const putNewDislike = async (req, res = response) => {
