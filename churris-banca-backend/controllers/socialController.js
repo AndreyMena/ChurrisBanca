@@ -1,7 +1,7 @@
 const { response } = require("express");
 const cloudinary = require("cloudinary").v2;
 const pool = require("../config/dbConnection");
-const logEvents = require("../middleware/logEvents");
+const logPost = require("../middleware/logEvents");
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -159,7 +159,7 @@ const deletePost = async (req, res = response) => {
         .json({ message: "Post not found or no changes made" });
     }
 
-    logEvents(req.body.payload, "postLog.txt");
+    logPost({ id, nickname, content, dateTime }, "postLog.txt");
     res.status(200).json({ message: "Post deleted successfully" });
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
