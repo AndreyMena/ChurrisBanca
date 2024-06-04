@@ -32,16 +32,19 @@ const PostReaction = ({postId, postLikes, postUsernamesLikes, postDislikes}) => 
     };
     
     if (liked) {
-      setLikesCount(likesCount - 1);
+      // setLikesCount(likesCount - 1);
       sendRemoveLike(payload);
       return setLiked(false);
     }
 
-    sendNewLike(payload);
-    setDislikesCount(likesCount + 1);
-    setLiked(true);
+    if (disliked) {
+      sendRemoveDislike(payload);
+      setDisliked(false);
+    }
 
-    if (disliked) setDisliked(false);
+    sendNewLike(payload);
+    // setLikesCount(likesCount + 1);
+    setLiked(true);
   };
 
   const handleDislike = () => {
@@ -51,16 +54,19 @@ const PostReaction = ({postId, postLikes, postUsernamesLikes, postDislikes}) => 
     };
 
     if (disliked) {
-      setLikesCount(dislikesCount - 1);
+      // setLikesCount(dislikesCount - 1);
       sendRemoveDislike(payload);
       return setDisliked(false);
     }
 
-    sendNewDislike(payload);
-    setDislikesCount(dislikesCount + 1);
-    setDisliked(true);
+    if (liked) {
+      sendRemoveLike(payload);
+      setLiked(false);
+    }
 
-    if (liked) setLiked(false);
+    sendNewDislike(payload);
+    // setDislikesCount(dislikesCount + 1);
+    setDisliked(true);
   };
 
   return (
@@ -69,7 +75,7 @@ const PostReaction = ({postId, postLikes, postUsernamesLikes, postDislikes}) => 
       <IconButton onClick={handleLike} color={liked ? "primary" : "default"}>
         <ThumbUpOutlinedIcon></ThumbUpOutlinedIcon>
       </IconButton>
-      <Typography>{likesCount}</Typography>
+      <Typography>{postLikes}</Typography>
       </div>
       <div className="reaction-item-container">
       <IconButton onClick={handleDislike} color={disliked ? "primary" : "default"}>
