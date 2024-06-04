@@ -12,6 +12,7 @@ const PostReaction = ({postId, postLikes, postUsernamesLikes, postDislikes}) => 
   const { auth } = useAuth();
   const { sendNewLike, sendNewDislike } = useSocialStore();
   const [liked, setLiked] = useState(false);
+  const [likesCount, setLikesCount] = useState(Number(postLikes));
   const [disliked, setDisliked] = useState(false);
 
   useEffect(() => {
@@ -25,7 +26,8 @@ const PostReaction = ({postId, postLikes, postUsernamesLikes, postDislikes}) => 
   
   const handleLike = () => {
     if (liked) {
-      // TODO: Eliminar el like
+      // TODO: Eliminar el like del backend
+      setLikesCount(likesCount - 1);
       return setLiked(false);
     }
 
@@ -36,7 +38,8 @@ const PostReaction = ({postId, postLikes, postUsernamesLikes, postDislikes}) => 
 
     sendNewLike(payload);
 
-    return setLiked(true);
+    setLikesCount(likesCount + 1);
+    setLiked(true);
 
     if (disliked) setDisliked(false);
   };
@@ -53,7 +56,7 @@ const PostReaction = ({postId, postLikes, postUsernamesLikes, postDislikes}) => 
       <IconButton onClick={handleLike} color={liked ? "primary" : "default"}>
         <ThumbUpOutlinedIcon></ThumbUpOutlinedIcon>
       </IconButton>
-      <Typography>{postLikes}</Typography>
+      <Typography>{likesCount}</Typography>
       </div>
       <div className="reaction-item-container">
       <IconButton onClick={handleDislike} color={disliked ? "primary" : "default"}>
