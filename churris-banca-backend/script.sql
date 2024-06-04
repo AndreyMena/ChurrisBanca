@@ -39,3 +39,11 @@ VALUES
 	("cristian.ortegahurtado", "Este es un mensaje de prueba.\nOjalá todo salga bien :)", "https://res.cloudinary.com/churris-banca/image/upload/v1717375978/react-churris-banca/juocijzxbw7rhhj2g9tq.png");
 	("andre.villegas", "Este es mi primer post", "https://res.cloudinary.com/churris-banca/image/upload/v1717375978/react-churris-banca/juocijzxbw7rhhj2g9tq.png");
 
+INSERT INTO LIKES (IdMensaje, Nickname)
+VALUES 
+	(4, "andre.villegas")
+	(5, "cristian.ortegahurtado");
+
+INSERT INTO DISLIKES (IdMensaje, Nickname) 
+VALUES 
+	(5, "andrey.menaespinoza");
