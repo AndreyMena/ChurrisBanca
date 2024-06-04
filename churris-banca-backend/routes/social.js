@@ -12,7 +12,9 @@ const {
   getPostsByUserName,
   putNewPost,
   putNewLike,
+  putRemoveLike,
   putNewDislike,
+  putRemoveDislike,
   deletePost,
 } = require("../controllers/socialController");
 
@@ -21,8 +23,10 @@ router.put("/user", putAccountByUsername);
 router.get("/", getAccounts);
 router.get("/posts/:userName", getPostsByUserName);
 router.put("/newPost/:userName:postText", putNewPost);
-router.put("/newLike/:userName:postId", putNewLike);
-router.put("/newDislike/:userName:postId", putNewDislike);
+router.put("/newLike", putNewLike);
+router.put("/removeLike", putRemoveLike);
+router.put("/newDislike", putNewDislike);
+router.put("/removeDislike", putRemoveDislike);
 router.delete("/post", deletePost);
 
 module.exports = router;

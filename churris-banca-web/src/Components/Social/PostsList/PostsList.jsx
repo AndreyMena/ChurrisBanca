@@ -28,6 +28,7 @@ const PostsList = () => {
           postDateTime={post.Fecha}
           postImage={post.Imagen}
           postLikes={post.Likes}
+          postUsernamesLikes={post.Nicknames}
           postDislikes={post.Dislikes}
         ></Post>
       ))}

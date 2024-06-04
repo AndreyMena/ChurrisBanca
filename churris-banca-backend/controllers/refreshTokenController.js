@@ -6,7 +6,7 @@ const handleRefreshToken = async (req, res) => {
     if (!cookies?.jwt) return res.sendStatus(401);
     const refreshToken = cookies.jwt;
 
-    const sqlQuery = 'SELECT Email FROM USUARIO WHERE RefreshToken=?';
+    const sqlQuery = 'SELECT Email, Nickname FROM USUARIO WHERE RefreshToken=?';
     const foundUser = await pool.query(sqlQuery, refreshToken);
     if (!foundUser) return res.sendStatus(403); //Forbidden 
 
@@ -20,8 +20,9 @@ const handleRefreshToken = async (req, res) => {
                 process.env.ACCESS_TOKEN_SECRET,
                 { expiresIn: '30s' }
             );
-            const user = foundUser[0].Email;
-            res.json({ user, accessToken })
+            const user = foundUser[0].Nickname;
+            const email = foundUser[0].Email;
+            res.json({ user, accessToken, email })
         }
     );
 }

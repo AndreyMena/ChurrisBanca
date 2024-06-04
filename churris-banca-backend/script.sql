@@ -34,8 +34,19 @@ VALUES
 	('andre.villegas', '$2b$10$33Q9jtAoaXC4aUX9Bjihxum2BHG.ENB6JyoCvPjnuXpITtUd8x8/y', 'Andre', 'Villegas Gallardo', NULL, 'andre.villegas@ucr.ac.cr', 12345678, NULL),
 	('emilia.viquez', '$2b$10$33Q9jtAoaXC4aUX9Bjihxum2BHG.ENB6JyoCvPjnuXpITtUd8x8/y', 'Emilia', 'Viquez Mora', NULL, 'emilia.viquez@ucr.ac.cr', 12345678, NULL);
 
-INSERT INTO MENSAJE (Nickname, Contenido, Imagen) 
-VALUES 
-	("cristian.ortegahurtado", "Este es un mensaje de prueba.\nOjalá todo salga bien :)", "https://res.cloudinary.com/churris-banca/image/upload/v1717375978/react-churris-banca/juocijzxbw7rhhj2g9tq.png");
-	("andre.villegas", "Este es mi primer post", "https://res.cloudinary.com/churris-banca/image/upload/v1717375978/react-churris-banca/juocijzxbw7rhhj2g9tq.png");
+INSERT INTO MENSAJE (Nickname, Contenido, Imagen) VALUES ("cristian.ortegahurtado", "Este es un mensaje de prueba.\nOjalá todo salga bien :)", "https://res.cloudinary.com/churris-banca/image/upload/v1717375978/react-churris-banca/juocijzxbw7rhhj2g9tq.png"), ("andre.villegas", "Este es mi primer post", "https://res.cloudinary.com/churris-banca/image/upload/v1717375978/react-churris-banca/juocijzxbw7rhhj2g9tq.png");
 
+CREATE TABLE LIKES(
+	IdMensaje INT ,
+	FOREIGN KEY (IdMensaje) REFERENCES MENSAJE(Id),
+	Nickname VARCHAR(25) NOT NULL
+);
+
+INSERT INTO LIKES (IdMensaje, Nickname)
+VALUES 
+	(6, "andre.villegas"),
+	(7, "cristian.ortegahurtado");
+
+INSERT INTO DISLIKES (IdMensaje, Nickname) 
+VALUES 
+	(5, "andrey.menaespinoza");
