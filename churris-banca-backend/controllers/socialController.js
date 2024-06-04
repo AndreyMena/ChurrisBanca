@@ -88,7 +88,8 @@ const getPostsByUserName = async (req, res = response) => {
       return res.status(400).json({ message: "userName is required" });
     }
 
-    const sqlQuery = `SELECT m.Id AS PostId, m.Nickname, m.Contenido, m.Imagen, m.Fecha, COALESCE(l.Likes, 0) AS Likes, COALESCE(d.Dislikes, 0) AS Dislikes FROM MENSAJE m LEFT JOIN (SELECT IdMensaje, COUNT(*) AS Likes FROM LIKES GROUP BY IdMensaje) l ON m.Id = l.IdMensaje LEFT JOIN (SELECT IdMensaje, COUNT(*) AS Dislikes FROM DISLIKES GROUP BY IdMensaje) d ON m.Id = d.IdMensaje WHERE m.Nickname = ?;`;
+    const sqlQuery = "SELECT m.Id AS PostId, m.Nickname, m.Contenido, m.Imagen, m.Fecha, COALESCE(l.Likes, 0) AS Likes, COALESCE(d.Dislikes, 0) AS Dislikes, l.Nicknames FROM MENSAJE m LEFT JOIN (" + 
+      "SELECT IdMensaje, COUNT(*) AS Likes, GROUP_CONCAT(Nickname) AS Nicknames FROM LIKES GROUP BY IdMensaje) l ON m.Id = l.IdMensaje LEFT JOIN (SELECT IdMensaje, COUNT(*) AS Dislikes FROM DISLIKES GROUP BY IdMensaje) d ON m.Id = d.IdMensaje WHERE m.Nickname = ?;";
     const posts = await pool.query(sqlQuery, [userName]);
     if (posts.length <= 0) {
       return res.status(400).json({

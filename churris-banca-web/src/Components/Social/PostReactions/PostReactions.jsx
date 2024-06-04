@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import IconButton from "@mui/material/IconButton";
 import ThumbDownOutlinedIcon from '@mui/icons-material/ThumbDownOutlined';
 import ThumbUpOutlinedIcon from '@mui/icons-material/ThumbUpOutlined';
@@ -8,13 +8,27 @@ import useSocialStore from "../../../hooks/useSocialStore";
 
 import "./PostReactions.css"
 
-const PostReaction = ({postId, postLikes, postDislikes}) => {
+const PostReaction = ({postId, postLikes, postUsernamesLikes, postDislikes}) => {
   const { auth } = useAuth();
   const { sendNewLike, sendNewDislike } = useSocialStore();
   const [liked, setLiked] = useState(false);
   const [disliked, setDisliked] = useState(false);
 
+  useEffect(() => {
+    if (postUsernamesLikes !== null) {
+      const usernamesArray = postUsernamesLikes.split(',');
+      if (usernamesArray.includes(auth.user)) {
+        setLiked(true);
+      }
+    }
+  }, [])
+  
   const handleLike = () => {
+    if (liked) {
+      // TODO: Eliminar el like
+      return setLiked(false);
+    }
+
     const payload = {
       userName: auth.user,
       postId: postId,
@@ -22,7 +36,8 @@ const PostReaction = ({postId, postLikes, postDislikes}) => {
 
     sendNewLike(payload);
 
-    setLiked(!liked);
+    return setLiked(true);
+
     if (disliked) setDisliked(false);
   };
 
