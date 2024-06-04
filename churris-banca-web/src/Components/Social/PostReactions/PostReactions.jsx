@@ -14,6 +14,7 @@ const PostReaction = ({postId, postLikes, postUsernamesLikes, postDislikes}) => 
   const [liked, setLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(Number(postLikes));
   const [disliked, setDisliked] = useState(false);
+  const [dislikesCount, setDislikesCount] = useState(Number(postDislikes));
 
   useEffect(() => {
     if (postUsernamesLikes !== null) {
@@ -26,7 +27,6 @@ const PostReaction = ({postId, postLikes, postUsernamesLikes, postDislikes}) => 
   
   const handleLike = () => {
     if (liked) {
-      // TODO: Eliminar el like del backend
       setLikesCount(likesCount - 1);
       return setLiked(false);
     }
@@ -37,16 +37,27 @@ const PostReaction = ({postId, postLikes, postUsernamesLikes, postDislikes}) => 
     };
 
     sendNewLike(payload);
-
-    setLikesCount(likesCount + 1);
+    setDislikesCount(likesCount + 1);
     setLiked(true);
 
     if (disliked) setDisliked(false);
   };
 
   const handleDislike = () => {
-    sendNewDislike(auth.user, postId);
-    setDisliked(!disliked);
+    if (disliked) {
+      setLikesCount(dislikesCount - 1);
+      return setDisliked(false);
+    }
+
+    const payload = {
+      userName: auth.user,
+      postId: postId,
+    };
+
+    sendNewDislike(payload);
+    setDislikesCount(dislikesCount + 1);
+    setDisliked(true);
+
     if (liked) setLiked(false);
   };
 
