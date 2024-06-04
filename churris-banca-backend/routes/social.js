@@ -22,7 +22,7 @@ router.get("/", getAccounts);
 router.get("/posts/:userName", getPostsByUserName);
 router.put("/newPost/:userName:postText", putNewPost);
 router.put("/newLike", putNewLike);
-router.put("/newDislike/:userName:postId", putNewDislike);
+router.put("/newDislike", putNewDislike);
 router.delete("/post", deletePost);
 
 module.exports = router;
