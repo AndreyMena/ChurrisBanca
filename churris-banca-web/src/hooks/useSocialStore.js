@@ -62,6 +62,22 @@ export const useSocialStore = () => {
     }
   };
 
+  const sendRemoveLike = async (payload) => {
+    try {
+      await axios.put(`social/removeLike`, payload);
+    } catch (error) {
+      console.log("Error send remove like.", error);
+    }
+  };
+
+  const sendRemoveDislike = async (payload) => {
+    try {
+      await axios.put(`social/removeDislike`, payload);
+    } catch (error) {
+      console.log("Error send remove dislike.", error);
+    }
+  };
+
   const sendNewDislike = async (payload) => {
     try {
       await axios.put(`social/newDislike`, payload);
@@ -105,7 +121,9 @@ export const useSocialStore = () => {
     startLoadingPosts,
     sendNewPost,
     sendNewLike,
+    sendRemoveLike,
     sendNewDislike,
+    sendRemoveDislike,
     startDeletingPost,
 
     startLoadingAccounts,
