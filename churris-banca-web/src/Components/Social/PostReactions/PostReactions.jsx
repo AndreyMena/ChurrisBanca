@@ -45,10 +45,11 @@ const PostReaction = ({postId, postLikes, postUsernamesLikes, postDislikes, post
       return setLiked(false);
     }
 
-    /*if (disliked) {
+    if (disliked) {
+      setDislikesCount(dislikesCount - 1);
       sendRemoveDislike(payload);
       setDisliked(false);
-    }*/
+    }
 
     sendNewLike(payload);
     setLikesCount(likesCount + 1);
@@ -67,10 +68,11 @@ const PostReaction = ({postId, postLikes, postUsernamesLikes, postDislikes, post
       return setDisliked(false);
     }
 
-    /*if (liked) {
+    if (liked) {
+      setLikesCount(likesCount - 1);
       sendRemoveLike(payload);
       setLiked(false);
-    }*/
+    }
 
     sendNewDislike(payload);
     setDislikesCount(dislikesCount + 1);
