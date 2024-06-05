@@ -12,7 +12,6 @@ const PostsList = () => {
     startLoadingPosts(auth.user);
 
     const intervalId = setInterval(() => {
-      console.log("Ejecutando actualización de posts.");
       startLoadingPosts(auth.user);
     }, 30000);
     

@@ -46,9 +46,9 @@ export const useSocialStore = () => {
     }
   };
 
-  const sendNewPost = async (userName, postText) => {
+  const sendNewPost = async (payload) => {
     try {
-      await axios.get(`social/newPost/${userName}/${postText}`);
+      await axios.post("social/newPost", payload);
     } catch (error) {
       console.log("Error send new post.", error);
     }

@@ -20,7 +20,12 @@ const CreatePostPopUp = ({ openPopup, handleClosePopup }) => {
   }
 
   const handleSendPost = () => {
-    sendNewPost(auth.user, text);
+    const payload = {
+      userName: auth.user,
+      content: text
+    };
+
+    sendNewPost(payload);
     handleClosePopup();
   }
 
