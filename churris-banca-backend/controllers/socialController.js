@@ -114,10 +114,20 @@ const getPostsByUserName = async (req, res = response) => {
 };
 
 const postNewPost = async (req, res = response) => {
-  const {userName, content} = req.body;
+  try {
+    const {userName, content} = req.body;
+    if (!userName || !content) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
+  
+    const sqlQuery = `INSERT INTO MENSAJE (Nickname, Contenido, Imagen) VALUES (?, ?, NULL);`;
+    await pool.query(sqlQuery, [userName, content]);
 
-  const sqlQuery = `INSERT INTO MENSAJE (Nickname, Contenido, Imagen) VALUES (?, ?, NULL);`;
-  await pool.query(sqlQuery, [userName, content]);
+    res.status(201).json({ message: "Post created successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+    throw new Error(error);
+  }
 };
 
 const putNewLike = async (req, res = response) => {
