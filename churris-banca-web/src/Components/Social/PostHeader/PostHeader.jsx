@@ -4,8 +4,9 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import DeleteIcon from "@mui/icons-material/Delete";
 import useAuth from "../../../hooks/useAuth";
-import "./PostHeader.css";
 import useSocialStore from "../../../hooks/useSocialStore";
+import "./PostHeader.css";
+import "../../../App.css"
 
 const PostHeader = ({
   postUserImage,
