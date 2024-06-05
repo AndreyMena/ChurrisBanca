@@ -34,6 +34,7 @@ const PostsList = () => {
           postLikes={post.Likes}
           postUsernamesLikes={post.Nicknames}
           postDislikes={post.Dislikes}
+          postUsernamesDislikes={post.DislikeNicknames}
         ></Post>
       ))}
     </div>

@@ -8,7 +8,7 @@ import useSocialStore from "../../../hooks/useSocialStore";
 
 import "./PostReactions.css"
 
-const PostReaction = ({postId, postLikes, postUsernamesLikes, postDislikes}) => {
+const PostReaction = ({postId, postLikes, postUsernamesLikes, postDislikes, postUsernamesDislikes}) => {
   const { auth } = useAuth();
   const { sendNewLike, sendNewDislike, sendRemoveLike, sendRemoveDislike } = useSocialStore();
   const [liked, setLiked] = useState(false);
@@ -20,11 +20,19 @@ const PostReaction = ({postId, postLikes, postUsernamesLikes, postDislikes}) => 
     if (postUsernamesLikes !== null) {
       const usernamesArray = postUsernamesLikes.split(',');
       if (usernamesArray.includes(auth.user)) {
-        setLiked(true);
+        return setLiked(true);
+      }
+    }
+
+    if (postUsernamesDislikes !== null) {
+      const usernamesArray = postUsernamesDislikes.split(',');
+      if (usernamesArray.includes(auth.user)) {
+        setDisliked(true);
       }
     }
   }, [])
   
+
   const handleLike = () => {
     const payload = {
       userName: auth.user,
@@ -32,18 +40,18 @@ const PostReaction = ({postId, postLikes, postUsernamesLikes, postDislikes}) => 
     };
     
     if (liked) {
-      // setLikesCount(likesCount - 1);
+      setLikesCount(likesCount - 1);
       sendRemoveLike(payload);
       return setLiked(false);
     }
 
-    if (disliked) {
+    /*if (disliked) {
       sendRemoveDislike(payload);
       setDisliked(false);
-    }
+    }*/
 
     sendNewLike(payload);
-    // setLikesCount(likesCount + 1);
+    setLikesCount(likesCount + 1);
     setLiked(true);
   };
 
@@ -54,18 +62,18 @@ const PostReaction = ({postId, postLikes, postUsernamesLikes, postDislikes}) => 
     };
 
     if (disliked) {
-      // setLikesCount(dislikesCount - 1);
+      setDislikesCount(dislikesCount - 1);
       sendRemoveDislike(payload);
       return setDisliked(false);
     }
 
-    if (liked) {
+    /*if (liked) {
       sendRemoveLike(payload);
       setLiked(false);
-    }
+    }*/
 
     sendNewDislike(payload);
-    // setDislikesCount(dislikesCount + 1);
+    setDislikesCount(dislikesCount + 1);
     setDisliked(true);
   };
 
@@ -75,13 +83,13 @@ const PostReaction = ({postId, postLikes, postUsernamesLikes, postDislikes}) => 
       <IconButton onClick={handleLike} color={liked ? "primary" : "default"}>
         <ThumbUpOutlinedIcon></ThumbUpOutlinedIcon>
       </IconButton>
-      <Typography>{postLikes}</Typography>
+      <Typography>{likesCount}</Typography>
       </div>
       <div className="reaction-item-container">
       <IconButton onClick={handleDislike} color={disliked ? "primary" : "default"}>
         <ThumbDownOutlinedIcon></ThumbDownOutlinedIcon>
       </IconButton>
-      <Typography>{postDislikes}</Typography>
+      <Typography>{dislikesCount}</Typography>
       </div>
     </div>
   );
