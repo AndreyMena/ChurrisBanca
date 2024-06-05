@@ -1,6 +1,7 @@
 const { response } = require("express");
 const openssl = require("openssl-wrapper");
 const fs = require("fs");
+const axios = require('../config/axios-cgi');
 
 // Borrar después
 const bankAccounts = [
@@ -81,8 +82,29 @@ const transactionsExamples = [
   },
 ];
 
-const getBankAccountByUsername = (req, res = response) => {
+const getBankAccountByUsername = async (req, res = response) => {
   const userName = req.params.bankAccountUsername;
+
+  console.log(userName);
+  const postData = new URLSearchParams();
+  postData.append('input_data', `SELECT * FROM CUENTA WHERE Nickname='${userName}'`);
+
+  try {
+    const cgiResponse = await axios.post('/', postData, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    });
+
+    /*
+    const postData = {
+      input_data: 'SELECT * FROM CUENTA WHERE Nickname = mike;'
+    };*/
+    //const response = await axios.post('/');
+    console.log(cgiResponse.data);
+  } catch (error) {
+      console.error('Error al llamar a la aplicación CGI:', error);
+  }
 
   const bankAccount = bankAccounts.find(
     (bankAccount) => bankAccount.userName === userName
@@ -99,7 +121,7 @@ const getBankAccountByUsername = (req, res = response) => {
   });
 };
 
-const getTransactionsByUserName = (req, res = response) => {
+const getTransactionsByUserName = async (req, res = response) => {
   const userName = req.params.userName;
 
   const transactions = transactionsExamples.filter(

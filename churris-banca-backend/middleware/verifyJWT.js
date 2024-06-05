@@ -2,11 +2,14 @@ const jwt = require('jsonwebtoken');
 
 //Middleware para TODO lo que entra
 const verifyJWT = (req, res, next) => {
+    next();
+    /*
     const authHeader = req.headers.authorization || req.headers.Authorization;
 
     // Verificacion de seguridad del header para auth
     //if (!authHeader) return res.sendStatus(401);
     if (!authHeader?.startsWith('Bearer ')) return res.sendStatus(401);
+    console.log("HOla");
     const token = authHeader.split(' ')[1];
     console.log(token)
     jwt.verify(
@@ -17,7 +20,7 @@ const verifyJWT = (req, res, next) => {
             req.user = decoded.username;
             next();
         }
-    );
+    );*/
 }
 
 module.exports = verifyJWT
