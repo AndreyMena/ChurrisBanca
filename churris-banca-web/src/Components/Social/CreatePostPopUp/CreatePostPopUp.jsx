@@ -5,9 +5,9 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
+import InsertPhotoOutlinedIcon from '@mui/icons-material/InsertPhotoOutlined';
 import useAuth from "../../../hooks/useAuth";
 import useSocialStore from "../../../hooks/useSocialStore";
-
 import "./CreatePostPopUp.css";
 
 const CreatePostPopUp = ({ openPopup, handleClosePopup }) => {
@@ -42,7 +42,8 @@ const CreatePostPopUp = ({ openPopup, handleClosePopup }) => {
           onChange={handleTextChange}
         />
       </DialogContent>
-      <DialogActions>
+      <DialogActions id="dialog-actions-container">
+        <InsertPhotoOutlinedIcon fontSize="large"/>
         <Button variant="contained" onClick={handleSendPost}>Send post</Button>
       </DialogActions>
     </Dialog>

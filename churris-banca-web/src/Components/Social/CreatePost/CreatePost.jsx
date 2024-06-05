@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import CreatePostPopUp from "../CreatePostPopUp/CreatePostPopUp";
-import IconButton from "@mui/material/IconButton";
-import InputAdornment from '@mui/material/InputAdornment';
-import InsertPhotoOutlinedIcon from '@mui/icons-material/InsertPhotoOutlined';
 import TextField from "@mui/material/TextField";
 
 import "./CreatePost.css";
@@ -29,17 +26,8 @@ const CreatePost = () => {
           className="custom-text-field" 
           placeholder="What's on your mind?" 
           variant="filled"
-          onClick={handleOpenPopup}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={handleOpenPopup}>
-                  <InsertPhotoOutlinedIcon fontSize="large"></InsertPhotoOutlinedIcon>
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        ></TextField>
+          onClick={handleOpenPopup} 
+         />
       </div>
 
       <CreatePostPopUp
