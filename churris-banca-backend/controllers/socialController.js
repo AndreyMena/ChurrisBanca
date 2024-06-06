@@ -113,6 +113,28 @@ const getPostsByUserName = async (req, res = response) => {
   }
 };
 
+const getFollowedPostsByUserName = async (req, res = response) => {
+  try {
+    const userName = req.params.userName;
+    if (!userName) {
+      return res.status(400).json({ message: "userName is required" });
+    }
+    // TODO
+    const sqlQuery = "";
+    const usersFollowed = await pool.query(sqlQuery, [userName]);
+    if (usersFollowed.length <= 0) {
+      return res.status(400).json({
+        message: "No followed posts found for this user",
+      });
+    }
+
+    
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+    throw new Error(error);
+  }
+};
+
 const postNewPost = async (req, res = response) => {
   try {
     const {userName, content, imageUrl} = req.body;
@@ -267,6 +289,7 @@ module.exports = {
   putAccountByUsername,
   getAccounts,
   getPostsByUserName,
+  getFollowedPostsByUserName,
   postNewPost,
   putNewLike,
   putRemoveLike,
