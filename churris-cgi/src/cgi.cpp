@@ -57,6 +57,75 @@ string getCgiReply(string reply)
     return cgiReply.str();
 }
 
+std::vector<std::string> split(const std::string &s, char delimiter) {
+    std::vector<std::string> tokens;
+    std::string token;
+    std::istringstream tokenStream(s);
+    while (std::getline(tokenStream, token, delimiter)) {
+        tokens.push_back(token);
+    }
+    return tokens;
+}
+
+string checkQuery(string query) {
+    // Separar los datos por comas
+    std::vector<std::string> params = split(query, ',');
+
+    // Determinar el tipo de transacción
+    char transactionType = params[0][0];
+    std::string resultQuery;
+    switch (transactionType) {
+        case 'd': {
+            //Para hacer depositos:
+            //d,300,moneda(C para churrumines, E para euros),usuario1,usuario2
+            if (params.size() == 5) {
+                std::string amount = params[1];
+                std::string currency = params[2];
+                std::string user1 = params[3];
+                std::string user2 = params[4];
+
+                // Construir la query para dejar registro de la transacción
+                std::string query = "INSERT INTO Transacciones (Id, IdCuentaOrigen, IdCuentaDestino, Monto, Fecha, Hora) VALUES ('" + user1 + "', '" + user1 + "', '" + amount + "', '" + /*fecha*/ + "', '" + /*hora*/  + "')";
+
+                // Falta restar a las 2 cuentas.
+                std::string query = "INSERT INTO Transacciones (Id, IdCuentaOrigen, IdCuentaDestino, Monto, Fecha, Hora) VALUES ('" + user1 + "', '" + user1 + "', '" + amount + "', '" + /*fecha*/ + "', '" + /*hora*/  + "')";
+            } else {
+                std::cout << "<html><body><h1>Error: Invalid parameters for transaction</h1></body></html>";
+            }
+            break;
+        }
+        case 't': {
+            //Ver transacciones del usuario:
+            //t,usuario
+            if (params.size() == 2) {
+                std::string user = params[1];
+
+                // Construir la query la query para ver transacciones del usuario
+                std::string query = "SELECT * FROM Transacciones WHERE IdCuentaOrigen = '" + user + "' OR IdCuentaDestino = '" + user + "'";
+            } else {
+                std::cerr << "Error: Invalid parameters for viewing transactions"; << endl;
+            }
+            break;
+        }
+        case 'b': {
+            //Ver balance, aunque tambien q traiga los otros datos del usuario cm nombre etc:
+            //b,usuario
+            if (params.size() == 2) {
+                std::string user = params[1];
+
+                // Construir la query la query para ver el balance del usuario y demas datos
+                std::string query = "SELECT balance, name, other_details FROM users WHERE username = '" + user + "'";
+            } else {
+                std::cerr << "<html><body><h1>Error: Invalid parameters for viewing balance</h1></body></html>";
+            }
+            break;
+        }
+        default:
+            std::cerr << "<html><body><h1>Error: Unknown transaction type</h1></body></html>";
+            break;
+    }
+}
+
 void submitQuery(const string& query)
 {
     // Validaciones
@@ -86,7 +155,8 @@ void submitQuery(const string& query)
         }
 
         // Execute query
-        if (mysql_query(sqlConnection, query.c_str()) != 0)
+        const std::string consulta = checkQuery(query);
+        if (mysql_query(sqlConnection, consulta.c_str()) != 0)
         {
             cerr << "\t+ Error while querying: " << mysql_error(sqlConnection) << endl;
             mysql_close(sqlConnection);
