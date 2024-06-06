@@ -115,13 +115,13 @@ const getPostsByUserName = async (req, res = response) => {
 
 const postNewPost = async (req, res = response) => {
   try {
-    const {userName, content} = req.body;
+    const {userName, content, imageUrl} = req.body;
     if (!userName || !content) {
       return res.status(400).json({ message: "Missing required fields" });
     }
-  
-    const sqlQuery = `INSERT INTO MENSAJE (Nickname, Contenido, Imagen) VALUES (?, ?, NULL);`;
-    await pool.query(sqlQuery, [userName, content]);
+
+    const sqlQuery = `INSERT INTO MENSAJE (Nickname, Contenido, Imagen) VALUES (?, ?, ?);`;
+    await pool.query(sqlQuery, [userName, content, imageUrl]);
 
     res.status(201).json({ message: "Post created successfully" });
   } catch (error) {

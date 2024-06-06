@@ -1,4 +1,13 @@
+.css-1t1j96h-MuiPaper-root-MuiDialog-paper {
+    border-radius: 10px;
+}
+
 #dialog-actions-container {
     display: flex;
     justify-content: space-between;
+}
+
+#image-uploader {
+    display: flex;
+    align-items: center;
 }
