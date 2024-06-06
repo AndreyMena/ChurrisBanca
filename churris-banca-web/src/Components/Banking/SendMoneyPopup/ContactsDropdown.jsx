@@ -61,6 +61,7 @@ const ContactsDropdown = ({ handleNextStage, selectedContact, setSelectedContact
           ))}
         </Menu>
         <Button
+          variant="contained"
           id="btn-contacts-dropdown"
           onClick={() => handleNextStage(selectedContact)}
           disabled={selectedContact === "Contacts"}

@@ -1,16 +1,21 @@
-import React, { useState } from "react";
-import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
+import React, { useState, useEffect } from "react";
 import CreatePostPopUp from "../CreatePostPopUp/CreatePostPopUp";
-import IconButton from "@mui/material/IconButton";
-import InputAdornment from '@mui/material/InputAdornment';
-import InsertPhotoOutlinedIcon from '@mui/icons-material/InsertPhotoOutlined';
 import TextField from "@mui/material/TextField";
-
+import { Box } from "@mui/material";
+import useAuth from "../../../hooks/useAuth";
+import useSocialStore from "../../../hooks/useSocialStore";
 import "./CreatePost.css";
+import "../../../App.css"
 
 const CreatePost = () => {
+  const { auth } = useAuth();
+  const { startLoadingAccount, account } = useSocialStore()
   const [openPopup, setOpenPopup] = useState(false);
 
+  useEffect(() => {
+    startLoadingAccount(auth.user)
+  }, [])
+  
   const handleOpenPopup = () => {
     setOpenPopup(true);
   };
@@ -22,24 +27,23 @@ const CreatePost = () => {
   return (
     <div id="create-post-container">
       <div className="create-post-item-container">
-        <AccountCircleOutlinedIcon fontSize="large"></AccountCircleOutlinedIcon>
+      <Box
+        id="image-user-box"
+        component="img"
+        src={
+          account.Imagen
+            ? account.Imagen
+            : "https://ps.w.org/user-avatar-reloaded/assets/icon-128x128.png?rev=2540745"
+        }
+      />
       </div>
       <div className="create-post-item-container">
         <TextField 
           className="custom-text-field" 
           placeholder="What's on your mind?" 
           variant="filled"
-          onClick={handleOpenPopup}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={handleOpenPopup}>
-                  <InsertPhotoOutlinedIcon fontSize="large"></InsertPhotoOutlinedIcon>
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        ></TextField>
+          onClick={handleOpenPopup} 
+         />
       </div>
 
       <CreatePostPopUp

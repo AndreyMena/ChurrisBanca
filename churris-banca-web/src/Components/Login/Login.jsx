@@ -1,6 +1,7 @@
 import React from "react";
 import { useRef, useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { Button } from "@mui/material";
 import { useAuthStore } from "../../hooks/useAuthStore";
 import "./Login.css";
 import "../../App.css";
@@ -46,34 +47,33 @@ const Login = () => {
   };
 
   return (
-    <section id="container">
+    <section id="container-login">
       <div id="card">
         <h1>Sign in</h1>
         <form onSubmit={handleSumbit}>
-          <div className="item">
-            <input
-              type="text"
-              id="username"
-              ref={userRef}
-              autoComplete="off"
-              onChange={(e) => setUser(e.target.value)}
-              value={user}
-              required
-              placeholder="Email"
-            />
-          </div>
-
-          <div className="item">
-            <input
-              type="password"
-              id="password"
-              onChange={(e) => setPwd(e.target.value)}
-              value={pwd}
-              required
-              placeholder="Password"
-            />
-          </div>
-
+          <input
+            className="input"
+            type="text"
+            id="username"
+            ref={userRef}
+            autoComplete="off"
+            onChange={(e) => setUser(e.target.value)}
+            value={user}
+            required
+            placeholder="Email"
+          />
+        
+          <input
+            className="input"
+            input="input"
+            type="password"
+            id="password"
+            onChange={(e) => setPwd(e.target.value)}
+            value={pwd}
+            required
+            placeholder="Password"
+          />
+          
           <p
             id="error-msg"
             ref={errRef}
@@ -83,7 +83,7 @@ const Login = () => {
             {errMsg}
           </p>
 
-          <button id="button">Sign in</button>
+          <Button variant="contained" id="button" >Sign in</Button>
         </form>
       </div>
     </section>

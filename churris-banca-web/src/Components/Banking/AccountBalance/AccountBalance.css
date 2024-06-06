@@ -16,18 +16,6 @@
   width: 50%;
 }
 
-#button-send-money {
-  background-color: #ffffff;
-  border-radius: 8px;
-  border: 1px solid #1976d2;
-  color: black;
-  height: 50px;
-}
-
-#button-send-money:hover {
-  background-color: #1976d2;
-}
-
 #info-button {
   display: flex;
   flex-direction: column;
@@ -36,4 +24,5 @@
 
 #icon {
   display: flex;
+  color: #ffffff;
 }

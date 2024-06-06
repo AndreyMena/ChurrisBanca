@@ -63,7 +63,7 @@ const UserInformationField = ({
         </IconButton>
       )}
       {isSaveButtonVisible && (
-        <Button variant="outlined" onClick={handleSaveClick}>
+        <Button variant="contained" onClick={handleSaveClick}>
           Save
         </Button>
       )}

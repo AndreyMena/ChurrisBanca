@@ -46,11 +46,18 @@ export const useSocialStore = () => {
     }
   };
 
-  const sendNewPost = async (userName, postText) => {
-    try {
-      await axios.get(`social/newPost/${userName}/${postText}`);
+  const sendNewPost = async (payload, formData) => {
+    try { 
+      if (formData) {
+        const response = await axios.post(process.env.REACT_APP_CLOUDINARY_URL, formData);
+        payload.imageUrl = response.data.secure_url;
+      } else {
+        payload.imageUrl = "";
+      }
+
+      await axios.post("social/newPost", payload);
     } catch (error) {
-      console.log("Error send new post.", error);
+      console.log("Error sending new post");
     }
   };
 

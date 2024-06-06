@@ -88,8 +88,9 @@ const getPostsByUserName = async (req, res = response) => {
       return res.status(400).json({ message: "userName is required" });
     }
 
-    const sqlQuery = "SELECT m.Id AS PostId, m.Nickname, m.Contenido, m.Imagen, m.Fecha, COALESCE(l.Likes, 0) AS Likes, COALESCE(d.Dislikes, 0) AS Dislikes, l.Nicknames FROM MENSAJE m LEFT JOIN (" + 
-      "SELECT IdMensaje, COUNT(*) AS Likes, GROUP_CONCAT(Nickname) AS Nicknames FROM LIKES GROUP BY IdMensaje) l ON m.Id = l.IdMensaje LEFT JOIN (SELECT IdMensaje, COUNT(*) AS Dislikes FROM DISLIKES GROUP BY IdMensaje) d ON m.Id = d.IdMensaje WHERE m.Nickname = ?;";
+    const sqlQuery = "SELECT m.Id AS PostId, m.Nickname, m.Contenido, m.Imagen, m.Fecha, COALESCE(l.Likes, 0) AS Likes, COALESCE(d.Dislikes, 0) AS Dislikes, l.Nicknames, d.DislikeNicknames FROM MENSAJE m LEFT JOIN (" + 
+      "SELECT IdMensaje, COUNT(*) AS Likes, GROUP_CONCAT(Nickname) AS Nicknames FROM LIKES GROUP BY IdMensaje) l ON m.Id = l.IdMensaje LEFT JOIN (" +
+      "SELECT IdMensaje, COUNT(*) AS Dislikes, GROUP_CONCAT(Nickname) AS DislikeNicknames FROM DISLIKES GROUP BY IdMensaje) d ON m.Id = d.IdMensaje WHERE m.Nickname = ?;";
     const posts = await pool.query(sqlQuery, [userName]);
     if (posts.length <= 0) {
       return res.status(400).json({
@@ -112,12 +113,21 @@ const getPostsByUserName = async (req, res = response) => {
   }
 };
 
-const putNewPost = async (req, res = response) => {
-  const userName = req.params.userName;
-  const postText = req.params.postText;
+const postNewPost = async (req, res = response) => {
+  try {
+    const {userName, content, imageUrl} = req.body;
+    if (!userName || !content) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
 
-  const sqlQuery = `INSERT INTO MENSAJE (Nickname, Contenido, Imagen) VALUES (?, ?, NULL);`;
-  await pool.query(sqlQuery, [userName, postText]);
+    const sqlQuery = `INSERT INTO MENSAJE (Nickname, Contenido, Imagen) VALUES (?, ?, ?);`;
+    await pool.query(sqlQuery, [userName, content, imageUrl]);
+
+    res.status(201).json({ message: "Post created successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+    throw new Error(error);
+  }
 };
 
 const putNewLike = async (req, res = response) => {
@@ -257,7 +267,7 @@ module.exports = {
   putAccountByUsername,
   getAccounts,
   getPostsByUserName,
-  putNewPost,
+  postNewPost,
   putNewLike,
   putRemoveLike,
   putNewDislike,
