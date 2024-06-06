@@ -3,15 +3,22 @@
 #include <sstream>
 #include <chrono>
 #include <thread>
+#include <vector>
 #include <mysql/mysql.h>
+#include <ctime>
 
 using namespace std;
 
+/*
+const char* HOST = "localhost";
+const char* USERNAME = "myuser";
+const char* PASSWORD = "mypassword";
+const char* SCHEMA = "mydatabase";
+*/
 const char* HOST = "localhost";
 const char* USERNAME = "churris_cgi";
 const char* PASSWORD = "Abc123$%";
 const char* SCHEMA = "churris_banking";
-
 
 string decodeUriArgument(const string& argument)
 {
@@ -84,11 +91,26 @@ string checkQuery(string query) {
                 std::string user1 = params[3];
                 std::string user2 = params[4];
 
-                // Construir la query para dejar registro de la transacción
-                std::string query = "INSERT INTO Transacciones (Id, IdCuentaOrigen, IdCuentaDestino, Monto, Fecha, Hora) VALUES ('" + user1 + "', '" + user1 + "', '" + amount + "', '" + /*fecha*/ + "', '" + /*hora*/  + "')";
+                //Deposito a la cuenta
+                resultQuery = "UPDATE CUENTA SET Monto = Monto + " + amount + " WHERE Nickname = '" + user2 + "' AND Moneda = '" + currency + "';_";  //Importante el espacio
+                
+                //Resta a la cuenta que transfiere
+                resultQuery += "UPDATE CUENTA SET Monto = Monto - " + amount + " WHERE Nickname = '" + user1 + "' AND Moneda = '" + currency + "';_";
 
-                // Falta restar a las 2 cuentas.
-                std::string query = "INSERT INTO Transacciones (Id, IdCuentaOrigen, IdCuentaDestino, Monto, Fecha, Hora) VALUES ('" + user1 + "', '" + user1 + "', '" + amount + "', '" + /*fecha*/ + "', '" + /*hora*/  + "')";
+                
+                //Se toma hora actual
+                time_t now = time(0);
+                tm *ltm = localtime(&now);
+                char datetime[20];
+                strftime(datetime, 20, "%Y-%m-%d %H:%M:%S", ltm);
+
+                // Se deja egistro de la transacción
+                resultQuery += "INSERT INTO TRANSACCION (CuentaOrigen, CuentaDestino, Monto, FechaHora) VALUES ('"
+                    + user1 + "', '"
+                    + user2 + "', "
+                    + amount + ", '"
+                    + datetime + "');";   
+                // cout << endl << resultQuery << endl;
             } else {
                 std::cout << "<html><body><h1>Error: Invalid parameters for transaction</h1></body></html>";
             }
@@ -100,21 +122,25 @@ string checkQuery(string query) {
             if (params.size() == 2) {
                 std::string user = params[1];
 
-                // Construir la query la query para ver transacciones del usuario
-                std::string query = "SELECT * FROM Transacciones WHERE IdCuentaOrigen = '" + user + "' OR IdCuentaDestino = '" + user + "'";
+                // Construir la resultQuery la resultQuery para ver transacciones del usuario
+                resultQuery = "SELECT * FROM TRANSACCION WHERE CuentaOrigen = '" + user 
+                  + "' OR CuentaDestino = '" + user 
+                  + "' ORDER BY FechaHora DESC";
             } else {
-                std::cerr << "Error: Invalid parameters for viewing transactions"; << endl;
+                std::cerr << "Error: Invalid parameters for viewing transactions" << endl;
             }
             break;
         }
         case 'b': {
             //Ver balance, aunque tambien q traiga los otros datos del usuario cm nombre etc:
-            //b,usuario
-            if (params.size() == 2) {
+            //b,usuario,C (de cuenta en churruminos, E de cuenta en Euros)
+            std::cout << endl << params.size()<< endl;
+            if (params.size() == 3) {
                 std::string user = params[1];
+                std::string currency = params[2];
 
-                // Construir la query la query para ver el balance del usuario y demas datos
-                std::string query = "SELECT balance, name, other_details FROM users WHERE username = '" + user + "'";
+                // Obtiene balance y de paso los otros datos para validar
+                resultQuery = "SELECT * FROM CUENTA WHERE Nickname = '" + user + "' AND Moneda = '" + currency + "';";
             } else {
                 std::cerr << "<html><body><h1>Error: Invalid parameters for viewing balance</h1></body></html>";
             }
@@ -124,17 +150,15 @@ string checkQuery(string query) {
             std::cerr << "<html><body><h1>Error: Unknown transaction type</h1></body></html>";
             break;
     }
+    return resultQuery;
 }
 
 void submitQuery(const string& query)
 {
     // Validaciones
-    if( query.empty() )
-    {
+    if( query.empty() ) {
         cout << getCgiReply("Empty query...");
-    }
-    else
-    {
+    } else {
         //cout << "\t+ Query received: " << query << endl;
 
         // Initialize connection
@@ -154,48 +178,76 @@ void submitQuery(const string& query)
             return;
         }
 
-        // Execute query
+
+        // Check and build query
         const std::string consulta = checkQuery(query);
-        if (mysql_query(sqlConnection, consulta.c_str()) != 0)
-        {
-            cerr << "\t+ Error while querying: " << mysql_error(sqlConnection) << endl;
-            mysql_close(sqlConnection);
-            return;
+        
+        // Split query by semicolon
+        std::vector<std::string> queries = split(consulta, '_');
+
+        // Execute each query
+        for (const auto& singleQuery : queries) {
+            // Execute query
+            cout << endl << singleQuery << endl;
+            if (singleQuery.size() == 1) {
+                continue;
+            }else{
+                if (mysql_query(sqlConnection, singleQuery.c_str()) != 0)
+                {
+                    cerr << "\t+ Error while querying: " << mysql_error(sqlConnection) << endl;
+                    mysql_close(sqlConnection);
+                    return;
+                }
+            }
         }
 
         // Store result
         MYSQL_RES* result = mysql_store_result(sqlConnection);
 
-        if (result == nullptr)
-        {
-            cerr << "\t+ Error while storing query result: " << mysql_error(sqlConnection) << endl;
-            mysql_close(sqlConnection);
-            return;
-        }
-
-        // Translate result to rows
-        MYSQL_ROW row;
-        ostringstream resultData;
-
-        while ((row = mysql_fetch_row(result)))
-        {
-            // Show result rows
-            for (unsigned int i = 0; i < mysql_num_fields(result); ++i)
-            {
-                if (i > 0) 
-                    resultData << ", ";
-                resultData << row[i];
+        if (query[0] == 'd') {  //Caso donde no debe retornar nada ya que no hace select
+            if (result != nullptr) {
+                cerr << "\t+ Error while storing query result: " << mysql_error(sqlConnection) << endl;
+                mysql_close(sqlConnection);
+                cout << getCgiReply("Error, revisar cgi");  //Con errores
+                return;
+            }else{
+                mysql_close(sqlConnection);
+                cout << getCgiReply("Ok");  //Sin errores
             }
-            resultData << endl;
+        } else {
+            //En este caso si se hizo un select como balance o ver transacciones
+            if (result == nullptr)
+            {
+                cerr << "\t+ Error while storing query result: " << mysql_error(sqlConnection) << endl;
+                mysql_close(sqlConnection);
+                return;
+            }
+
+            // Translate result to rows
+            MYSQL_ROW row;
+            ostringstream resultData;
+
+            while ((row = mysql_fetch_row(result)))
+            {
+                // Show result rows
+                for (unsigned int i = 0; i < mysql_num_fields(result); ++i)
+                {
+                    if (i > 0) 
+                        resultData << ", ";
+                    resultData << row[i];
+                }
+                resultData << endl;
+            }
+
+            // Release resources & close connection
+            mysql_free_result(result);
+    
+            mysql_close(sqlConnection);
+
+            // Finally reply to output in CGI format
+            //cout << "\t+ Replying the following content: " << endl;
+            cout << getCgiReply(resultData.str());
         }
-
-        // Release resources & close connection
-        mysql_free_result(result);
-        mysql_close(sqlConnection);
-
-        // Finally reply to output in CGI format
-        //cout << "\t+ Replying the following content: " << endl;
-        cout << getCgiReply(resultData.str());
     }
 }
 
