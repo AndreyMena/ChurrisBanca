@@ -99,7 +99,12 @@ const getPostsByUserName = async (req, res = response) => {
     }
 
     posts.forEach((post) => {
-      post.Fecha = post.Fecha !== undefined ? post.Fecha.toString() : "Sin hora y fecha";
+      if (post.Fecha !== undefined) {
+        post.Fecha = post.Fecha.toString().split(" GMT")[0];
+      }
+      else {
+        post.Fecha = "Sin hora y fecha"
+      };
       post.Likes = post.Likes !== undefined ? post.Likes.toString() : "0";
       post.Dislikes = post.Dislikes !== undefined ? post.Dislikes.toString() : "0";
     });
