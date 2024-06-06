@@ -46,34 +46,33 @@ const Login = () => {
   };
 
   return (
-    <section id="container">
+    <section id="container-login">
       <div id="card">
         <h1>Sign in</h1>
         <form onSubmit={handleSumbit}>
-          <div className="item">
-            <input
-              type="text"
-              id="username"
-              ref={userRef}
-              autoComplete="off"
-              onChange={(e) => setUser(e.target.value)}
-              value={user}
-              required
-              placeholder="Email"
-            />
-          </div>
-
-          <div className="item">
-            <input
-              type="password"
-              id="password"
-              onChange={(e) => setPwd(e.target.value)}
-              value={pwd}
-              required
-              placeholder="Password"
-            />
-          </div>
-
+          <input
+            className="input"
+            type="text"
+            id="username"
+            ref={userRef}
+            autoComplete="off"
+            onChange={(e) => setUser(e.target.value)}
+            value={user}
+            required
+            placeholder="Email"
+          />
+        
+          <input
+            className="input"
+            input="input"
+            type="password"
+            id="password"
+            onChange={(e) => setPwd(e.target.value)}
+            value={pwd}
+            required
+            placeholder="Password"
+          />
+          
           <p
             id="error-msg"
             ref={errRef}
