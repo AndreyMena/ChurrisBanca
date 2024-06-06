@@ -21,11 +21,5 @@
 }
 
 #button {
-  border-radius: 8px;
-  border: 1px solid #1976d2;
-  height: 30px;
   width: 40%;
-  margin: 5px;
-  color: #1976d2;
-  background-color: #ffffff;
 }

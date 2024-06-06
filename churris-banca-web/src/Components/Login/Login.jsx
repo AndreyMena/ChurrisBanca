@@ -1,6 +1,7 @@
 import React from "react";
 import { useRef, useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { Button } from "@mui/material";
 import { useAuthStore } from "../../hooks/useAuthStore";
 import "./Login.css";
 import "../../App.css";
@@ -82,7 +83,7 @@ const Login = () => {
             {errMsg}
           </p>
 
-          <button id="button">Sign in</button>
+          <Button variant="contained" id="button" >Sign in</Button>
         </form>
       </div>
     </section>

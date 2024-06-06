@@ -1,6 +1,5 @@
 .user-information-editing-container {
   display: flex;
-  flex-direction: row;
   margin-left: 2%;
   width: 100%;
 }

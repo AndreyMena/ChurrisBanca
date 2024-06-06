@@ -58,10 +58,10 @@ const MoneyAmount = ({
         </div>
 
         <div id="buttons-container">
-          <Button className="btn" onClick={handlePrevStage}>
+          <Button variant="contained" className="btn" onClick={handlePrevStage}>
             Prev
           </Button>
-          <Button className="btn" disabled={amount <= 0} onClick={handleClick}>
+          <Button  variant="contained" className="btn" disabled={amount <= 0} onClick={handleClick}>
             Next
           </Button>
         </div>

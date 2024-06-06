@@ -42,7 +42,7 @@ const ValidateTransaction = ({ selectedContact, amount, handlePrevStage }) => {
 
   return (
     <form id="form-key" onSubmit={handleSubmit}>
-      <label>
+      <label id="key-uploader">
         Key:
         <input
           id="input-key"
@@ -56,6 +56,7 @@ const ValidateTransaction = ({ selectedContact, amount, handlePrevStage }) => {
         <IconButton onClick={() => fileInputRef.current.click()}>
           <UploadOutlined />
         </IconButton>
+        <Typography>{keyFile ? keyFile.name : "No file selected"}</Typography>
       </label>
       {showResMsg && resMsg && (
         <Typography
@@ -65,10 +66,10 @@ const ValidateTransaction = ({ selectedContact, amount, handlePrevStage }) => {
         </Typography>
       )}
       <div id="buttons-container">
-        <Button className="btn" onClick={handlePrevStage}>
+        <Button variant="contained" className="btn" onClick={handlePrevStage}>
           Prev
         </Button>
-        <Button className="btn" type="submit">
+        <Button variant="contained" className="btn" type="submit">
           Submit Transaction
         </Button>
       </div>
