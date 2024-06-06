@@ -6,6 +6,7 @@
 }
 
 #container {
+  display: flex;
   justify-content: space-between;
   width: 100%;
 }
@@ -17,7 +18,11 @@
 
 .post-header-item {
   margin-right: 10px;
-  padding-left: 5px;
+  padding-left: 10px;
+}
+
+#name{
+  margin-right: 10px;
 }
 
 #icon {

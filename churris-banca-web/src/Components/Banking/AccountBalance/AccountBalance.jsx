@@ -35,7 +35,7 @@ const AccountBalance = () => {
         <Button variant="contained" onClick={handleOpenPopup}>
           <div id="info-button">
             Send money
-            <div id="icon">
+            <div id="icon-money">
               {currency}
               <ArrowForwardIcon />
             </div>

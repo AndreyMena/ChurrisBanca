@@ -15,6 +15,7 @@ const Login = () => {
 
   const userRef = useRef();
   const errRef = useRef();
+  const buttonRef = useRef();
 
   const [user, setUser] = useState("");
   const [pwd, setPwd] = useState("");
@@ -83,7 +84,8 @@ const Login = () => {
             {errMsg}
           </p>
 
-          <Button variant="contained" id="button" >Sign in</Button>
+          <button ref={buttonRef} style={{display: "none"}}/>
+          <Button variant="contained" id="button" onClick={() => buttonRef.current.click()}>Sign in</Button>
         </form>
       </div>
     </section>
