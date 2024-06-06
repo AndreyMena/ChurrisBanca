@@ -9,9 +9,6 @@
 }
 
 #buttons-container .btn {
-  border-radius: 8px;
-  border: 1px solid #1976d2;
-  height: 30px;
   width: 40%;
   margin: 5px;
 }
@@ -34,10 +31,7 @@
 }
 
 #btn-contacts-dropdown {
-  border-radius: 8px;
-  border: 1px solid #1976d2;
-  height: 30px;
-  width: 70%;
+  width: 40%;
 }
 
 /*MoneyAmount*/
@@ -66,6 +60,13 @@
   align-items: center;
   padding-top: 20px;
   padding-bottom: 20px;
+}
+
+#key-uploader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 }
 
 #input-key {

@@ -23,3 +23,12 @@
   color: red;
   margin-top: 5px;
 }
+
+#image-user-box {
+  width: 100%;
+  max-width: 40px;
+  height: 100%;
+  border-radius: 16px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 2px solid #ccc;
+}

@@ -14,7 +14,9 @@ const Post = ({
   postContent,
   postImage,
   postLikes,
+  postUsernamesLikes,
   postDislikes,
+  postUsernamesDislikes
 }) => {
   return (
     <div id="post-container">
@@ -34,7 +36,9 @@ const Post = ({
       <PostReaction
         postId={postId}
         postLikes={postLikes}
+        postUsernamesLikes={postUsernamesLikes}
         postDislikes={postDislikes}
+        postUsernamesDislikes={postUsernamesDislikes}
       ></PostReaction>
     </div>
   );

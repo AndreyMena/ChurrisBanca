@@ -32,7 +32,7 @@ const AccountBalance = () => {
         <Typography>Account ID: {bankAccountId}</Typography>
       </div>
       <div className="info">
-        <Button id="button-send-money" onClick={handleOpenPopup}>
+        <Button variant="contained" onClick={handleOpenPopup}>
           <div id="info-button">
             Send money
             <div id="icon">

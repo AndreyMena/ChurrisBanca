@@ -4,16 +4,19 @@ import useAuth from "../../../hooks/useAuth";
 import useSocialStore from "../../../hooks/useSocialStore";
 
 const PostsList = () => {
-  const { startLoadingAccount, account, startLoadingPosts, posts } =
-    useSocialStore();
+  const { startLoadingAccount, account, startLoadingPosts, posts } = useSocialStore();
   const { auth } = useAuth();
 
   useEffect(() => {
     startLoadingAccount(auth.user);
     startLoadingPosts(auth.user);
-    // const intervalId = setInterval(startLoadingPosts(auth.user), 60000);
-    // return () => clearInterval(intervalId);
-  }, []);
+
+    const intervalId = setInterval(() => {
+      startLoadingPosts(auth.user);
+    }, 30000);
+    
+    return () => clearInterval(intervalId);
+  }, [auth.user]);
 
   return (
     <div>
@@ -28,7 +31,9 @@ const PostsList = () => {
           postDateTime={post.Fecha}
           postImage={post.Imagen}
           postLikes={post.Likes}
+          postUsernamesLikes={post.Nicknames}
           postDislikes={post.Dislikes}
+          postUsernamesDislikes={post.DislikeNicknames}
         ></Post>
       ))}
     </div>

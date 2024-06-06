@@ -8,11 +8,11 @@ const PostContent = ({ postContent, postImage }) => {
   return (
     <div id="post-content-container">
       <Typography id="text">{postContent}</Typography>
-      <Box
+      {postImage ? <Box
         id="image-box"
         component="img"
         src={postImage}
-      ></Box>
+       /> : ""}
     </div>
   );
 };
