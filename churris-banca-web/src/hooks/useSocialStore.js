@@ -11,6 +11,7 @@ const initialStateAccount = {
 export const useSocialStore = () => {
   const [account, setAccount] = useState(initialStateAccount);
   const [posts, setPosts] = useState([]);
+  const [followedPosts, setfollowedPosts] = useState([]);
   const [accounts, setAccounts] = useState([]);
 
   /* Profile, social */
@@ -41,6 +42,15 @@ export const useSocialStore = () => {
     try {
       const { data } = await axios.get(`social/posts/${userName}`);
       setPosts(data.posts);
+    } catch (error) {
+      console.log("Error loading posts");
+    }
+  };
+
+  const startLoadingFollowedPosts = async (userName) => {
+    try {
+      const { data } = await axios.get(`social/followedPosts/${userName}`);
+      setfollowedPosts(data.followedPosts);
     } catch (error) {
       console.log("Error loading posts");
     }
@@ -118,6 +128,7 @@ export const useSocialStore = () => {
   return {
     account,
     posts,
+    followedPosts,
     accounts,
 
     setAccounts,
@@ -126,6 +137,7 @@ export const useSocialStore = () => {
     startUpdatingValueAccount,
 
     startLoadingPosts,
+    startLoadingFollowedPosts,
     sendNewPost,
     sendNewLike,
     sendRemoveLike,

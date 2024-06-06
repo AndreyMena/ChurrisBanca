@@ -10,6 +10,7 @@ const {
   putAccountByUsername,
   getAccounts,
   getPostsByUserName,
+  getFollowedPostsByUserName,
   postNewPost,
   putNewLike,
   putRemoveLike,
@@ -22,6 +23,7 @@ router.get("/:accountUsername", getAccountByUsername);
 router.put("/user", putAccountByUsername);
 router.get("/", getAccounts);
 router.get("/posts/:userName", getPostsByUserName);
+router.get("/followedPosts/:userName", getFollowedPostsByUserName);
 router.post("/newPost", postNewPost);
 router.put("/newLike", putNewLike);
 router.put("/removeLike", putRemoveLike);
