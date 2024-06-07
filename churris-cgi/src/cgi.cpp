@@ -81,7 +81,7 @@ string checkQuery(string query) {
                 std::string currency = params[2];
                 std::string user1 = params[3];
                 std::string user2 = params[4];
-                std::string transaccion = params[5];
+                std::string firma = params[5];
 
                 //Deposito a la cuenta
                 resultQuery = "UPDATE CUENTA SET Monto = Monto + " + amount + " WHERE Nickname = '" + user2 + "' AND Moneda = '" + currency + "';_";  //Importante el espacio
@@ -100,7 +100,7 @@ string checkQuery(string query) {
                     + user1 + "', '"
                     + user2 + "', "
                     + amount + ", '"
-                    + transaccion + ", '"
+                    + firma + "', '"
                     + datetime + "');";   
             } else {
                 std::cout << "<html><body><h1>Error: Invalid parameters for transaction</h1></body></html>";
