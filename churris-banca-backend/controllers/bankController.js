@@ -161,26 +161,39 @@ const puTransaction = async (req, res = response) => {
         .json({ message: "No certificate found for this user" });
     }
 
+    const keyFilePath = process.env.USER_KEY_FILE_PATH + req.file.filename;
+    if (!fs.existsSync(keyFilePath)) {
+      return res
+        .status(400)
+        .json({ message: "No private key found for this user" });
+    }
+
     const validateCertMsg = await validateCert(certFilePath);
     if (validateCertMsg !== "The certificate is signed by the CA") {
       return res.status(400).json({ message: validateCertMsg });
     }
 
-    const validateKeyMsg = await validateKey(req.file.filename, certFilePath);
+    const validateKeyMsg = await validateKey(keyFilePath, certFilePath);
     if (validateKeyMsg !== "The private key matches the certificate") {
       return res.status(400).json({ message: validateKeyMsg });
     }
 
+    const signObjectMsg =  await signObject(keyFilePath);
+    if (signObjectMsg.length <= 35) {
+      return res.status(400).json({ message: signObjectMsg });
+    }
+
     const timestamp = new Date();
 
-    console.log(validateKeyMsg);
+    console.log(signObjectMsg);
     console.log(userName);
     console.log(destinationAccountNickname);
     console.log(amount);
     console.log(timestamp);
 
-    //const sqlQuery = "INSERT INTO TRANSACCION (NicknameCuentaOrigen, NicknameCuentaDestino, Monto, FechaHora) VALUES(?, ?, ?, ?)";
-    //await pool.query(sqlQuery, [userName, destinationAccountNickname, amount, timestamp]);
+    //const sqlQuery = "INSERT INTO TRANSACCION (NicknameCuentaOrigen, NicknameCuentaDestino, Monto, FechaHora, Firma) VALUES(?, ?, ?, ?, ?)";
+    //await pool.query(sqlQuery, [userName, destinationAccountNickname, amount, timestamp, signObjectMsg]);
+    
     res.status(200).json({ message: "Transaction succesful" });
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
@@ -215,13 +228,8 @@ const validateCert = (certFilePath) => {
   });
 };
 
-const validateKey = (fileName, certFilePath) => {
+const validateKey = (keyFilePath, certFilePath) => {
   return new Promise((resolve, reject) => {
-    const keyFilePath = process.env.USER_KEY_FILE_PATH + fileName;
-    if (!fs.existsSync(keyFilePath)) {
-      resolve("No private key found for this user");
-    }
-
     openssl.exec(
       "x509",
       {
@@ -242,12 +250,6 @@ const validateKey = (fileName, certFilePath) => {
             modulus: true,
           },
           (err, keyMod) => {
-            fs.unlink(keyFilePath, (err) => {
-              if (err) {
-                resolve("Error deleting the private key");
-              }
-            });
-
             if (err) {
               resolve("Error extracting private key modulus");
             }
@@ -259,6 +261,42 @@ const validateKey = (fileName, certFilePath) => {
             }
           }
         );
+      }
+    );
+  });
+};
+
+const signObject = (keyFilePath) => {
+  return new Promise((resolve, reject) => {
+    const signFilePath = process.env.USER_KEY_FILE_PATH + "transactionSignature.sig";
+
+    openssl.exec(
+      "dgst", 
+      {
+        sha256: true,
+        sign: keyFilePath,
+        out: signFilePath,
+      },
+      (err) => {
+        fs.unlink(keyFilePath, (err) => {
+          if (err) {
+            resolve("Error deleting the private key");
+          }
+        });
+
+        if (err) {
+          resolve("Error signing the object")
+        }
+        
+        const signature = fs.readFileSync(signFilePath, 'base64');
+
+        fs.unlink(signFilePath, (err) => {
+          if (err) {
+            resolve("Error deleting the signature file");
+          }
+        });
+
+        resolve(signature);
       }
     );
   });
