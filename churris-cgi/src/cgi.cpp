@@ -125,7 +125,6 @@ string checkQuery(string query) {
         case 'b': {
             //Ver balance, aunque tambien q traiga los otros datos del usuario cm nombre etc:
             //b,usuario,C (de cuenta en churruminos, E de cuenta en Euros)
-            std::cout << endl << params.size()<< endl;
             if (params.size() == 3) {
                 std::string user = params[1];
                 std::string currency = params[2];
@@ -177,7 +176,6 @@ void submitQuery(const string& query, const char* HOST, const char* USERNAME, co
         // Execute each query
         for (const auto& singleQuery : queries) {
             // Execute query
-            cout << endl << singleQuery << endl;
             if (singleQuery.size() == 1) {
                 continue;
             }else{
