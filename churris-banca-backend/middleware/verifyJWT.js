@@ -2,8 +2,6 @@ const jwt = require('jsonwebtoken');
 
 //Middleware para TODO lo que entra
 const verifyJWT = (req, res, next) => {
-    next();
-    /*
     const authHeader = req.headers.authorization || req.headers.Authorization;
 
     // Verificacion de seguridad del header para auth
@@ -20,7 +18,7 @@ const verifyJWT = (req, res, next) => {
             req.user = decoded.username;
             next();
         }
-    );*/
+    );
 }
 
 module.exports = verifyJWT

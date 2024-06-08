@@ -14,7 +14,7 @@ const Transaction = ({transactionID, transactionType, transactionUser, transacti
             <Typography id="coin" style={{ color: '#28a745'}}><ArrowForwardIcon/>Ch</Typography> : 
             <Typography id="coin" style={{ color: '#dc3545'}}>Ch<ArrowForwardIcon/></Typography>
         }
-        <Typography>id: {transactionID}</Typography>
+        <Typography>ID: {transactionID}</Typography>
       </div>
       <div id="transaction-central-information-container">
         <Typography>Transaction {transactionType === 'received' ? 'received' : 'sent'}</Typography>

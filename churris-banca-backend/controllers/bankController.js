@@ -94,7 +94,6 @@ const transactionsExamples = [
 const getBankAccountByUsername = async (req, res = response) => {
   const userName = req.params.bankAccountUsername;
 
-  console.log(userName);
   const postData = new URLSearchParams();
   postData.append('input_data', `b,${userName},C`);
 
@@ -128,8 +127,7 @@ const getBankAccountByUsername = async (req, res = response) => {
       currency
     };
     
-    res.status(200).json({ bankAccounts: [bankAccount] });
-    console.log(cgiResponse.data);
+    res.status(200).json({ bankAccount: bankAccount });
   } catch (error) {
     console.error('Error al llamar a la aplicación CGI:', error);
     res.status(500).json({ error: 'Internal Server Error' });
