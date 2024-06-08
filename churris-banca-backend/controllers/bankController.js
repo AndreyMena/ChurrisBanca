@@ -2,6 +2,14 @@ const { response } = require("express");
 const openssl = require("openssl-wrapper");
 const fs = require("fs");
 const axios = require('../config/axios-cgi');
+const https = require('https');
+const path = require('path');
+
+const cert = fs.readFileSync(path.resolve(__dirname, '../rootCACert.crt'));
+
+const agent = new https.Agent({  
+  ca: cert
+});
 
 // Borrar después
 const bankAccounts = [
@@ -91,6 +99,7 @@ const getBankAccountByUsername = async (req, res = response) => {
 
   try {
     const cgiResponse = await axios.post('/', postData, {
+      httpsAgent: agent,
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       }
@@ -124,6 +133,29 @@ const getBankAccountByUsername = async (req, res = response) => {
 const getTransactionsByUserName = async (req, res = response) => {
   const userName = req.params.userName;
 
+  console.log(userName);
+  const postData = new URLSearchParams();
+  postData.append('input_data', `t,${userName}`);
+
+  try {
+    const cgiResponse = await axios.post('/', postData, {
+      httpsAgent: agent,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    });
+
+    /*
+    const postData = {
+      input_data: 'SELECT * FROM CUENTA WHERE Nickname = mike;'
+    };*/
+    //const response = await axios.post('/');
+    console.log(cgiResponse.data);
+  } catch (error) {
+      console.error('Error al llamar a la aplicación CGI:', error);
+  }
+
+  /*
   const transactions = transactionsExamples.filter(
     (transaction) =>
       transaction.originAccount === userName ||
@@ -134,7 +166,7 @@ const getTransactionsByUserName = async (req, res = response) => {
     return res.status(200).json({
       transactions: transactions,
     });
-  }
+  }*/
 
   res.status(400).json({
     message: "No transactions found for this bank account",
