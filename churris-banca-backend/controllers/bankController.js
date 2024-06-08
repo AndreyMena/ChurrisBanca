@@ -191,19 +191,19 @@ const puTransaction = async (req, res = response) => {
     if (!req.file) {
       return res.status(400).json({ message: "Key is required" });
     }
-
+    
     const userName = req.body.userName;
     const destinationAccountNickname = req.body.nicknameCuentaDestino;
     const amount = req.body.amount;
     if (!userName || !destinationAccountNickname || !amount) {
       return res.status(400).json({ message: "Missing required fields" });
     }
-
+    
     const certFilePath = process.env.USER_CERT_FILE_PATH + userName + ".crt";
     if (!fs.existsSync(certFilePath)) {
       return res
-        .status(400)
-        .json({ message: "No certificate found for this user" });
+      .status(400)
+      .json({ message: "No certificate found for this user" });
     }
 
     const keyFilePath = process.env.USER_KEY_FILE_PATH + req.file.filename;
@@ -234,12 +234,26 @@ const puTransaction = async (req, res = response) => {
     console.log(userName);
     console.log(destinationAccountNickname);
     console.log(amount);
-    console.log(timestamp);
+    console.log(timestamp);  // No es necesario pasar la fecha, se hace en cgi
 
-    //const sqlQuery = "INSERT INTO TRANSACCION (NicknameCuentaOrigen, NicknameCuentaDestino, Monto, FechaHora, Firma) VALUES(?, ?, ?, ?, ?)";
-    //await pool.query(sqlQuery, [userName, destinationAccountNickname, amount, timestamp, signObjectMsg]);
-    
-    res.status(200).json({ message: "Transaction succesful" });
+    // d,5,C,andrey.menaespinoza,andre.villegas,Firma
+    const postData = new URLSearchParams();
+    postData.append('input_data', `d,${amount},C,${userName},${destinationAccountNickname},${signObjectMsg}`);
+    const cgiResponse = await axios.post('/', postData, {
+      httpsAgent: agent,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+    });
+
+    const htmlData = cgiResponse.data;
+    const $ = cheerio.load(htmlData);
+    const pData = $('p').text().trim();
+    if (pData === 'Ok') {
+      res.status(200).json({ message: "Transaction successful" });
+    } else {
+      res.status(400).json({ message: "Transaction failed", details: pData });
+    }
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
     throw new Error(error);
