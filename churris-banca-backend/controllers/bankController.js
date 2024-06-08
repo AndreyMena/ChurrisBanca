@@ -4,6 +4,7 @@ const fs = require("fs");
 const axios = require('../config/axios-cgi');
 const https = require('https');
 const path = require('path');
+const cheerio = require('cheerio');
 
 const cert = fs.readFileSync(path.resolve(__dirname, '../rootCACert.crt'));
 
@@ -132,8 +133,6 @@ const getBankAccountByUsername = async (req, res = response) => {
 
 const getTransactionsByUserName = async (req, res = response) => {
   const userName = req.params.userName;
-
-  console.log(userName);
   const postData = new URLSearchParams();
   postData.append('input_data', `t,${userName}`);
 
@@ -145,32 +144,23 @@ const getTransactionsByUserName = async (req, res = response) => {
       }
     });
 
-    /*
-    const postData = {
-      input_data: 'SELECT * FROM CUENTA WHERE Nickname = mike;'
-    };*/
-    //const response = await axios.post('/');
-    console.log(cgiResponse.data);
+    const htmlData = cgiResponse.data;
+    const $ = cheerio.load(htmlData);
+    const pData = $('p').text();
+
+    // Verificar si el texto está vacío
+    if (pData.trim() === '') {
+      // Enviar mensaje de que no se encontraron transacciones
+      return res.status(400).json({
+        message: "No transactions found for this bank account",
+      });
+    }
+
+    res.status(200).json({ transactions: pData });
   } catch (error) {
       console.error('Error al llamar a la aplicación CGI:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
   }
-
-  /*
-  const transactions = transactionsExamples.filter(
-    (transaction) =>
-      transaction.originAccount === userName ||
-      transaction.targetAccount === userName
-  );
-
-  if (transactions.length > 0) {
-    return res.status(200).json({
-      transactions: transactions,
-    });
-  }*/
-
-  res.status(400).json({
-    message: "No transactions found for this bank account",
-  });
 };
 
 const puTransaction = async (req, res = response) => {
