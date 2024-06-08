@@ -156,7 +156,27 @@ const getTransactionsByUserName = async (req, res = response) => {
       });
     }
 
-    res.status(200).json({ transactions: pData });
+    // Parsear los datos obtenidos del CGI y convertirlos al formato deseado
+    const transactions = pData.trim().split('\n').map(transaction => {
+      const [transactionID, originAccount, targetAccount, amount, , date] = transaction.split(',').map(item => item.trim());
+      
+      // Separar la fecha y la hora
+      const [transactionDate, transactionTime] = date.split(' ');
+
+      // Determinar el tipo de transacción según la cuenta de origen
+      const transactionType = originAccount === userName ? 'sent' : 'received';
+
+      return {
+        transactionID,                                                                                                                                                                                                                               
+        originAccount,
+        targetAccount,
+        transactionType,
+        transactionDate: transactionDate + ' ' + transactionTime,
+        transactionAmount: parseFloat(amount),
+      };
+    });
+
+    res.status(200).json({ transactions });
   } catch (error) {
       console.error('Error al llamar a la aplicación CGI:', error);
       res.status(500).json({ error: 'Internal Server Error' });
