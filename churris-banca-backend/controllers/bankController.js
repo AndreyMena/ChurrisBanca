@@ -96,7 +96,7 @@ const getBankAccountByUsername = async (req, res = response) => {
 
   console.log(userName);
   const postData = new URLSearchParams();
-  postData.append('input_data', `SELECT * FROM CUENTA WHERE Nickname='${userName}'`);
+  postData.append('input_data', `b,${userName},C`);
 
   try {
     const cgiResponse = await axios.post('/', postData, {
@@ -106,29 +106,34 @@ const getBankAccountByUsername = async (req, res = response) => {
       }
     });
 
-    /*
-    const postData = {
-      input_data: 'SELECT * FROM CUENTA WHERE Nickname = mike;'
-    };*/
-    //const response = await axios.post('/');
+    const htmlData = cgiResponse.data;
+    const $ = cheerio.load(htmlData);
+    const pData = $('p').text();
+
+    // Verificar si el texto está vacío
+    if (pData.trim() === '') {
+      // Enviar mensaje de que no se encontraron transacciones
+      return res.status(400).json({
+        message: "No bank account found for this bank username",
+      });
+    }
+
+    // Parsear los datos obtenidos del CGI
+    const [userName, accountStatus, currency] = pData.trim().split(', ');
+
+    // Crear el objeto de cuenta bancaria
+    const bankAccount = {
+      userName,
+      accountStatus: parseFloat(accountStatus),
+      currency
+    };
+    
+    res.status(200).json({ bankAccounts: [bankAccount] });
     console.log(cgiResponse.data);
   } catch (error) {
-      console.error('Error al llamar a la aplicación CGI:', error);
+    console.error('Error al llamar a la aplicación CGI:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
-
-  const bankAccount = bankAccounts.find(
-    (bankAccount) => bankAccount.userName === userName
-  );
-
-  if (bankAccount) {
-    return res.status(200).json({
-      bankAccount: bankAccount,
-    });
-  }
-
-  res.status(400).json({
-    message: "Bank accounts not found",
-  });
 };
 
 const getTransactionsByUserName = async (req, res = response) => {
