@@ -50,6 +50,7 @@ export const useSocialStore = () => {
   const startLoadingFollowedPosts = async (userName) => {
     try {
       const { data } = await axios.get(`social/followedPosts/${userName}`);
+      console.log(data.followedPosts);
       setfollowedPosts(data.followedPosts);
     } catch (error) {
       console.log("Error loading posts");
