@@ -6,19 +6,10 @@
 #include <vector>
 #include <mysql/mysql.h>
 #include <ctime>
+#include <cstdlib> // Para getenv
+#include <fstream> // Para ifstream
 
 using namespace std;
-
-/*
-const char* HOST = "localhost";
-const char* USERNAME = "myuser";
-const char* PASSWORD = "mypassword";
-const char* SCHEMA = "mydatabase";
-*/
-const char* HOST = "localhost";
-const char* USERNAME = "churris_cgi";
-const char* PASSWORD = "Abc123$%";
-const char* SCHEMA = "churris_banking";
 
 string decodeUriArgument(const string& argument)
 {
@@ -84,19 +75,19 @@ string checkQuery(string query) {
     switch (transactionType) {
         case 'd': {
             //Para hacer depositos:
-            //d,300,moneda(C para churrumines, E para euros),usuario1,usuario2
-            if (params.size() == 5) {
+            //d,300,moneda(C para churrumines, E para euros),usuario1,usuario2,transaccion
+            if (params.size() == 6) {
                 std::string amount = params[1];
                 std::string currency = params[2];
                 std::string user1 = params[3];
                 std::string user2 = params[4];
+                std::string firma = params[5];
 
                 //Deposito a la cuenta
                 resultQuery = "UPDATE CUENTA SET Monto = Monto + " + amount + " WHERE Nickname = '" + user2 + "' AND Moneda = '" + currency + "';_";  //Importante el espacio
                 
                 //Resta a la cuenta que transfiere
                 resultQuery += "UPDATE CUENTA SET Monto = Monto - " + amount + " WHERE Nickname = '" + user1 + "' AND Moneda = '" + currency + "';_";
-
                 
                 //Se toma hora actual
                 time_t now = time(0);
@@ -105,12 +96,12 @@ string checkQuery(string query) {
                 strftime(datetime, 20, "%Y-%m-%d %H:%M:%S", ltm);
 
                 // Se deja egistro de la transacción
-                resultQuery += "INSERT INTO TRANSACCION (CuentaOrigen, CuentaDestino, Monto, FechaHora) VALUES ('"
+                resultQuery += "INSERT INTO TRANSACCION (CuentaOrigen, CuentaDestino, Monto, Firma, FechaHora) VALUES ('"
                     + user1 + "', '"
                     + user2 + "', "
                     + amount + ", '"
+                    + firma + "', '"
                     + datetime + "');";   
-                // cout << endl << resultQuery << endl;
             } else {
                 std::cout << "<html><body><h1>Error: Invalid parameters for transaction</h1></body></html>";
             }
@@ -134,7 +125,6 @@ string checkQuery(string query) {
         case 'b': {
             //Ver balance, aunque tambien q traiga los otros datos del usuario cm nombre etc:
             //b,usuario,C (de cuenta en churruminos, E de cuenta en Euros)
-            std::cout << endl << params.size()<< endl;
             if (params.size() == 3) {
                 std::string user = params[1];
                 std::string currency = params[2];
@@ -153,14 +143,12 @@ string checkQuery(string query) {
     return resultQuery;
 }
 
-void submitQuery(const string& query)
+void submitQuery(const string& query, const char* HOST, const char* USERNAME, const char* PASSWORD, const char* SCHEMA)
 {
     // Validaciones
     if( query.empty() ) {
         cout << getCgiReply("Empty query...");
     } else {
-        //cout << "\t+ Query received: " << query << endl;
-
         // Initialize connection
         MYSQL* sqlConnection = mysql_init(nullptr);
 
@@ -188,7 +176,6 @@ void submitQuery(const string& query)
         // Execute each query
         for (const auto& singleQuery : queries) {
             // Execute query
-            cout << endl << singleQuery << endl;
             if (singleQuery.size() == 1) {
                 continue;
             }else{
@@ -251,11 +238,40 @@ void submitQuery(const string& query)
     }
 }
 
+// Función para leer el archivo de configuración
+void loadConfig(const string& filename, string& host, string& username, string& password, string& schema) {
+    ifstream configFile(filename);
+    if (!configFile) {
+        cerr << "Error opening config file." << endl;
+        exit(1);
+    }
+    
+    string line;
+    while (getline(configFile, line)) {
+        istringstream iss(line);
+        string key, value;
+        if (getline(iss, key, '=') && getline(iss, value)) {
+            if (key == "DB_HOST") host = value;
+            else if (key == "DB_USERNAME") username = value;
+            else if (key == "DB_PASSWORD") password = value;
+            else if (key == "DB_SCHEMA") schema = value;
+        }
+    }
+}
+
 int main()
-{
+{    
     string query;
     getline(cin, query);
-    
+
+    std::string host, username, password, schema;
+    loadConfig("db_config.txt", host, username, password, schema);
+
+    const char* HOST = host.c_str();
+    const char* USERNAME = username.c_str();
+    const char* PASSWORD = password.c_str();
+    const char* SCHEMA = schema.c_str();
+
     // We must read 'input_data' from the URL
     string::size_type pos = query.find("input_data=");
     
@@ -265,7 +281,7 @@ int main()
         query = "";
     }
     
-    submitQuery(query);
+    submitQuery(query, HOST, USERNAME, PASSWORD, SCHEMA);
 
     return 0;
 }
