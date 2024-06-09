@@ -27,8 +27,6 @@ string decodeUriArgument(const string& argument)
             decoded += ch;
             i = i + 2;
 			
-        }else if(argument[i] == '+'){
-            decoded += ' ';
         }else{
             decoded += argument[i];
         }
