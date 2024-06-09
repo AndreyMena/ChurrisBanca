@@ -232,20 +232,12 @@ const puTransaction = async (req, res = response) => {
       return res.status(400).json({ message: signObjectMsg });
     }
 
-    const timestamp = new Date();
-
-    console.log(signObjectMsg);
-    console.log(userName);
-    console.log(destinationAccountNickname);
-    console.log(amount);
-    console.log(timestamp); // No es necesario pasar la fecha, se hace en cgi
-
-    // d,5,C,andrey.menaespinoza,andre.villegas,Firma
     const postData = new URLSearchParams();
     postData.append(
       "input_data",
       `d,${amount},C,${userName},${destinationAccountNickname},${signObjectMsg}`
     );
+
     const cgiResponse = await axios.post("/", postData, {
       httpsAgent: agent,
       headers: {
@@ -255,9 +247,10 @@ const puTransaction = async (req, res = response) => {
 
     const htmlData = cgiResponse.data;
     const $ = cheerio.load(htmlData);
+
     const pData = $("p").text().trim();
     if (pData === "Ok") {
-      res.status(200).json({ message: "Transaction successful" });
+      res.status(200).json({ message: "Transaction succesful" });
     } else {
       res.status(400).json({ message: "Transaction failed", details: pData });
     }
