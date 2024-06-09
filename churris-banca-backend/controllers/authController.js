@@ -12,7 +12,7 @@ const handleLogin = async (req, res) => {
   const sqlQuery =
     "SELECT Nickname, Email, Contrasena, RefreshToken FROM USUARIO WHERE Email=?";
   const foundUser = await pool.query(sqlQuery, email);
-  if (!foundUser) return res.sendStatus(401); //Unauthorized
+  if (foundUser.length === 0 || !foundUser) return res.sendStatus(401); //Unauthorized
 
   // Evalua password
   const match = await bcrypt.compare(pwd, foundUser[0].Contrasena);
