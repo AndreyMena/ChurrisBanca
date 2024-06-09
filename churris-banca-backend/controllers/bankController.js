@@ -1,28 +1,16 @@
 const { response } = require("express");
 const openssl = require("openssl-wrapper");
 const fs = require("fs");
-const axios = require('../config/axios-cgi');
-const https = require('https');
-const path = require('path');
-const cheerio = require('cheerio');
+const axios = require("../config/axios-cgi");
+const https = require("https");
+const path = require("path");
+const cheerio = require("cheerio");
 
-const cert = fs.readFileSync(path.resolve(__dirname, '../rootCACert.crt'));
+const cert = fs.readFileSync(path.resolve(__dirname, "../rootCACert.crt"));
 
-const agent = new https.Agent({  
-  ca: cert
+const agent = new https.Agent({
+  ca: cert,
 });
-
-// Borrar después
-const bankAccounts = [
-  { id: 1, userName: "andre.villegas", accountStatus: 1550000, currency: "Ch" },
-  { id: 2, userName: "maria.hernandez", accountStatus: 150000, currency: "€" },
-  {
-    id: 2,
-    userName: "roberto.chavez.madriz",
-    accountStatus: 150000,
-    currency: "Ch",
-  },
-];
 
 // Elimminar despues
 const transactionsExamples = [
@@ -92,67 +80,74 @@ const transactionsExamples = [
 ];
 
 const getBankAccountByUsername = async (req, res = response) => {
-  const userName = req.params.bankAccountUsername;
-
-  const postData = new URLSearchParams();
-  postData.append('input_data', `b,${userName},C`);
-
   try {
-    const cgiResponse = await axios.post('/', postData, {
+    const bankAccountUsername = req.params.bankAccountUsername;
+    if (!bankAccountUsername) {
+      return res.status(400).json({ message: "userName is required" });
+    }
+
+    const postData = new URLSearchParams();
+    postData.append("input_data", `b,${bankAccountUsername},C`);
+
+    const cgiResponse = await axios.post("/", postData, {
       httpsAgent: agent,
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
     });
 
     const htmlData = cgiResponse.data;
     const $ = cheerio.load(htmlData);
-    const pData = $('p').text();
+    const pData = $("p").text();
 
     // Verificar si el texto está vacío
-    if (pData.trim() === '') {
-      // Enviar mensaje de que no se encontraron transacciones
+    if (pData.trim() === "") {
       return res.status(400).json({
         message: "No bank account found for this bank username",
       });
     }
 
     // Parsear los datos obtenidos del CGI
-    const [userName, accountStatus, currency] = pData.trim().split(', ');
+    const [userName, accountStatus, currency] = pData.trim().split(", ");
+    if (!userName || !accountStatus || !currency) {
+      return res.status(400).json({
+        message: "Invalid data received from CGI response",
+      });
+    }
 
     // Crear el objeto de cuenta bancaria
     const bankAccount = {
       userName,
       accountStatus: parseFloat(accountStatus),
-      currency
+      currency,
     };
-    
+
     res.status(200).json({ bankAccount: bankAccount });
   } catch (error) {
-    console.error('Error al llamar a la aplicación CGI:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    res.status(500).json({ message: "Internal server error" });
+    throw new Error(error);
   }
 };
 
 const getTransactionsByUserName = async (req, res = response) => {
   const userName = req.params.userName;
   const postData = new URLSearchParams();
-  postData.append('input_data', `t,${userName}`);
+  postData.append("input_data", `t,${userName}`);
 
   try {
-    const cgiResponse = await axios.post('/', postData, {
+    const cgiResponse = await axios.post("/", postData, {
       httpsAgent: agent,
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
     });
 
     const htmlData = cgiResponse.data;
     const $ = cheerio.load(htmlData);
-    const pData = $('p').text();
+    const pData = $("p").text();
 
     // Verificar si el texto está vacío
-    if (pData.trim() === '') {
+    if (pData.trim() === "") {
       // Enviar mensaje de que no se encontraron transacciones
       return res.status(400).json({
         message: "No transactions found for this bank account",
@@ -160,29 +155,34 @@ const getTransactionsByUserName = async (req, res = response) => {
     }
 
     // Parsear los datos obtenidos del CGI y convertirlos al formato deseado
-    const transactions = pData.trim().split('\n').map(transaction => {
-      const [transactionID, originAccount, targetAccount, amount, , date] = transaction.split(',').map(item => item.trim());
-      
-      // Separar la fecha y la hora
-      const [transactionDate, transactionTime] = date.split(' ');
+    const transactions = pData
+      .trim()
+      .split("\n")
+      .map((transaction) => {
+        const [transactionID, originAccount, targetAccount, amount, , date] =
+          transaction.split(",").map((item) => item.trim());
 
-      // Determinar el tipo de transacción según la cuenta de origen
-      const transactionType = originAccount === userName ? 'sent' : 'received';
+        // Separar la fecha y la hora
+        const [transactionDate, transactionTime] = date.split(" ");
 
-      return {
-        transactionID,                                                                                                                                                                                                                               
-        originAccount,
-        targetAccount,
-        transactionType,
-        transactionDate: transactionDate + ' ' + transactionTime,
-        transactionAmount: parseFloat(amount),
-      };
-    });
+        // Determinar el tipo de transacción según la cuenta de origen
+        const transactionType =
+          originAccount === userName ? "sent" : "received";
+
+        return {
+          transactionID,
+          originAccount,
+          targetAccount,
+          transactionType,
+          transactionDate: transactionDate + " " + transactionTime,
+          transactionAmount: parseFloat(amount),
+        };
+      });
 
     res.status(200).json({ transactions });
   } catch (error) {
-      console.error('Error al llamar a la aplicación CGI:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
+    console.error("Error al llamar a la aplicación CGI:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -191,19 +191,19 @@ const puTransaction = async (req, res = response) => {
     if (!req.file) {
       return res.status(400).json({ message: "Key is required" });
     }
-    
+
     const userName = req.body.userName;
     const destinationAccountNickname = req.body.nicknameCuentaDestino;
     const amount = req.body.amount;
     if (!userName || !destinationAccountNickname || !amount) {
       return res.status(400).json({ message: "Missing required fields" });
     }
-    
+
     const certFilePath = process.env.USER_CERT_FILE_PATH + userName + ".crt";
     if (!fs.existsSync(certFilePath)) {
       return res
-      .status(400)
-      .json({ message: "No certificate found for this user" });
+        .status(400)
+        .json({ message: "No certificate found for this user" });
     }
 
     const keyFilePath = process.env.USER_KEY_FILE_PATH + req.file.filename;
@@ -223,7 +223,7 @@ const puTransaction = async (req, res = response) => {
       return res.status(400).json({ message: validateKeyMsg });
     }
 
-    const signObjectMsg =  await signObject(keyFilePath);
+    const signObjectMsg = await signObject(keyFilePath);
     if (signObjectMsg.length <= 35) {
       return res.status(400).json({ message: signObjectMsg });
     }
@@ -234,22 +234,25 @@ const puTransaction = async (req, res = response) => {
     console.log(userName);
     console.log(destinationAccountNickname);
     console.log(amount);
-    console.log(timestamp);  // No es necesario pasar la fecha, se hace en cgi
+    console.log(timestamp); // No es necesario pasar la fecha, se hace en cgi
 
     // d,5,C,andrey.menaespinoza,andre.villegas,Firma
     const postData = new URLSearchParams();
-    postData.append('input_data', `d,${amount},C,${userName},${destinationAccountNickname},${signObjectMsg}`);
-    const cgiResponse = await axios.post('/', postData, {
+    postData.append(
+      "input_data",
+      `d,${amount},C,${userName},${destinationAccountNickname},${signObjectMsg}`
+    );
+    const cgiResponse = await axios.post("/", postData, {
       httpsAgent: agent,
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
     });
 
     const htmlData = cgiResponse.data;
     const $ = cheerio.load(htmlData);
-    const pData = $('p').text().trim();
-    if (pData === 'Ok') {
+    const pData = $("p").text().trim();
+    if (pData === "Ok") {
       res.status(200).json({ message: "Transaction successful" });
     } else {
       res.status(400).json({ message: "Transaction failed", details: pData });
@@ -327,10 +330,11 @@ const validateKey = (keyFilePath, certFilePath) => {
 
 const signObject = (keyFilePath) => {
   return new Promise((resolve, reject) => {
-    const signFilePath = process.env.USER_KEY_FILE_PATH + "transactionSignature.sig";
+    const signFilePath =
+      process.env.USER_KEY_FILE_PATH + "transactionSignature.sig";
 
     openssl.exec(
-      "dgst", 
+      "dgst",
       {
         sha256: true,
         sign: keyFilePath,
@@ -344,10 +348,10 @@ const signObject = (keyFilePath) => {
         });
 
         if (err) {
-          resolve("Error signing the object")
+          resolve("Error signing the object");
         }
-        
-        const signature = fs.readFileSync(signFilePath, 'base64');
+
+        const signature = fs.readFileSync(signFilePath, "base64");
 
         fs.unlink(signFilePath, (err) => {
           if (err) {
