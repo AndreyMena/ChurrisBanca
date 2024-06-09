@@ -82,7 +82,7 @@ const transactionsExamples = [
 const getBankAccountByUsername = async (req, res = response) => {
   try {
     const bankAccountUsername = req.params.bankAccountUsername;
-    if (!bankAccountUsername) {
+    if (bankAccountUsername === "undefined" || bankAccountUsername === "null") {
       return res.status(400).json({ message: "userName is required" });
     }
 
