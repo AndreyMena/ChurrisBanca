@@ -247,8 +247,13 @@ const puTransaction = async (req, res = response) => {
 
     const htmlData = cgiResponse.data;
     const $ = cheerio.load(htmlData);
-
     const pData = $("p").text().trim();
+    if (pData.trim() === "") {
+      return res.status(400).json({
+        message: "No transactions found for this bank account",
+      });
+    }
+
     if (pData === "Ok") {
       res.status(200).json({ message: "Transaction succesful" });
     } else {
