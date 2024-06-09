@@ -45,12 +45,11 @@ app.use("/auth", require("./routes/auth"));
 app.use("/refresh", require("./routes/refresh"));
 app.use("/logout", require("./routes/logout"));
 
-app.use("/bank", require("./routes/bank"));
 app.use("/social", require("./routes/social"));
-
-//Otro middleware para los web tokens, necesario para quitar o no sesion
-//en caso de querer hacer request ya deslogeado
+//Impide hacer post sin sin estar logeado a las rutas que se encuentren abajo
 app.use(verifyJWT);
+app.use("/bank", require("./routes/bank"));
+
 
 app.all("*", (req, res) => {
   res.status(404);
