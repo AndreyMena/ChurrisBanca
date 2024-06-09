@@ -130,11 +130,15 @@ const getBankAccountByUsername = async (req, res = response) => {
 };
 
 const getTransactionsByUserName = async (req, res = response) => {
-  const userName = req.params.userName;
-  const postData = new URLSearchParams();
-  postData.append("input_data", `t,${userName}`);
-
   try {
+    const userName = req.params.userName;
+    if (userName === "undefined" || userName === "null") {
+      return res.status(400).json({ message: "userName is required" });
+    }
+
+    const postData = new URLSearchParams();
+    postData.append("input_data", `t,${userName}`);
+
     const cgiResponse = await axios.post("/", postData, {
       httpsAgent: agent,
       headers: {
@@ -181,8 +185,8 @@ const getTransactionsByUserName = async (req, res = response) => {
 
     res.status(200).json({ transactions });
   } catch (error) {
-    console.error("Error al llamar a la aplicación CGI:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ message: "Internal server error" });
+    throw new Error(error);
   }
 };
 
