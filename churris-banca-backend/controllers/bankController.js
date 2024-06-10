@@ -5,6 +5,7 @@ const axios = require("../config/axios-cgi");
 const https = require("https");
 const path = require("path");
 const cheerio = require("cheerio");
+const { logTransaction } = require("../middleware/logEvents");
 
 const cert = fs.readFileSync(path.resolve(__dirname, "../rootCACert.crt"));
 
@@ -280,6 +281,10 @@ const puTransaction = async (req, res = response) => {
     }
 
     if (pData === "Ok") {
+      logTransaction(
+        { amount, userName, destinationAccountNickname },
+        "transactionLog.txt"
+      );
       res.status(200).json({ message: "Transaction succesful" });
     } else {
       res.status(400).json({ message: "Transaction failed", details: pData });
