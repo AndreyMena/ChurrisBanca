@@ -144,6 +144,11 @@ string checkQuery(string query) {
                     return ""; // Retorna una cadena vacía para indicar error
                 }
 
+                if (firma.size() >= 345) {
+                    std::cerr << "<html><body><h1>Error: Signature must not exceed 345 characters</h1></body></html>";
+                    return ""; // Devuelve una cadena vacía para indicar un error
+                }
+
                 //Deposito a la cuenta
                 resultQuery = "UPDATE CUENTA SET Monto = Monto + " + amount + " WHERE Nickname = '" + user2 + "' AND Moneda = '" + currency + "';_";  //Importante el espacio
                 
