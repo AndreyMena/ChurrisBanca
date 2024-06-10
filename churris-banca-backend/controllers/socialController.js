@@ -324,38 +324,29 @@ const deletePostImage = async (urlImage) => {
   }
 };
 
-const getCheckFriendship = async (req, res = response) => {
+const putCheckFriendship = async (req, res = response) => {
   try{
     const { followed, follower } = req.body;
-
-    console.log(followed);
-    console.log(follower);
-
     if (!followed || !follower) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
     const sqlFirstFriendshipQuery = `SELECT EXISTS (SELECT 1 FROM SEGUIDOR WHERE Seguido=? AND Seguidor=?) AS tupla_existe;`;
-    const firstFriendship = await pool.query(sqlFirstFriendshipQuery, [followed, follower]);
-
+    const firstFriendshipResult = await pool.query(sqlFirstFriendshipQuery, [followed, follower]);
+    const firstFriendship = firstFriendshipResult[0].tupla_existe;
 
     const sqlSecondFriendshipQuery = `SELECT EXISTS (SELECT 1 FROM SEGUIDOR WHERE Seguido=? AND Seguidor=?) AS tupla_existe;`;
-    const secondFriendship = await pool.query(sqlSecondFriendshipQuery, [follower, followed]);
-
-    console.log(firstFriendship);
-    console.log(secondFriendship);
+    const secondFriendshipResult  = await pool.query(sqlSecondFriendshipQuery, [follower, followed]);
+    const secondFriendship = secondFriendshipResult[0].tupla_existe;
 
     const friendship = {
-      firstFriendship: {firstFriendship},
-      secondFriendship: {secondFriendship},
+      firstFriendship,
+      secondFriendship,
     };
-
-    console.log(friendship);
 
     res.status(200).json({
       friendship: friendship,
     });
-
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
     throw new Error(error);
@@ -412,7 +403,7 @@ module.exports = {
   putNewDislike,
   putRemoveDislike,
   deletePost,
-  getCheckFriendship,
+  putCheckFriendship,
   putNewFollow,
   putRemoveFollow,
   getViewOnlyUserProfile,
