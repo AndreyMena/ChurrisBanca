@@ -14,10 +14,15 @@ import useSocialStore from "../../../hooks/useSocialStore";
 const SearchUserPopup = ({ openPopup, handleClosePopup, selectedUser, setSelectedUser }) => {
   const { auth } = useAuth();
   const [ anchorEl, setAnchorEl ] = useState(null);
-  const { startLoadingAccounts, accounts, setAccounts } = useSocialStore();
+  const { startLoadingAccounts, accounts, setAccounts, viewOnlyUserProfile, sendNewFollow, sendRemoveFollow, getSeeProfileUser } = useSocialStore();
   const [ isFollowButtonVisible, setIsFollowButtonVisible ] = useState(false);
   const [ isSeeProfileButtonVisible, setIsSeeProfileButtonVisible ] = useState(false);
   const [ isUnfollowButtonVisible, setIsUnfollowButtonVisible ] = useState(false);
+
+  const payload = {
+    followed: auth.user,
+    follower: selectedUser, // TODO nombre + "." + apellidos
+  };
 
   const handleOpenDropdown = (event) => {
     setAnchorEl(event.currentTarget);
