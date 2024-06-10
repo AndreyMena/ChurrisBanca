@@ -11,16 +11,20 @@ import useAuth from "../../../hooks/useAuth";
 import useSocialStore from "../../../hooks/useSocialStore";
 
 
-const SearchUserPopup = ({ openPopup, handleClosePopup, selectedUser, setSelectedUser }) => {
+const SearchUserPopup = ({ openPopup, handleClosePopup, }) => {
   const { auth } = useAuth();
   const [ anchorEl, setAnchorEl ] = useState(null);
-  const { startLoadingAccounts, accounts, setAccounts, viewOnlyUserProfile, sendNewFollow, sendRemoveFollow, getSeeProfileUser } = useSocialStore();
+  const [ selectedUser, setSelectedUser ] = useState("Select user");
+  const { startLoadingAccounts, accounts, setAccounts, friendship, checkFriendship, sendNewFollow, sendRemoveFollow, viewOnlyUserProfile, getViewOnlyUserProfile } = useSocialStore();
   const [ isFollowButtonVisible, setIsFollowButtonVisible ] = useState(false);
   const [ isSeeProfileButtonVisible, setIsSeeProfileButtonVisible ] = useState(false);
   const [ isUnfollowButtonVisible, setIsUnfollowButtonVisible ] = useState(false);
 
+  const { firstFriendship, secondFriendship } = friendship;
+  const { Nombre, Apellidos, Email, Celular, Imagen } = viewOnlyUserProfile;
+
   const payload = {
-    followed: selectedUser, // TODO nombre + "." + apellidos
+    followed: selectedUser,
     follower: auth.user,
   };
 
@@ -37,10 +41,25 @@ const SearchUserPopup = ({ openPopup, handleClosePopup, selectedUser, setSelecte
     setAnchorEl(null);
   };
 
-  const handleSelectUser = (name, surnames) => {
+  const handleSelectUser = (name, surnames, nickname) => {
     setSelectedUser(name + " " + surnames);
-    setIsFollowButtonVisible(true);
-    setIsSeeProfileButtonVisible(true);
+    payload.followed = nickname;
+    checkFriendship(payload);
+
+    if(firstFriendship===1 && secondFriendship===1) {
+      setIsFollowButtonVisible(false);
+      setIsUnfollowButtonVisible(true);
+      setIsSeeProfileButtonVisible(true);
+    } else if(firstFriendship===1 && secondFriendship===0) {
+      setIsFollowButtonVisible(false);
+      setIsUnfollowButtonVisible(true);
+      setIsSeeProfileButtonVisible(false);
+    } else {
+      setIsFollowButtonVisible(true);
+      setIsUnfollowButtonVisible(false);
+      setIsSeeProfileButtonVisible(false);
+    }
+
     handleCloseDropdown();
   };
 
@@ -49,11 +68,12 @@ const SearchUserPopup = ({ openPopup, handleClosePopup, selectedUser, setSelecte
   }
 
   const handleUnfollow = () => {
-   sendRemoveFollow(payload);
+    sendRemoveFollow(payload);
   }
 
   const handleSeeProfile = () => {
-    getSeeProfileUser(selectedUser);
+    getViewOnlyUserProfile(payload.followed);
+    console.log(viewOnlyUserProfile);
   }
 
   useEffect(() => {
@@ -85,7 +105,7 @@ const SearchUserPopup = ({ openPopup, handleClosePopup, selectedUser, setSelecte
             <MenuItem
             key={account.Nombre}
             onClick={() =>
-              handleSelectUser(account.Nombre, account.Apellidos)
+              handleSelectUser(account.Nombre, account.Apellidos, account.Nickname)
             }
           >
             {account.Nombre + " " + account.Apellidos}
