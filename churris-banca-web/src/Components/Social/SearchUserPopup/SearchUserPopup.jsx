@@ -11,10 +11,13 @@ import useAuth from "../../../hooks/useAuth";
 import useSocialStore from "../../../hooks/useSocialStore";
 
 
-const SearchUserPopup = ({ openPopup, handleClosePopup }) => {
-  const { startLoadingAccounts, accounts, setAccounts } = useSocialStore();
+const SearchUserPopup = ({ openPopup, handleClosePopup, selectedUser, setSelectedUser }) => {
   const { auth } = useAuth();
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [ anchorEl, setAnchorEl ] = useState(null);
+  const { startLoadingAccounts, accounts, setAccounts } = useSocialStore();
+  const [ isFollowButtonVisible, setIsFollowButtonVisible ] = useState(false);
+  const [ isSeeProfileButtonVisible, setIsSeeProfileButtonVisible ] = useState(false);
+  const [ isUnfollowButtonVisible, setIsUnfollowButtonVisible ] = useState(false);
 
   const handleOpenDropdown = (event) => {
     setAnchorEl(event.currentTarget);
@@ -30,8 +33,23 @@ const SearchUserPopup = ({ openPopup, handleClosePopup }) => {
   };
 
   const handleSelectUser = (name, surnames) => {
+    setSelectedUser(name + " " + surnames);
+    setIsFollowButtonVisible(true);
+    setIsSeeProfileButtonVisible(true);
     handleCloseDropdown();
   };
+
+  const handleFollow = () => {
+  
+  }
+
+  const handleUnfollow = () => {
+  
+  }
+
+  const handleSeeProfile = () => {
+  
+  }
 
   useEffect(() => {
     startLoadingAccounts();
@@ -41,7 +59,18 @@ const SearchUserPopup = ({ openPopup, handleClosePopup }) => {
     <Dialog open={openPopup} onClose={handleClosePopup}>
       <DialogTitle align="center">Who are you looking for?</DialogTitle>
       <DialogContent>
-      <Button onClick={handleOpenDropdown}>Select user</Button>
+        <Button onClick={handleOpenDropdown}>
+          {selectedUser}
+        </Button>
+        {isFollowButtonVisible && (
+          <Button variant="contained" onClick={handleFollow}>Follow</Button>
+        )}
+        {isUnfollowButtonVisible && (
+          <Button variant="contained" onClick={handleUnfollow}>Unfollow</Button>
+        )}
+        {isSeeProfileButtonVisible && (
+          <Button variant="contained" onClick={handleSeeProfile}>See profile</Button>
+        )}
         <Menu
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
