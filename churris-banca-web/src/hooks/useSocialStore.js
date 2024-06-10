@@ -53,7 +53,7 @@ export const useSocialStore = () => {
       console.log(data.followedPosts);
       setfollowedPosts(data.followedPosts);
     } catch (error) {
-      console.log("Error loading posts");
+      console.log("Error loading followed posts");
     }
   };
 
