@@ -143,12 +143,12 @@ export const useSocialStore = () => {
     }
   };
 
-  const getSeeProfileUser = async (userName) => {
+  const getViewOnlyUserProfile = async (accountUsername) => {
     try {
-      const { data } = await axios.get(`social/seeProfileUser/${userName}`);
-      setViewOnlyUserProfile(data.viewOnlyUserProfile);
+      const { data } = await axios.get(`social/${accountUsername}`);
+      setViewOnlyUserProfile(data.account);
     } catch (error) {
-      console.log("Error getting only-view user profile.");
+      console.log("Error loading view-only user profile");
     }
   };
 
@@ -186,7 +186,7 @@ export const useSocialStore = () => {
     checkFriendship,
     sendNewFollow,
     sendRemoveFollow,
-    getSeeProfileUser,
+    getViewOnlyUserProfile,
 
     startLoadingAccounts,
   };
