@@ -20,8 +20,8 @@ const SearchUserPopup = ({ openPopup, handleClosePopup, selectedUser, setSelecte
   const [ isUnfollowButtonVisible, setIsUnfollowButtonVisible ] = useState(false);
 
   const payload = {
-    followed: auth.user,
-    follower: selectedUser, // TODO nombre + "." + apellidos
+    followed: selectedUser, // TODO nombre + "." + apellidos
+    follower: auth.user,
   };
 
   const handleOpenDropdown = (event) => {

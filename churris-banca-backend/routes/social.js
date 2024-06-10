@@ -17,6 +17,9 @@ const {
   putNewDislike,
   putRemoveDislike,
   deletePost,
+  putNewFollow,
+  putRemoveFollow,
+  getViewOnlyUserProfile,
 } = require("../controllers/socialController");
 
 router.get("/:accountUsername", getAccountByUsername);
@@ -30,5 +33,8 @@ router.put("/removeLike", putRemoveLike);
 router.put("/newDislike", putNewDislike);
 router.put("/removeDislike", putRemoveDislike);
 router.delete("/post", deletePost);
+router.delete("/newFollow", putNewFollow);
+router.delete("/removeFollow", putRemoveFollow);
+router.delete("/seeProfileUser/:userName", getViewOnlyUserProfile);
 
 module.exports = router;

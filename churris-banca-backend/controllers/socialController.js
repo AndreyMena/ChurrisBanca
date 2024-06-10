@@ -324,6 +324,46 @@ const deletePostImage = async (urlImage) => {
   }
 };
 
+const putNewFollow = async (req, res = response) => {
+  try{
+    const { followed, follower } = req.body;
+    if (!followed || !follower) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    const sqlQuery = `INSERT INTO SEGUIDOR (Seguido, Seguidor) VALUES (?, ?);`;
+    await pool.query(sqlQuery, [followed, follower]);
+
+    res.status(200).json({ message: "Follow updated successfully" });
+  } catch (error) {
+    
+    res.status(500).json({ message: "Internal server error" });
+    throw new Error(error);
+  }
+};
+
+const putRemoveFollow = async (req, res = response) => {
+  try{
+    const { followed, follower } = req.body;
+    if (!followed || !follower) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    const sqlQuery = `DELETE FROM SEGUIDOR WHERE Seguido=? AND Seguidor=?;`;
+    await pool.query(sqlQuery, [followed, follower]);
+
+    res.status(200).json({ message: "Follow removed successfully" });
+  } catch (error) {
+    
+    res.status(500).json({ message: "Internal server error" });
+    throw new Error(error);
+  }
+};
+
+const getViewOnlyUserProfile = async (req, res = response) => {
+  // TODO
+}
+
 module.exports = {
   getAccountByUsername,
   putAccountByUsername,
@@ -336,4 +376,7 @@ module.exports = {
   putNewDislike,
   putRemoveDislike,
   deletePost,
+  putNewFollow,
+  putRemoveFollow,
+  getViewOnlyUserProfile,
 };
