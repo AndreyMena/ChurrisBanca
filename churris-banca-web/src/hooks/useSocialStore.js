@@ -116,6 +116,15 @@ export const useSocialStore = () => {
     }
   };
 
+  const checkFriendship = async (payload) => {
+    try {
+      const { data } = await axios.get(`social/checkFriendship`, payload);
+      console.log(data.friendship)
+    } catch (error) {
+      console.log("Error checking friendship.");
+    }
+  };
+
   const sendNewFollow = async (payload) => {
     try {
       await axios.put(`social/newFollow`, payload);
@@ -171,6 +180,7 @@ export const useSocialStore = () => {
     sendNewDislike,
     sendRemoveDislike,
     startDeletingPost,
+    checkFriendship,
     sendNewFollow,
     sendRemoveFollow,
     getSeeProfileUser,

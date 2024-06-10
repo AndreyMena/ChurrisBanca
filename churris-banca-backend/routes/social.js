@@ -17,6 +17,7 @@ const {
   putNewDislike,
   putRemoveDislike,
   deletePost,
+  getCheckFriendship,
   putNewFollow,
   putRemoveFollow,
   getViewOnlyUserProfile,
@@ -33,8 +34,9 @@ router.put("/removeLike", putRemoveLike);
 router.put("/newDislike", putNewDislike);
 router.put("/removeDislike", putRemoveDislike);
 router.delete("/post", deletePost);
-router.delete("/newFollow", putNewFollow);
-router.delete("/removeFollow", putRemoveFollow);
-router.delete("/seeProfileUser/:userName", getViewOnlyUserProfile);
+router.get("/checkFriendship", getCheckFriendship);
+router.put("/newFollow", putNewFollow);
+router.put("/removeFollow", putRemoveFollow);
+router.get("/seeProfileUser/:userName", getViewOnlyUserProfile);
 
 module.exports = router;

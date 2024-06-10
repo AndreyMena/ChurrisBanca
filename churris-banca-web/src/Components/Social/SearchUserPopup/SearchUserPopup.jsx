@@ -14,13 +14,13 @@ import useSocialStore from "../../../hooks/useSocialStore";
 const SearchUserPopup = ({ openPopup, handleClosePopup, selectedUser, setSelectedUser }) => {
   const { auth } = useAuth();
   const [ anchorEl, setAnchorEl ] = useState(null);
-  const { startLoadingAccounts, accounts, setAccounts, viewOnlyUserProfile, sendNewFollow, sendRemoveFollow, getSeeProfileUser } = useSocialStore();
+  const { startLoadingAccounts, accounts, setAccounts, viewOnlyUserProfile, checkFriendship, sendNewFollow, sendRemoveFollow, getSeeProfileUser } = useSocialStore();
   const [ isFollowButtonVisible, setIsFollowButtonVisible ] = useState(false);
   const [ isSeeProfileButtonVisible, setIsSeeProfileButtonVisible ] = useState(false);
   const [ isUnfollowButtonVisible, setIsUnfollowButtonVisible ] = useState(false);
 
   const payload = {
-    followed: selectedUser, // TODO nombre + "." + apellidos
+    followed: selectedUser,
     follower: auth.user,
   };
 
@@ -37,10 +37,14 @@ const SearchUserPopup = ({ openPopup, handleClosePopup, selectedUser, setSelecte
     setAnchorEl(null);
   };
 
-  const handleSelectUser = (name, surnames) => {
+  const handleSelectUser = (name, surnames, nickname) => {
     setSelectedUser(name + " " + surnames);
-    setIsFollowButtonVisible(true);
-    setIsSeeProfileButtonVisible(true);
+    payload.followed = nickname;
+    console.log(payload);
+    checkFriendship(payload);
+    
+    // setIsFollowButtonVisible(true);
+    // setIsSeeProfileButtonVisible(true);
     handleCloseDropdown();
   };
 
@@ -85,7 +89,7 @@ const SearchUserPopup = ({ openPopup, handleClosePopup, selectedUser, setSelecte
             <MenuItem
             key={account.Nombre}
             onClick={() =>
-              handleSelectUser(account.Nombre, account.Apellidos)
+              handleSelectUser(account.Nombre, account.Apellidos, account.Nickname)
             }
           >
             {account.Nombre + " " + account.Apellidos}
