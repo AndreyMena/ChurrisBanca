@@ -71,7 +71,7 @@ const CreatePostPopUp = ({ openPopup, handleClosePopup }) => {
             </IconButton>
             <Typography>{image ? image.name : "No file selected"}</Typography>
         </div>
-        <Button variant="contained" onClick={handleSendPost}>Send post</Button>
+        <Button variant="contained" onClick={handleSendPost} disabled={!text}>Send post</Button>
       </DialogActions>
     </Dialog>
   );
