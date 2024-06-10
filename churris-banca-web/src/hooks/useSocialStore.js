@@ -11,6 +11,7 @@ const initialStateAccount = {
 export const useSocialStore = () => {
   const [account, setAccount] = useState(initialStateAccount);
   const [accounts, setAccounts] = useState([]);
+  const [friendship, setFriendship] = useState([]);
   const [followedPosts, setfollowedPosts] = useState([]);
   const [posts, setPosts] = useState([]);
   const [viewOnlyUserProfile, setViewOnlyUserProfile] = useState([]);
@@ -118,8 +119,9 @@ export const useSocialStore = () => {
 
   const checkFriendship = async (payload) => {
     try {
-      const { data } = await axios.get(`social/checkFriendship`, payload);
-      console.log(data.friendship)
+      const { data } = await axios.put("social/checkFriendship", payload);
+      setFriendship(data.friendship);
+      console.log(data.friendship);
     } catch (error) {
       console.log("Error checking friendship.");
     }
@@ -141,12 +143,12 @@ export const useSocialStore = () => {
     }
   };
 
-  const getSeeProfileUser = async (userName) => {
+  const getViewOnlyUserProfile = async (accountUsername) => {
     try {
-      const { data } = await axios.get(`social/seeProfileUser/${userName}`);
-      setViewOnlyUserProfile(data.viewOnlyUserProfile);
+      const { data } = await axios.get(`social/${accountUsername}`);
+      setViewOnlyUserProfile(data.account);
     } catch (error) {
-      console.log("Error getting only-view user profile.");
+      console.log("Error loading view-only user profile");
     }
   };
 
@@ -163,6 +165,7 @@ export const useSocialStore = () => {
   return {
     account,
     accounts,
+    friendship,
     followedPosts,
     posts,
     viewOnlyUserProfile,
@@ -183,7 +186,7 @@ export const useSocialStore = () => {
     checkFriendship,
     sendNewFollow,
     sendRemoveFollow,
-    getSeeProfileUser,
+    getViewOnlyUserProfile,
 
     startLoadingAccounts,
   };

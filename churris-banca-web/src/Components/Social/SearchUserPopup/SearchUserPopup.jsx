@@ -11,13 +11,17 @@ import useAuth from "../../../hooks/useAuth";
 import useSocialStore from "../../../hooks/useSocialStore";
 
 
-const SearchUserPopup = ({ openPopup, handleClosePopup, selectedUser, setSelectedUser }) => {
+const SearchUserPopup = ({ openPopup, handleClosePopup, }) => {
   const { auth } = useAuth();
   const [ anchorEl, setAnchorEl ] = useState(null);
-  const { startLoadingAccounts, accounts, setAccounts, viewOnlyUserProfile, checkFriendship, sendNewFollow, sendRemoveFollow, getSeeProfileUser } = useSocialStore();
+  const [ selectedUser, setSelectedUser ] = useState("Select user");
+  const { startLoadingAccounts, accounts, setAccounts, friendship, checkFriendship, sendNewFollow, sendRemoveFollow, viewOnlyUserProfile, getViewOnlyUserProfile } = useSocialStore();
   const [ isFollowButtonVisible, setIsFollowButtonVisible ] = useState(false);
   const [ isSeeProfileButtonVisible, setIsSeeProfileButtonVisible ] = useState(false);
   const [ isUnfollowButtonVisible, setIsUnfollowButtonVisible ] = useState(false);
+
+  const { firstFriendship, secondFriendship } = friendship;
+  const { Nombre, Apellidos, Email, Celular, Imagen } = viewOnlyUserProfile;
 
   const payload = {
     followed: selectedUser,
@@ -40,11 +44,22 @@ const SearchUserPopup = ({ openPopup, handleClosePopup, selectedUser, setSelecte
   const handleSelectUser = (name, surnames, nickname) => {
     setSelectedUser(name + " " + surnames);
     payload.followed = nickname;
-    console.log(payload);
     checkFriendship(payload);
-    
-    // setIsFollowButtonVisible(true);
-    // setIsSeeProfileButtonVisible(true);
+
+    if(firstFriendship===1 && secondFriendship===1) {
+      setIsFollowButtonVisible(false);
+      setIsUnfollowButtonVisible(true);
+      setIsSeeProfileButtonVisible(true);
+    } else if(firstFriendship===1 && secondFriendship===0) {
+      setIsFollowButtonVisible(false);
+      setIsUnfollowButtonVisible(true);
+      setIsSeeProfileButtonVisible(false);
+    } else {
+      setIsFollowButtonVisible(true);
+      setIsUnfollowButtonVisible(false);
+      setIsSeeProfileButtonVisible(false);
+    }
+
     handleCloseDropdown();
   };
 
@@ -53,11 +68,12 @@ const SearchUserPopup = ({ openPopup, handleClosePopup, selectedUser, setSelecte
   }
 
   const handleUnfollow = () => {
-   sendRemoveFollow(payload);
+    sendRemoveFollow(payload);
   }
 
   const handleSeeProfile = () => {
-    getSeeProfileUser(selectedUser);
+    getViewOnlyUserProfile(payload.followed);
+    console.log(viewOnlyUserProfile);
   }
 
   useEffect(() => {

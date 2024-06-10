@@ -13,7 +13,6 @@ const CreatePost = () => {
   const { auth } = useAuth();
   const [openCreatePostPopup, setOpenCreatePostPopup] = useState(false);
   const [openSearchUserPopup, setOpenSearchUserPopup] = useState(false);
-  const [selectedUser, setSelectedUser] = useState("Select user");
   const { startLoadingAccount, account } = useSocialStore();
 
   useEffect(() => {
@@ -70,9 +69,7 @@ const CreatePost = () => {
       
       <SearchUserPopup
         openPopup={openSearchUserPopup}
-        handleClosePopup={handleCloseSearchUserPopup}
-        selectedUser={selectedUser}
-        setSelectedUser={setSelectedUser}>
+        handleClosePopup={handleCloseSearchUserPopup}>
       </SearchUserPopup>
     </div>
   );
