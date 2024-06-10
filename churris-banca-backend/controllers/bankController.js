@@ -217,6 +217,12 @@ const puTransaction = async (req, res = response) => {
         .json({ message: "No private key found for this user" });
     }
 
+    const publicKeyFilePath =
+      process.env.USER_KEY_FILE_PATH + userName + ".pub";
+
+    const signatureFilePath =
+      process.env.USER_KEY_FILE_PATH + "transactionSignature.sig";
+
     const validateCertMsg = await validateCert(certFilePath);
     if (validateCertMsg !== "The certificate is signed by the CA") {
       return res.status(400).json({ message: validateCertMsg });
@@ -227,9 +233,28 @@ const puTransaction = async (req, res = response) => {
       return res.status(400).json({ message: validateKeyMsg });
     }
 
-    const signObjectMsg = await signObject(keyFilePath);
+    const signObjectMsg = await signObject(keyFilePath, signatureFilePath);
     if (signObjectMsg.length <= 35) {
       return res.status(400).json({ message: signObjectMsg });
+    }
+
+    if (!fs.existsSync(publicKeyFilePath)) {
+      const extractPublicKeyMsg = await extractPublicKey(
+        certFilePath,
+        publicKeyFilePath
+      );
+
+      if (extractPublicKeyMsg !== "Public key created") {
+        return res.status(400).json({ message: validateKeyMsg });
+      }
+    }
+
+    const verifySignatureMsg = await verifySignature(
+      publicKeyFilePath,
+      signatureFilePath
+    );
+    if (verifySignatureMsg !== "Signature is valid") {
+      return res.status(400).json({ message: validateKeyMsg });
     }
 
     const postData = new URLSearchParams();
@@ -330,11 +355,8 @@ const validateKey = (keyFilePath, certFilePath) => {
   });
 };
 
-const signObject = (keyFilePath) => {
+const signObject = (keyFilePath, signFilePath) => {
   return new Promise((resolve, reject) => {
-    const signFilePath =
-      process.env.USER_KEY_FILE_PATH + "transactionSignature.sig";
-
     openssl.exec(
       "dgst",
       {
@@ -355,13 +377,59 @@ const signObject = (keyFilePath) => {
 
         const signature = fs.readFileSync(signFilePath, "base64");
 
-        fs.unlink(signFilePath, (err) => {
+        resolve(signature);
+      }
+    );
+  });
+};
+
+const extractPublicKey = (certFilePath, publicKeyFilePath) => {
+  return new Promise((resolve, reject) => {
+    openssl.exec(
+      "x509",
+      {
+        in: certFilePath,
+        pubkey: true,
+        noout: true,
+      },
+      (err, buffer) => {
+        if (err) {
+          resolve("Error creating the public key");
+        } else {
+          require("fs").writeFileSync(publicKeyFilePath, buffer);
+          resolve("Public key created");
+        }
+      }
+    );
+  });
+};
+
+const verifySignature = (publicKeyFilePath, signatureFilePath) => {
+  return new Promise((resolve, reject) => {
+    openssl.exec(
+      "dgst",
+      {
+        sha256: true,
+        verify: publicKeyFilePath,
+        signature: signatureFilePath,
+      },
+      (err, buffer) => {
+        fs.unlink(signatureFilePath, (err) => {
           if (err) {
             resolve("Error deleting the signature file");
           }
         });
 
-        resolve(signature);
+        if (err) {
+          resolve("Error verifying the signature");
+        }
+
+        const result = buffer.toString().trim();
+        if (result === "Verified OK") {
+          resolve("Signature is valid");
+        } else {
+          resolve("Signature is invalid");
+        }
       }
     );
   });
