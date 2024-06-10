@@ -45,15 +45,15 @@ const SearchUserPopup = ({ openPopup, handleClosePopup, selectedUser, setSelecte
   };
 
   const handleFollow = () => {
-  
+    sendNewFollow(payload);
   }
 
   const handleUnfollow = () => {
-  
+   sendRemoveFollow(payload);
   }
 
   const handleSeeProfile = () => {
-  
+    getSeeProfileUser(selectedUser);
   }
 
   useEffect(() => {
