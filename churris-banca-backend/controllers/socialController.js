@@ -381,6 +381,31 @@ const putRemoveFollow = async (req, res = response) => {
   }
 };
 
+const getViewOnlyUserProfile = async (req, res = response) => {
+  try{
+    const userName = req.params.profileUserName;
+    if (!userName) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    const sqlQuery = `SELECT Nombre, Apellidos, Email, Celular, Imagen FROM USUARIO WHERE NickName=?;`;
+    const userProfile = await pool.query(sqlQuery, [userName]);
+
+    if (userProfile.length <= 0) {
+      return res.status(400).json({
+        message: "User profile not found",
+      });
+    }
+
+    res.status(200).json({
+      userProfile: userProfile[0],
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+    throw new Error(error);
+  }
+};
+
 module.exports = {
   getAccountByUsername,
   putAccountByUsername,
@@ -396,4 +421,5 @@ module.exports = {
   putCheckFriendship,
   putNewFollow,
   putRemoveFollow,
+  getViewOnlyUserProfile,
 };

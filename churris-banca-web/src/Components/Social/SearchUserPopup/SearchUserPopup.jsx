@@ -15,6 +15,7 @@ const SearchUserPopup = ({ openPopup, handleClosePopup, }) => {
   const { auth } = useAuth();
   const [ anchorEl, setAnchorEl ] = useState(null);
   const [ selectedUser, setSelectedUser ] = useState("Select user");
+  const [ selectedUserNickname, setSelectedUserNickname ] = useState("Select user nickname");
   const { startLoadingAccounts, accounts, setAccounts, friendship, checkFriendship, sendNewFollow, sendRemoveFollow, viewOnlyUserProfile, getViewOnlyUserProfile } = useSocialStore();
   const [ isFollowButtonVisible, setIsFollowButtonVisible ] = useState(false);
   const [ isSeeProfileButtonVisible, setIsSeeProfileButtonVisible ] = useState(false);
@@ -24,7 +25,7 @@ const SearchUserPopup = ({ openPopup, handleClosePopup, }) => {
   const { Nombre, Apellidos, Email, Celular, Imagen } = viewOnlyUserProfile;
 
   const payload = {
-    followed: selectedUser,
+    followed: selectedUserNickname,
     follower: auth.user,
   };
 
@@ -43,7 +44,7 @@ const SearchUserPopup = ({ openPopup, handleClosePopup, }) => {
 
   const handleSelectUser = (name, surnames, nickname) => {
     setSelectedUser(name + " " + surnames);
-    payload.followed = nickname;
+    setSelectedUserNickname(nickname);
     checkFriendship(payload);
 
     if(firstFriendship===1 && secondFriendship===1) {
@@ -72,7 +73,7 @@ const SearchUserPopup = ({ openPopup, handleClosePopup, }) => {
   }
 
   const handleSeeProfile = () => {
-    getViewOnlyUserProfile(payload.followed);
+    getViewOnlyUserProfile(selectedUserNickname);
     console.log(viewOnlyUserProfile);
   }
 
