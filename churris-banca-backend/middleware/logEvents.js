@@ -23,4 +23,14 @@ const logPost = async ({ id, nickname, content, dateTime }, logName) => {
   logEvents(logItem, logName);
 };
 
-module.exports = logPost;
+const logTransaction = async (
+  { amount, userName, destinationAccountNickname },
+  logName
+) => {
+  const currentDateTime = `${format(new Date(), "yyyyMMdd\tHH:mm:ss")}`;
+  const logItem = `${currentDateTime}\t${uuid()}\tAmount: ${amount}\tOrigin account: ${userName}\tDestination account: ${destinationAccountNickname}\n`;
+
+  logEvents(logItem, logName);
+};
+
+module.exports = { logPost, logTransaction };

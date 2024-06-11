@@ -6,7 +6,7 @@ import { useBankStore } from "../../../hooks/useBankStore";
 import "./SendMoneyPopup.css";
 import "../../../App.css";
 
-const ValidateTransaction = ({ selectedContact, amount, handlePrevStage }) => {
+const ValidateTransaction = ({ selectedContact, amount, handlePrevStage, handleNewTransaction, handleResetStage }) => {
   const { startCreatingTransaction, resMsg } = useBankStore();
   const { auth } = useAuth();
   const [keyFile, setKeyFile] = useState(null);
@@ -19,7 +19,7 @@ const ValidateTransaction = ({ selectedContact, amount, handlePrevStage }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
+    
     if (keyFile) {
       const formData = new FormData();
       formData.append("key", keyFile);
@@ -35,7 +35,8 @@ const ValidateTransaction = ({ selectedContact, amount, handlePrevStage }) => {
   useEffect(() => {
     if (showResMsg) {
       setTimeout(() => {
-        setShowResMsg(false); // Ocultar mensaje después de 2 segundos
+        setShowResMsg(false);
+        handleResetStage();
       }, 2000);
     }
   }, [showResMsg]);
@@ -60,7 +61,7 @@ const ValidateTransaction = ({ selectedContact, amount, handlePrevStage }) => {
       </label>
       {showResMsg && resMsg && (
         <Typography
-          id={resMsg === "Transaction succesful" ? "success-msg" : "error-msg"}
+          id={resMsg === "Transaction successful" ? "success-msg" : "error-msg"}
         >
           {resMsg}
         </Typography>
@@ -69,8 +70,13 @@ const ValidateTransaction = ({ selectedContact, amount, handlePrevStage }) => {
         <Button variant="contained" className="btn" onClick={handlePrevStage}>
           Prev
         </Button>
-        <Button variant="contained" className="btn" type="submit">
-          Submit Transaction
+        <Button 
+          variant="contained" 
+          className="btn" 
+          type="submit" 
+          disabled={!keyFile} 
+          onClick={() => handleNewTransaction(amount)}>
+            Submit Transaction
         </Button>
       </div>
     </form>
