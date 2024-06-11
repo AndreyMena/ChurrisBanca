@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "../api/axios";
+import useAxiosPrivate from "../hooks/useAxiosPrivate";
 
 const initialStateAccount = {
   Nombre: "",
@@ -15,6 +16,7 @@ export const useSocialStore = () => {
   const [followedPosts, setfollowedPosts] = useState([]);
   const [posts, setPosts] = useState([]);
   const [viewOnlyUserProfile, setViewOnlyUserProfile] = useState([]);
+  const axiosPrivate = useAxiosPrivate();
 
   /* Profile, social */
   const startLoadingAccount = async (accountUsername) => {

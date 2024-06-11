@@ -48,9 +48,9 @@ app.use("/auth", require("./routes/auth"));
 app.use("/refresh", require("./routes/refresh"));
 app.use("/logout", require("./routes/logout"));
 
-app.use("/social", require("./routes/social"));
 //Impide hacer post sin sin estar logeado a las rutas que se encuentren abajo
 app.use(verifyJWT);
+app.use("/social", require("./routes/social"));
 app.use("/bank", require("./routes/bank"));
 
 
