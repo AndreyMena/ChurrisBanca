@@ -10,22 +10,20 @@ import {
 import useAuth from "../../../hooks/useAuth";
 import useSocialStore from "../../../hooks/useSocialStore";
 import ViewOnlyUserProfilePopup from "./ViewOnlyUserProfilePopup/ViewOnlyUserProfilePopup";
-
-const SearchUserPopup = ({ openPopup, handleClosePopup, }) => {
+const SearchUserPopup = ({ openPopup, handleClosePopup }) => {
   const { auth } = useAuth();
-  const [ anchorEl, setAnchorEl ] = useState(null);
-  const [ selectedUser, setSelectedUser ] = useState("Select user");
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedUser, setSelectedUser] = useState("Select user");
   const { startLoadingAccounts, accounts, setAccounts, friendship, checkFriendship, sendNewFollow, sendRemoveFollow, viewOnlyUserProfile, getViewOnlyUserProfile } = useSocialStore();
-  const [ isFollowButtonVisible, setIsFollowButtonVisible ] = useState(false);
-  const [ isSeeProfileButtonVisible, setIsSeeProfileButtonVisible ] = useState(false);
-  const [ isUnfollowButtonVisible, setIsUnfollowButtonVisible ] = useState(false);
+  const [isFollowButtonVisible, setIsFollowButtonVisible] = useState(false);
+  const [isSeeProfileButtonVisible, setIsSeeProfileButtonVisible] = useState(false);
+  const [isUnfollowButtonVisible, setIsUnfollowButtonVisible] = useState(false);
   const [openViewOnlyUserProfilePopup, setOpenViewOnlyUserProfilePopup] = useState(false);
 
   const { firstFriendship, secondFriendship } = friendship;
   const { Nombre, Apellidos, Email, Celular, Imagen } = viewOnlyUserProfile;
 
   const [payload, setPayload] = useState(null);
-  const [readyToUpdateUI, setReadyToUpdateUI] = useState(false);
 
   const handleOpenDropdown = (event) => {
     setAnchorEl(event.currentTarget);
@@ -48,41 +46,46 @@ const SearchUserPopup = ({ openPopup, handleClosePopup, }) => {
     };
     setPayload(newPayload);
     await checkFriendship(newPayload);
-    setReadyToUpdateUI(true);
+    updateButtonVisibility();
     handleCloseDropdown();
   };
 
-  useEffect(() => {
-    if (readyToUpdateUI) {
-      if (firstFriendship === 1 && secondFriendship === 1) {
-        setIsFollowButtonVisible(false);
-        setIsUnfollowButtonVisible(true);
-        setIsSeeProfileButtonVisible(true);
-      } else if (firstFriendship === 1 && secondFriendship === 0) {
-        setIsFollowButtonVisible(false);
-        setIsUnfollowButtonVisible(true);
-        setIsSeeProfileButtonVisible(false);
-      } else {
-        setIsFollowButtonVisible(true);
-        setIsUnfollowButtonVisible(false);
-        setIsSeeProfileButtonVisible(false);
-      }
-      setReadyToUpdateUI(false);
+  const updateButtonVisibility = () => {
+    if (firstFriendship === 1 && secondFriendship === 1) {
+      setIsFollowButtonVisible(false);
+      setIsUnfollowButtonVisible(true);
+      setIsSeeProfileButtonVisible(true);
+    } else if (firstFriendship === 1 && secondFriendship === 0) {
+      setIsFollowButtonVisible(false);
+      setIsUnfollowButtonVisible(true);
+      setIsSeeProfileButtonVisible(false);
+    } else {
+      setIsFollowButtonVisible(true);
+      setIsUnfollowButtonVisible(false);
+      setIsSeeProfileButtonVisible(false);
     }
-  }, [firstFriendship, secondFriendship, readyToUpdateUI]);
+  };
 
-  const handleFollow = () => {
-    sendNewFollow(payload);
-  }
+  useEffect(() => {
+    updateButtonVisibility();
+  }, [firstFriendship, secondFriendship]);
 
-  const handleUnfollow = () => {
-    sendRemoveFollow(payload);
-  }
+  const handleFollow = async () => {
+    await sendNewFollow(payload);
+    await checkFriendship(payload);
+    updateButtonVisibility();
+  };
+
+  const handleUnfollow = async () => {
+    await sendRemoveFollow(payload);
+    await checkFriendship(payload);
+    updateButtonVisibility();
+  };
 
   const handleSeeProfile = () => {
     getViewOnlyUserProfile(payload.followed);
     setOpenViewOnlyUserProfilePopup(true);
-  }
+  };
 
   const handleCloseViewOnlyUserProfilePopup = () => {
     setOpenViewOnlyUserProfilePopup(false);
@@ -99,13 +102,13 @@ const SearchUserPopup = ({ openPopup, handleClosePopup, }) => {
         <Button onClick={handleOpenDropdown}>
           {selectedUser}
         </Button>
-        {isFollowButtonVisible && (
+        {selectedUser !== "Select user" && isFollowButtonVisible && (
           <Button variant="contained" onClick={handleFollow}>Follow</Button>
         )}
-        {isUnfollowButtonVisible && (
+        {selectedUser !== "Select user" && isUnfollowButtonVisible && (
           <Button variant="contained" onClick={handleUnfollow}>Unfollow</Button>
         )}
-        {isSeeProfileButtonVisible && (
+        {selectedUser !== "Select user" && isSeeProfileButtonVisible && (
           <Button variant="contained" onClick={handleSeeProfile}>See profile</Button>
         )}
         <Menu
@@ -115,7 +118,7 @@ const SearchUserPopup = ({ openPopup, handleClosePopup, }) => {
         >
           {accounts.map((account) => (
             <MenuItem
-              key={account.Nombre}
+              key={account.Nickname}
               onClick={() =>
                 handleSelectUser(account.Nombre, account.Apellidos, account.Nickname)
               }
@@ -126,15 +129,14 @@ const SearchUserPopup = ({ openPopup, handleClosePopup, }) => {
         </Menu>
 
         <ViewOnlyUserProfilePopup
-          openPopup={openViewOnlyUserProfilePopup} 
+          openPopup={openViewOnlyUserProfilePopup}
           handleClosePopup={handleCloseViewOnlyUserProfilePopup}
           Nombre={Nombre}
           Apellidos={Apellidos}
           Email={Email}
           Celular={Celular}
-          Imagen={Imagen}>
-      
-        </ViewOnlyUserProfilePopup>
+          Imagen={Imagen}
+        />
       </DialogContent>
     </Dialog>
   );
