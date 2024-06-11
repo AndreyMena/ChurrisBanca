@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import useAuth from "../../../hooks/useAuth";
 import useSocialStore from "../../../hooks/useSocialStore";
+import ViewOnlyUserProfilePopup from "./ViewOnlyUserProfilePopup/ViewOnlyUserProfilePopup";
 
 const SearchUserPopup = ({ openPopup, handleClosePopup, }) => {
   const { auth } = useAuth();
@@ -18,6 +19,7 @@ const SearchUserPopup = ({ openPopup, handleClosePopup, }) => {
   const [ isFollowButtonVisible, setIsFollowButtonVisible ] = useState(false);
   const [ isSeeProfileButtonVisible, setIsSeeProfileButtonVisible ] = useState(false);
   const [ isUnfollowButtonVisible, setIsUnfollowButtonVisible ] = useState(false);
+  const [openViewOnlyUserProfilePopup, setOpenViewOnlyUserProfilePopup] = useState(false);
 
   const { firstFriendship, secondFriendship } = friendship;
   const { Nombre, Apellidos, Email, Celular, Imagen } = viewOnlyUserProfile;
@@ -79,8 +81,12 @@ const SearchUserPopup = ({ openPopup, handleClosePopup, }) => {
 
   const handleSeeProfile = () => {
     getViewOnlyUserProfile(payload.followed);
-    console.log(viewOnlyUserProfile);
+    setOpenViewOnlyUserProfilePopup(true);
   }
+
+  const handleCloseViewOnlyUserProfilePopup = () => {
+    setOpenViewOnlyUserProfilePopup(false);
+  };
 
   useEffect(() => {
     startLoadingAccounts();
@@ -118,6 +124,17 @@ const SearchUserPopup = ({ openPopup, handleClosePopup, }) => {
             </MenuItem>
           ))}
         </Menu>
+
+        <ViewOnlyUserProfilePopup
+          openPopup={openViewOnlyUserProfilePopup} 
+          handleClosePopup={handleCloseViewOnlyUserProfilePopup}
+          Nombre={Nombre}
+          Apellidos={Apellidos}
+          Email={Email}
+          Celular={Celular}
+          Imagen={Imagen}>
+      
+        </ViewOnlyUserProfilePopup>
       </DialogContent>
     </Dialog>
   );
