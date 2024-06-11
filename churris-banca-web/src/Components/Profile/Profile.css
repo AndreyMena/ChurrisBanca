@@ -6,14 +6,13 @@
   background-color: #ffffff;
 }
 
-#profile-picture {
-  display: flex;
-  justify-content: center;
+#big-profile-picture {
+  padding-top: 5px;
 }
 
 #img {
-  width: 250px;
-  height: 250px;
+  width: 40%;
+  height: 450px;
 }
 
 #user-information-container {

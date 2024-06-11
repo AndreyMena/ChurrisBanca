@@ -56,7 +56,6 @@ Transaction.propTypes = {
   transactionType: PropTypes.string.isRequired,
   transactionUser: PropTypes.string.isRequired,
   transactionDate: PropTypes.string.isRequired,
-  transactionTime: PropTypes.string.isRequired,
   transactionAmount: PropTypes.number.isRequired,
 };
 

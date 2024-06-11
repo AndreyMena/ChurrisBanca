@@ -11,8 +11,8 @@ const AccountBalance = () => {
   const { startLoadingBankAccount, bankAccount } = useBankStore();
   const { auth } = useAuth();
   const [openPopup, setOpenPopup] = useState(false);
-  
   const { userName, currency, accountStatus } = bankAccount;
+  const [balance, setBalance] = useState(0);
 
   const handleOpenPopup = () => {
     setOpenPopup(true);
@@ -22,9 +22,17 @@ const AccountBalance = () => {
     setOpenPopup(false);
   };
 
+  const handleNewTransaction = (number) => {
+    setBalance(balance - number);
+  }
+
   useEffect(() => {
     startLoadingBankAccount(auth.user);
   }, []);
+
+  useEffect(() => {
+    setBalance(Number(accountStatus));
+  }, [accountStatus]);
 
   return (
     <div id="account-container">
@@ -46,7 +54,7 @@ const AccountBalance = () => {
         <Typography>Balance</Typography>
         <Typography>
           {currency}
-          {accountStatus}
+          {balance}
         </Typography>
       </div>
 
@@ -54,7 +62,8 @@ const AccountBalance = () => {
         openPopup={openPopup}
         handleClosePopup={handleClosePopup}
         currency={currency}
-        accountBalance={accountStatus}
+        accountBalance={balance}
+        handleNewTransaction={handleNewTransaction}
       />
     </div>
   );

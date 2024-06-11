@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import PasswordOutlinedIcon from "@mui/icons-material/PasswordOutlined";
@@ -12,7 +12,7 @@ import "./Profile.css";
 const Profile = () => {
   const { startLoadingAccount, account } = useSocialStore();
   const { auth } = useAuth();
-  const { Nombre, Apellidos, Email, Celular } = account;
+  const { Nombre, Apellidos, Email, Celular, Imagen } = account;
 
   const [userEmail, setUserEmail] = useState("");
   const [userPhoneNumber, setUserPhoneNumber] = useState("");
@@ -25,8 +25,16 @@ const Profile = () => {
   return (
     <div id="profile-container">
       <div id="big-profile-picture">
-        <AccountCircleIcon id="img" />
+        <Box 
+          id="img" 
+          component="img"
+          src={Imagen
+            ? Imagen
+            : "https://ps.w.org/user-avatar-reloaded/assets/icon-128x128.png?rev=2540745"
+          }
+        />
       </div>
+ 
       <Typography id="standard-read-only-input" variant="standard">
         {Nombre + " " + Apellidos}
       </Typography>
@@ -46,7 +54,7 @@ const Profile = () => {
           />
         </div>
 
-        <div className="user-specific-information-container">
+        <div className="user-specific-information-container" style={{display: "none"}}>
           <PasswordOutlinedIcon
             className="user-information-icons"
             fontSize="large"

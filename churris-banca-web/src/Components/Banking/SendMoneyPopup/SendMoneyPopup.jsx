@@ -5,7 +5,7 @@ import MoneyAmount from "./MoneyAmount";
 import ValidateTransaction from "./ValidateTransaction";
 import "./SendMoneyPopup.css";
 
-const SendMoneyPopup = ({ openPopup, handleClosePopup, accountBalance }) => {
+const SendMoneyPopup = ({ openPopup, handleClosePopup, accountBalance, handleNewTransaction }) => {
   const [stage, setStage] = useState(1);
   const [selectedContact, setSelectedContact] = useState("Contacts");
   const [amount, setAmount] = useState("");
@@ -17,6 +17,10 @@ const SendMoneyPopup = ({ openPopup, handleClosePopup, accountBalance }) => {
   const handlePrevStage = () => {
     setStage(stage - 1);
   };
+
+  const handleResetStage = () => {
+    setStage(1);
+  }
 
   const handleSelectedContact = (contact) => {
     setSelectedContact(contact);
@@ -39,7 +43,15 @@ const SendMoneyPopup = ({ openPopup, handleClosePopup, accountBalance }) => {
           />
         );
       case 3:
-        return (<ValidateTransaction selectedContact={selectedContact} amount={amount} handlePrevStage={handlePrevStage}/>);
+        return (
+          <ValidateTransaction 
+            selectedContact={selectedContact} 
+            amount={amount} 
+            handlePrevStage={handlePrevStage}
+            handleNewTransaction={handleNewTransaction}
+            handleResetStage={handleResetStage}
+          />
+        );
     }
   };
 
