@@ -22,7 +22,7 @@ const PostsList = () => {
     }, 15000);
     
     return () => clearInterval(intervalId);
-  }, [auth.user, startLoadingAccount, startLoadingPosts, startLoadingFollowedPosts]);
+  }, [auth.user]);
 
   return (
     <div>
