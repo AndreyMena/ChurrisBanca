@@ -21,7 +21,7 @@ export const useSocialStore = () => {
   /* Profile, social */
   const startLoadingAccount = async (accountUsername) => {
     try {
-      const { data } = await axios.get(`social/${accountUsername}`);
+      const { data } = await axiosPrivate.get(`social/${accountUsername}`);
       setAccount(data.account);
     } catch (error) {
       console.log("Error loading bank account");
@@ -31,7 +31,7 @@ export const useSocialStore = () => {
   /* Profile */
   const startUpdatingValueAccount = async (accountUsername, data, label) => {
     try {
-      await axios.put(`social/user`, {
+      await axiosPrivate.put(`social/user`, {
         userName: accountUsername,
         data: data,
         label: label === "Cell phone number" ? "Celular" : label,
@@ -44,7 +44,7 @@ export const useSocialStore = () => {
   /* Social */
   const startLoadingPosts = async (userName) => {
     try {
-      const { data } = await axios.get(`social/posts/${userName}`);
+      const { data } = await axiosPrivate.get(`social/posts/${userName}`);
       setPosts(data.posts);
     } catch (error) {
       console.log("Error loading posts");
@@ -53,7 +53,7 @@ export const useSocialStore = () => {
 
   const startLoadingFollowedPosts = async (userName) => {
     try {
-      const { data } = await axios.get(`social/followedPosts/${userName}`);
+      const { data } = await axiosPrivate.get(`social/followedPosts/${userName}`);
       setfollowedPosts(data.followedPosts);
     } catch (error) {
       console.log("Error loading followed posts");
@@ -63,13 +63,13 @@ export const useSocialStore = () => {
   const sendNewPost = async (payload, formData) => {
     try { 
       if (formData) {
-        const response = await axios.post(process.env.REACT_APP_CLOUDINARY_URL, formData);
+        const response = await axiosPrivate.post(process.env.REACT_APP_CLOUDINARY_URL, formData);
         payload.imageUrl = response.data.secure_url;
       } else {
         payload.imageUrl = "";
       }
 
-      await axios.post("social/newPost", payload);
+      await axiosPrivate.post("social/newPost", payload);
     } catch (error) {
       console.log("Error sending new post");
     }
@@ -77,7 +77,7 @@ export const useSocialStore = () => {
 
   const sendNewLike = async (payload) => {
     try {
-      await axios.put(`social/newLike`, payload);
+      await axiosPrivate.put(`social/newLike`, payload);
     } catch (error) {
       console.log("Error sending new like.", error);
     }
@@ -85,7 +85,7 @@ export const useSocialStore = () => {
 
   const sendRemoveLike = async (payload) => {
     try {
-      await axios.put(`social/removeLike`, payload);
+      await axiosPrivate.put(`social/removeLike`, payload);
     } catch (error) {
       console.log("Error removing like.", error);
     }
@@ -93,7 +93,7 @@ export const useSocialStore = () => {
 
   const sendNewDislike = async (payload) => {
     try {
-      await axios.put(`social/newDislike`, payload);
+      await axiosPrivate.put(`social/newDislike`, payload);
     } catch (error) {
       console.log("Error sending new dislike.", error);
     }
@@ -101,7 +101,7 @@ export const useSocialStore = () => {
 
   const sendRemoveDislike = async (payload) => {
     try {
-      await axios.put(`social/removeDislike`, payload);
+      await axiosPrivate.put(`social/removeDislike`, payload);
     } catch (error) {
       console.log("Error removing dislike.", error);
     }
@@ -109,7 +109,7 @@ export const useSocialStore = () => {
 
   const startDeletingPost = async (payload) => {
     try {
-      await axios.delete("social/post", {
+      await axiosPrivate.delete("social/post", {
         data: {
           payload: payload,
         },
@@ -121,7 +121,7 @@ export const useSocialStore = () => {
 
   const checkFriendship = async (payload) => {
     try {
-      const { data } = await axios.put("social/checkFriendship", payload);
+      const { data } = await axiosPrivate.put("social/checkFriendship", payload);
       setFriendship(data.friendship);
     } catch (error) {
       console.log("Error checking friendship.");
@@ -130,7 +130,7 @@ export const useSocialStore = () => {
 
   const sendNewFollow = async (payload) => {
     try {
-      await axios.put(`social/newFollow`, payload);
+      await axiosPrivate.put(`social/newFollow`, payload);
     } catch (error) {
       console.log("Error sending new follow.");
     }
@@ -138,7 +138,7 @@ export const useSocialStore = () => {
 
   const sendRemoveFollow = async (payload) => {
     try {
-      await axios.put(`social/removeFollow`, payload);
+      await axiosPrivate.put(`social/removeFollow`, payload);
     } catch (error) {
       console.log("Error removing follow.");
     }
@@ -146,7 +146,7 @@ export const useSocialStore = () => {
 
   const getViewOnlyUserProfile = async (selectedUserNickname) => {
     try {
-      const { data } = await axios.get(`social/viewOnlyUserProfile/${selectedUserNickname}`);
+      const { data } = await axiosPrivate.get(`social/viewOnlyUserProfile/${selectedUserNickname}`);
       setViewOnlyUserProfile(data.userProfile);
     } catch (error) {
       console.log("Error loading view-only user profile");
@@ -156,7 +156,7 @@ export const useSocialStore = () => {
   /* Banking */
   const startLoadingAccounts = async () => {
     try {
-      const { data } = await axios.get("social/");
+      const { data } = await axiosPrivate.get("social/");
       setAccounts(data.accounts);
     } catch (error) {
       console.log("Error loading bank account usernames");
