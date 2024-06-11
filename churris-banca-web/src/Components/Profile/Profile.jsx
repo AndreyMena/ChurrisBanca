@@ -54,7 +54,7 @@ const Profile = () => {
           />
         </div>
 
-        <div className="user-specific-information-container">
+        <div className="user-specific-information-container" style={{display: "none"}}>
           <PasswordOutlinedIcon
             className="user-information-icons"
             fontSize="large"
