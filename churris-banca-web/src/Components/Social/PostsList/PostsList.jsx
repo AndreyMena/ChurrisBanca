@@ -8,23 +8,27 @@ const PostsList = () => {
   const { auth } = useAuth();
 
   useEffect(() => {
-    startLoadingAccount(auth.user);
-    startLoadingPosts(auth.user);
-    startLoadingFollowedPosts(auth.user);
+    const fetchData = () => {
+      startLoadingAccount(auth.user);
+      startLoadingPosts(auth.user);
+      startLoadingFollowedPosts(auth.user);
+    };
+
+    fetchData();
 
     const intervalId = setInterval(() => {
       startLoadingPosts(auth.user);
       startLoadingFollowedPosts(auth.user);
-    }, 30000);
+    }, 15000);
     
     return () => clearInterval(intervalId);
-  }, [auth.user]);
+  }, [auth.user, startLoadingAccount, startLoadingPosts, startLoadingFollowedPosts]);
 
   return (
     <div>
-      {posts.map((post, index) => (
+      {posts.map((post) => (
         <Post
-          key={index}
+          key={post.PostId}
           postUserImage={account.Imagen}
           postName={account.Nombre}
           postId={post.PostId}
@@ -36,13 +40,13 @@ const PostsList = () => {
           postUsernamesLikes={post.Nicknames}
           postDislikes={post.Dislikes}
           postUsernamesDislikes={post.DislikeNicknames}
-        ></Post>
+        />
       ))}
-      {followedPosts.map((post, index) => (
+      {followedPosts.map((post) => (
         <Post
-          key={`followed-${index}`}
+          key={post.PostId}
           postUserImage={post.UserImage}
-          postName={post.UserName}
+          postName={post.Nickname}
           postId={post.PostId}
           postUser={post.Nickname}
           postContent={post.Contenido}

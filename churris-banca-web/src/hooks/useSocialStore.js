@@ -63,7 +63,7 @@ export const useSocialStore = () => {
   const sendNewPost = async (payload, formData) => {
     try { 
       if (formData) {
-        const response = await axiosPrivate.post(process.env.REACT_APP_CLOUDINARY_URL, formData);
+        const response = await axios.post(process.env.REACT_APP_CLOUDINARY_URL, formData);
         payload.imageUrl = response.data.secure_url;
       } else {
         payload.imageUrl = "";

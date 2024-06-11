@@ -47,16 +47,10 @@ const PostHeader = ({
         <div id="info">
           <Typography id="name" className="post-header-item"> {postName}</Typography>
           <Typography className="post-header-item"> {postDateTime}</Typography>
-          {postUser !== auth.user ? 
-            <Button className="post-header-item" variant="text">
-              Unfollow
-            </Button> 
-            : ""
-          }
          
         </div>
-        <Button onClick={handleDeleteClick}>
-          {postUser === auth.user ? <DeleteIcon id="icon" /> : ""}
+        <Button onClick={handleDeleteClick} style={{display: postUser === auth.user ? "" : "none"}}>
+          <DeleteIcon id="icon" />
         </Button>
       </div>
     </div>
