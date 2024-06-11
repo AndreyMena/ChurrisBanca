@@ -1,27 +1,38 @@
 import React, { useState, useEffect } from "react";
+import { Box, Button } from "@mui/material";
 import CreatePostPopUp from "../CreatePostPopUp/CreatePostPopUp";
+import SearchUserPopup from "../SearchUserPopup/SearchUserPopup";
 import TextField from "@mui/material/TextField";
-import { Box } from "@mui/material";
 import useAuth from "../../../hooks/useAuth";
 import useSocialStore from "../../../hooks/useSocialStore";
+
 import "./CreatePost.css";
 import "../../../App.css"
 
 const CreatePost = () => {
   const { auth } = useAuth();
-  const { startLoadingAccount, account } = useSocialStore()
-  const [openPopup, setOpenPopup] = useState(false);
+  const [openCreatePostPopup, setOpenCreatePostPopup] = useState(false);
+  const [openSearchUserPopup, setOpenSearchUserPopup] = useState(false);
+  const { startLoadingAccount, account } = useSocialStore();
 
   useEffect(() => {
     startLoadingAccount(auth.user)
   }, [])
   
-  const handleOpenPopup = () => {
-    setOpenPopup(true);
+  const handleOpenCreatePostPopup = () => {
+    setOpenCreatePostPopup(true);
   };
 
-  const handleClosePopup = () => {
-    setOpenPopup(false);
+  const handleCloseCreatePostPopup = () => {
+    setOpenCreatePostPopup(false);
+  };
+
+  const handleOpenSearchUserPopup = () => {
+    setOpenSearchUserPopup(true);
+  };
+
+  const handleCloseSearchUserPopup = () => {
+    setOpenSearchUserPopup(false);
   };
 
   return (
@@ -42,14 +53,24 @@ const CreatePost = () => {
           className="custom-text-field" 
           placeholder="What's on your mind?" 
           variant="filled"
-          onClick={handleOpenPopup} 
+          onClick={handleOpenCreatePostPopup} 
          />
+      </div>
+      <div>
+        <Button variant="outlined" onClick={handleOpenSearchUserPopup}>
+          Who are you looking for?
+        </Button>
       </div>
 
       <CreatePostPopUp
-        openPopup={openPopup}
-        handleClosePopup={handleClosePopup}>
+        openPopup={openCreatePostPopup}
+        handleClosePopup={handleCloseCreatePostPopup}>
       </CreatePostPopUp>
+      
+      <SearchUserPopup
+        openPopup={openSearchUserPopup}
+        handleClosePopup={handleCloseSearchUserPopup}>
+      </SearchUserPopup>
     </div>
   );
 };

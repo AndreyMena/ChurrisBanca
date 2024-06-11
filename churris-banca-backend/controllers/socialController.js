@@ -100,8 +100,12 @@ const getPostsByUserName = async (req, res = response) => {
     }
 
     posts.forEach((post) => {
-      post.Fecha =
-        post.Fecha !== undefined ? post.Fecha.toString() : "Sin hora y fecha";
+      if (post.Fecha !== undefined) {
+        post.Fecha = post.Fecha.toString().split(" GMT")[0];
+      }
+      else {
+        post.Fecha = "Sin hora y fecha"
+      };
       post.Likes = post.Likes !== undefined ? post.Likes.toString() : "0";
       post.Dislikes =
         post.Dislikes !== undefined ? post.Dislikes.toString() : "0";
@@ -109,6 +113,57 @@ const getPostsByUserName = async (req, res = response) => {
 
     res.status(200).json({
       posts: posts,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+    throw new Error(error);
+  }
+};
+
+const getFollowedPostsByUserName = async (req, res = response) => {
+  try {
+    const userName = req.params.userName;
+    if (!userName) {
+      return res.status(400).json({ message: "userName is required" });
+    }
+
+    const sqlQuery = `SELECT Seguido FROM SEGUIDOR WHERE Seguidor = ?;`;
+    const usersFollowed = await pool.query(sqlQuery, [userName]);
+    if (!Array.isArray(usersFollowed)) {
+      usersFollowed = [usersFollowed];
+    }
+    if (usersFollowed.length <= 0) {
+      return res.status(400).json({
+        message: "No followed posts found for this user",
+      });
+    }
+
+    const followedUserNames = usersFollowed.map(user => user.Seguido);
+    const sqlPostsQuery = "SELECT m.Id AS PostId, m.Nickname, m.Contenido, m.Imagen, m.Fecha, COALESCE(l.Likes, 0) AS Likes, COALESCE(d.Dislikes, 0) AS Dislikes, l.Nicknames, d.DislikeNicknames FROM MENSAJE m LEFT JOIN (" + 
+      "SELECT IdMensaje, COUNT(*) AS Likes, GROUP_CONCAT(Nickname) AS Nicknames FROM LIKES GROUP BY IdMensaje) l ON m.Id = l.IdMensaje LEFT JOIN (" +
+      "SELECT IdMensaje, COUNT(*) AS Dislikes, GROUP_CONCAT(Nickname) AS DislikeNicknames FROM DISLIKES GROUP BY IdMensaje) d ON m.Id = d.IdMensaje WHERE m.Nickname IN (?);";
+    const followedPosts = await pool.query(sqlPostsQuery, [followedUserNames]);
+    if (!Array.isArray(followedPosts)) {
+      followedPosts = [followedPosts];
+    }
+    if (followedPosts.length <= 0) {
+      return res.status(400).json({
+        message: "No followed posts found for this user",
+      });
+    }
+    followedPosts.forEach((followedPost) => {
+      if (followedPost.Fecha !== undefined) {
+        followedPost.Fecha = followedPost.Fecha.toString().split(" GMT")[0];
+      }
+      else {
+        followedPost.Fecha = "Sin hora y fecha"
+      };
+      followedPost.Likes = followedPost.Likes !== undefined ? followedPost.Likes.toString() : "0";
+      followedPost.Dislikes = followedPost.Dislikes !== undefined ? followedPost.Dislikes.toString() : "0";
+    });
+
+    res.status(200).json({
+      followedPosts: followedPosts,
     });
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
@@ -277,15 +332,82 @@ const deletePostImage = async (urlImage) => {
   }
 };
 
+const putCheckFriendship = async (req, res = response) => {
+  try{
+    const { followed, follower } = req.body;
+    if (!followed || !follower) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    const sqlFirstFriendshipQuery = `SELECT EXISTS (SELECT 1 FROM SEGUIDOR WHERE Seguido=? AND Seguidor=?) AS tupla_existe;`;
+    const firstFriendshipResult = await pool.query(sqlFirstFriendshipQuery, [followed, follower]);
+    const firstFriendship = firstFriendshipResult[0].tupla_existe;
+
+    const sqlSecondFriendshipQuery = `SELECT EXISTS (SELECT 1 FROM SEGUIDOR WHERE Seguido=? AND Seguidor=?) AS tupla_existe;`;
+    const secondFriendshipResult  = await pool.query(sqlSecondFriendshipQuery, [follower, followed]);
+    const secondFriendship = secondFriendshipResult[0].tupla_existe;
+
+    const friendship = {
+      firstFriendship,
+      secondFriendship,
+    };
+
+    res.status(200).json({
+      friendship: friendship,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+    throw new Error(error);
+  }
+};
+
+const putNewFollow = async (req, res = response) => {
+  try{
+    const { followed, follower } = req.body;
+    if (!followed || !follower) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    const sqlQuery = `INSERT INTO SEGUIDOR (Seguido, Seguidor) VALUES (?, ?);`;
+    await pool.query(sqlQuery, [followed, follower]);
+
+    res.status(200).json({ message: "Follow updated successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+    throw new Error(error);
+  }
+};
+
+const putRemoveFollow = async (req, res = response) => {
+  try{
+    const { followed, follower } = req.body;
+    if (!followed || !follower) {
+      return res.status(400).json({ message: "Missing required fields" });
+    }
+
+    const sqlQuery = `DELETE FROM SEGUIDOR WHERE Seguido=? AND Seguidor=?;`;
+    await pool.query(sqlQuery, [followed, follower]);
+
+    res.status(200).json({ message: "Follow removed successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+    throw new Error(error);
+  }
+};
+
 module.exports = {
   getAccountByUsername,
   putAccountByUsername,
   getAccounts,
   getPostsByUserName,
+  getFollowedPostsByUserName,
   postNewPost,
   putNewLike,
   putRemoveLike,
   putNewDislike,
   putRemoveDislike,
   deletePost,
+  putCheckFriendship,
+  putNewFollow,
+  putRemoveFollow,
 };

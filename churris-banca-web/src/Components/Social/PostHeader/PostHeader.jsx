@@ -45,11 +45,15 @@ const PostHeader = ({
       ></Box>
       <div id="container">
         <div id="info">
-          <Typography className="post-header-item"> {postName}</Typography>
+          <Typography id="name" className="post-header-item"> {postName}</Typography>
           <Typography className="post-header-item"> {postDateTime}</Typography>
-          <Button className="post-header-item" variant="text">
-            Unfollow
-          </Button>
+          {postUser !== auth.user ? 
+            <Button className="post-header-item" variant="text">
+              Unfollow
+            </Button> 
+            : ""
+          }
+         
         </div>
         <Button onClick={handleDeleteClick}>
           {postUser === auth.user ? <DeleteIcon id="icon" /> : ""}

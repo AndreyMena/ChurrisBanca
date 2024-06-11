@@ -8,6 +8,8 @@
 #include <ctime>
 #include <cstdlib> // Para getenv
 #include <fstream> // Para ifstream
+#include <algorithm>
+#include <regex>
 
 using namespace std;
 
@@ -27,8 +29,6 @@ string decodeUriArgument(const string& argument)
             decoded += ch;
             i = i + 2;
 			
-        }else if(argument[i] == '+'){
-            decoded += ' ';
         }else{
             decoded += argument[i];
         }
@@ -65,9 +65,40 @@ std::vector<std::string> split(const std::string &s, char delimiter) {
     return tokens;
 }
 
+bool isNumber(const std::string& s) {
+    bool hasDecimal = false;
+    for (char c : s) {
+        if (!std::isdigit(c)) {
+            if (c == '.' && !hasDecimal) {
+                hasDecimal = true;
+            } else {
+                return false;
+            }
+        }
+    }
+    return !s.empty();
+}
+
+bool isValidSignature(const std::string& signature) {
+    // Expresión regular para permitir letras, números y los caracteres =, +, /
+    std::regex pattern("[A-Za-z0-9=+/.,_!@\\$%^&(){}\\[\\]\":;`~]*[^-'#*\\\\/]*");
+
+    // Comprueba si la firma coincide con el patrón
+    return std::regex_match(signature, pattern);
+}
+
 string checkQuery(string query) {
     // Separar los datos por comas
     std::vector<std::string> params = split(query, ',');
+    // Lista de usuarios permitidos
+    std::vector<std::string> allowedUsers = {
+        "maria.andres", "gerardo.camposbadilla", "jeremy.espinozamadrigal",
+        "richard.garita", "genesis.herreraknyght", "esteban.leonrodriguez", "randall.lopezvarela",
+        "andrey.menaespinoza", "brandon.moraumana", "valery.murcia", "jason.murillo",
+        "cristian.ortegahurtado", "carlos.ramirezmasis", "yordi.robles", "sebastian.rodrigueztencio",
+        "carlos.sanchezblanco", "david.sanchezlopez", "dylan.tenorio", "eithel.vega",
+        "ricardo.villalon", "andre.villegas", "emilia.viquez"
+    };
 
     // Determinar el tipo de transacción
     char transactionType = params[0][0];
@@ -82,6 +113,41 @@ string checkQuery(string query) {
                 std::string user1 = params[3];
                 std::string user2 = params[4];
                 std::string firma = params[5];
+
+                // Validar que amount sea un número
+                if (!isNumber(amount)) {
+                    std::cerr << "<html><body><h1>Error: Amount must be a number</h1></body></html>";
+                    return ""; // Regresa una cadena vacía para indicar error
+                }
+
+                // Validar que currency sea "C" o "E"
+                if (currency != "C" && currency != "E") {
+                    std::cerr << "<html><body><h1>Error: Currency must be 'C' or 'E'</h1></body></html>";
+                    return ""; // Regresa una cadena vacía para indicar error
+                }
+
+                // Validar que user1 y user2 sean diferentes
+                if (user1 == user2) {
+                    std::cerr << "<html><body><h1>Error: User1 cannot be the same as User2</h1></body></html>";
+                    return ""; // Regresa una cadena vacía para indicar error
+                }
+
+                // Validar que user1 y user2 estén en la lista de usuarios permitidos
+                if (std::find(allowedUsers.begin(), allowedUsers.end(), user1) == allowedUsers.end() ||
+                    std::find(allowedUsers.begin(), allowedUsers.end(), user2) == allowedUsers.end()) {
+                    std::cerr << "<html><body><h1>Error: User1 and User2 must be one of the allowed users</h1></body></html>";
+                    return ""; // Regresa una cadena vacía para indicar error
+                }
+
+                if (!isValidSignature(firma)) {
+                    std::cerr << "<html><body><h1>Error: Invalid characters in the signature</h1></body></html>";
+                    return ""; // Retorna una cadena vacía para indicar error
+                }
+
+                if (firma.size() >= 345) {
+                    std::cerr << "<html><body><h1>Error: Signature must not exceed 345 characters</h1></body></html>";
+                    return ""; // Devuelve una cadena vacía para indicar un error
+                }
 
                 //Deposito a la cuenta
                 resultQuery = "UPDATE CUENTA SET Monto = Monto + " + amount + " WHERE Nickname = '" + user2 + "' AND Moneda = '" + currency + "';_";  //Importante el espacio
@@ -113,6 +179,11 @@ string checkQuery(string query) {
             if (params.size() == 2) {
                 std::string user = params[1];
 
+                if (std::find(allowedUsers.begin(), allowedUsers.end(), user) == allowedUsers.end()) {
+                    std::cerr << "<html><body><h1>Error: User1 and User2 must be one of the allowed users</h1></body></html>";
+                    return ""; // Regresa una cadena vacía para indicar error
+                }
+
                 // Construir la resultQuery la resultQuery para ver transacciones del usuario
                 resultQuery = "SELECT * FROM TRANSACCION WHERE CuentaOrigen = '" + user 
                   + "' OR CuentaDestino = '" + user 
@@ -128,6 +199,17 @@ string checkQuery(string query) {
             if (params.size() == 3) {
                 std::string user = params[1];
                 std::string currency = params[2];
+
+                if (std::find(allowedUsers.begin(), allowedUsers.end(), user) == allowedUsers.end()) {
+                    std::cerr << "<html><body><h1>Error: User1 and User2 must be one of the allowed users</h1></body></html>";
+                    return ""; // Regresa una cadena vacía para indicar error
+                }
+
+                // Validar que currency sea "C" o "E"
+                if (currency != "C" && currency != "E") {
+                    std::cerr << "<html><body><h1>Error: Currency must be 'C' or 'E'</h1></body></html>";
+                    return ""; // Regresa una cadena vacía para indicar error
+                }                
 
                 // Obtiene balance y de paso los otros datos para validar
                 resultQuery = "SELECT * FROM CUENTA WHERE Nickname = '" + user + "' AND Moneda = '" + currency + "';";
@@ -173,6 +255,12 @@ void submitQuery(const string& query, const char* HOST, const char* USERNAME, co
         // Split query by semicolon
         std::vector<std::string> queries = split(consulta, '_');
 
+        if (consulta == "") {
+            mysql_close(sqlConnection);
+
+            cout << getCgiReply("Error, check logs for more details (if u can ;D)");
+            return;
+        }
         // Execute each query
         for (const auto& singleQuery : queries) {
             // Execute query
@@ -281,6 +369,12 @@ int main()
         query = "";
     }
     
+    // Verificar que el primer elemento del input sea 'd', 'b' o 't'
+    if (query.empty() || (query[0] != 'd' && query[0] != 'b' && query[0] != 't')) {
+        cerr << "Error: First element of input must be 'd', 'b', or 't'." << endl;
+        return 1;
+    }
+
     submitQuery(query, HOST, USERNAME, PASSWORD, SCHEMA);
 
     return 0;
