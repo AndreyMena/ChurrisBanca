@@ -14,8 +14,6 @@ const Profile = () => {
   const { auth } = useAuth();
   const { Nombre, Apellidos, Email, Celular } = account;
 
-  const [userName, setUserName] = useState("");
-  const [userLastName, setUserLastName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [userPhoneNumber, setUserPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
@@ -29,13 +27,7 @@ const Profile = () => {
       <div id="big-profile-picture">
         <AccountCircleIcon id="img" />
       </div>
-      <Typography
-        id="standard-read-only-input"
-        InputProps={{
-          readOnly: true,
-        }}
-        variant="standard"
-      >
+      <Typography id="standard-read-only-input" variant="standard">
         {Nombre + " " + Apellidos}
       </Typography>
 

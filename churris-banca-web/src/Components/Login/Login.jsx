@@ -1,8 +1,10 @@
 import React from "react";
-//import './Login.css'
 import { useRef, useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { Button } from "@mui/material";
 import { useAuthStore } from "../../hooks/useAuthStore";
+import "./Login.css";
+import "../../App.css";
 
 const Login = () => {
   const { startLogin, msg } = useAuthStore();
@@ -13,6 +15,7 @@ const Login = () => {
 
   const userRef = useRef();
   const errRef = useRef();
+  const buttonRef = useRef();
 
   const [user, setUser] = useState("");
   const [pwd, setPwd] = useState("");
@@ -45,19 +48,12 @@ const Login = () => {
   };
 
   return (
-    <>
-      <section>
-        <p
-          ref={errRef}
-          className={errMsg ? "errmsg" : "offscreen"}
-          aria-live="assertive"
-        >
-          {errMsg}
-        </p>
+    <section id="container-login">
+      <div id="card">
         <h1>Sign in</h1>
         <form onSubmit={handleSumbit}>
-          <label htmlFor="username">Username:</label>
           <input
+            className="input"
             type="text"
             id="username"
             ref={userRef}
@@ -65,20 +61,34 @@ const Login = () => {
             onChange={(e) => setUser(e.target.value)}
             value={user}
             required
+            placeholder="Email"
           />
-
-          <label htmlFor="password">Password:</label>
+        
           <input
+            className="input"
+            input="input"
             type="password"
             id="password"
             onChange={(e) => setPwd(e.target.value)}
             value={pwd}
             required
+            placeholder="Password"
           />
-          <button>Sign in</button>
+          
+          <p
+            id="error-msg"
+            ref={errRef}
+            className={errMsg ? "errmsg" : "offscreen"}
+            aria-live="assertive"
+          >
+            {errMsg}
+          </p>
+
+          <button ref={buttonRef} style={{display: "none"}}/>
+          <Button variant="contained" id="button" onClick={() => buttonRef.current.click()}>Sign in</Button>
         </form>
-      </section>
-    </>
+      </div>
+    </section>
   );
 };
 

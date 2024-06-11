@@ -10,7 +10,11 @@ import useAuth from "../../../hooks/useAuth";
 import useSocialStore from "../../../hooks/useSocialStore";
 import "./SendMoneyPopup.css";
 
-const ContactsDropdown = ({ handleNextStage, selectedContact, setSelectedContact }) => {
+const ContactsDropdown = ({
+  handleNextStage,
+  selectedContact,
+  setSelectedContact,
+}) => {
   const { startLoadingAccounts, accounts, setAccounts } = useSocialStore();
   const { auth } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -28,8 +32,8 @@ const ContactsDropdown = ({ handleNextStage, selectedContact, setSelectedContact
     setAnchorEl(null);
   };
 
-  const handleSelectContact = (name, surnames) => {
-    setSelectedContact(name + " " + surnames);
+  const handleSelectContact = (Nickname) => {
+    setSelectedContact(Nickname);
     handleCloseDropdown();
   };
 
@@ -52,15 +56,14 @@ const ContactsDropdown = ({ handleNextStage, selectedContact, setSelectedContact
           {accounts.map((account) => (
             <MenuItem
               key={account.Nombre}
-              onClick={() =>
-                handleSelectContact(account.Nombre, account.Apellidos)
-              }
+              onClick={() => handleSelectContact(account.Nickname)}
             >
               {account.Nombre + " " + account.Apellidos}
             </MenuItem>
           ))}
         </Menu>
         <Button
+          variant="contained"
           id="btn-contacts-dropdown"
           onClick={() => handleNextStage(selectedContact)}
           disabled={selectedContact === "Contacts"}

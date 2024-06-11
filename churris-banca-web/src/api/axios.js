@@ -10,3 +10,9 @@ const BASE_URL = "https://localhost:8443";//"https://172.24.131.193:8443"; //Ver
 export default axios.create({
   baseURL: BASE_URL,
 });
+
+export const axiosPrivate = axios.create({
+  baseURL: BASE_URL,
+  headers: { 'Content-Type': 'application/json' },
+  withCredentials: true
+});

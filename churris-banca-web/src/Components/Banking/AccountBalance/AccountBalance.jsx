@@ -11,8 +11,8 @@ const AccountBalance = () => {
   const { startLoadingBankAccount, bankAccount } = useBankStore();
   const { auth } = useAuth();
   const [openPopup, setOpenPopup] = useState(false);
-
-  const { id: bankAccountId, currency, accountStatus } = bankAccount;
+  
+  const { userName, currency, accountStatus } = bankAccount;
 
   const handleOpenPopup = () => {
     setOpenPopup(true);
@@ -29,13 +29,13 @@ const AccountBalance = () => {
   return (
     <div id="account-container">
       <div className="info">
-        <Typography>Account ID: {bankAccountId}</Typography>
+        <Typography>Account name: {userName}</Typography>
       </div>
       <div className="info">
-        <Button id="button-send-money" onClick={handleOpenPopup}>
+        <Button variant="contained" onClick={handleOpenPopup}>
           <div id="info-button">
             Send money
-            <div id="icon">
+            <div id="icon-money">
               {currency}
               <ArrowForwardIcon />
             </div>

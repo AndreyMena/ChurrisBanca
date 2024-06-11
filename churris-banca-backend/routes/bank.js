@@ -24,6 +24,6 @@ const upload = multer({ storage: storage });
 
 router.get("/account/:bankAccountUsername", getBankAccountByUsername);
 router.get("/transactions/:userName", getTransactionsByUserName);
-router.post("/transaction/:userName", upload.single("key"), puTransaction);
+router.post("/transaction", upload.single("key"), puTransaction);
 
 module.exports = router;

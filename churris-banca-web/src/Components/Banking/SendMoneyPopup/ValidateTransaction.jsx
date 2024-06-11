@@ -1,13 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { Button, IconButton, Typography } from "@mui/material";
+import { UploadOutlined } from "@mui/icons-material";
 import useAuth from "../../../hooks/useAuth";
 import { useBankStore } from "../../../hooks/useBankStore";
 import "./SendMoneyPopup.css";
-import { Button } from "@mui/material";
+import "../../../App.css";
 
-const ValidateTransaction = ({selectedContact, amount, handlePrevStage}) => {
-  const { startCreatingTransaction } = useBankStore();
+const ValidateTransaction = ({ selectedContact, amount, handlePrevStage }) => {
+  const { startCreatingTransaction, resMsg } = useBankStore();
   const { auth } = useAuth();
   const [keyFile, setKeyFile] = useState(null);
+  const [showResMsg, setShowResMsg] = useState(false);
+  const fileInputRef = useRef();
 
   const handleKeyChange = (event) => {
     setKeyFile(event.target.files[0]);
@@ -21,24 +25,53 @@ const ValidateTransaction = ({selectedContact, amount, handlePrevStage}) => {
       formData.append("key", keyFile);
       formData.append("nicknameCuentaDestino", selectedContact);
       formData.append("amount", amount);
+      formData.append("userName", auth.user);
 
-      return startCreatingTransaction(formData, auth.user);
+      startCreatingTransaction(formData);
+      setShowResMsg(true);
     }
-
-    //alert("Please upload key file."); // TODO Cambiar
   };
+
+  useEffect(() => {
+    if (showResMsg) {
+      setTimeout(() => {
+        setShowResMsg(false); // Ocultar mensaje después de 2 segundos
+      }, 2000);
+    }
+  }, [showResMsg]);
 
   return (
     <form id="form-key" onSubmit={handleSubmit}>
-      <label>
+      <label id="key-uploader">
         Key:
-        <input id="input-key" type="file" name="key" accept=".key" onChange={handleKeyChange} />
+        <input
+          id="input-key"
+          type="file"
+          name="key"
+          accept=".key"
+          ref={fileInputRef}
+          onChange={handleKeyChange}
+          style={{ display: "none" }}
+        />
+        <IconButton onClick={() => fileInputRef.current.click()}>
+          <UploadOutlined />
+        </IconButton>
+        <Typography>{keyFile ? keyFile.name : "No file selected"}</Typography>
       </label>
+      {showResMsg && resMsg && (
+        <Typography
+          id={resMsg === "Transaction succesful" ? "success-msg" : "error-msg"}
+        >
+          {resMsg}
+        </Typography>
+      )}
       <div id="buttons-container">
-        <Button className="btn" onClick={handlePrevStage}>
-              Prev
+        <Button variant="contained" className="btn" onClick={handlePrevStage}>
+          Prev
         </Button>
-        <Button className="btn" type="submit">Submit Transaction</Button>
+        <Button variant="contained" className="btn" type="submit">
+          Submit Transaction
+        </Button>
       </div>
     </form>
   );

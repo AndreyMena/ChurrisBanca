@@ -8,7 +8,7 @@ const handleLogout = async (req, res) => {
     // Busca el refreshToken en la base?
     const sqlQuery = 'SELECT Email FROM USUARIO WHERE RefreshToken=?';
     const foundUser = await pool.query(sqlQuery, refreshToken);
-    if (!foundUser) {
+    if (!foundUser || foundUser.length === 0) {
         res.clearCookie('jwt', { httpOnly: true, sameSite: 'None', secure: true });
         return res.sendStatus(204);
     }
