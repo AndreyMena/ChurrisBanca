@@ -10,12 +10,10 @@ import {
 import useAuth from "../../../hooks/useAuth";
 import useSocialStore from "../../../hooks/useSocialStore";
 
-
 const SearchUserPopup = ({ openPopup, handleClosePopup, }) => {
   const { auth } = useAuth();
   const [ anchorEl, setAnchorEl ] = useState(null);
   const [ selectedUser, setSelectedUser ] = useState("Select user");
-  const [ selectedUserNickname, setSelectedUserNickname ] = useState("Select user nickname");
   const { startLoadingAccounts, accounts, setAccounts, friendship, checkFriendship, sendNewFollow, sendRemoveFollow, viewOnlyUserProfile, getViewOnlyUserProfile } = useSocialStore();
   const [ isFollowButtonVisible, setIsFollowButtonVisible ] = useState(false);
   const [ isSeeProfileButtonVisible, setIsSeeProfileButtonVisible ] = useState(false);
@@ -24,10 +22,8 @@ const SearchUserPopup = ({ openPopup, handleClosePopup, }) => {
   const { firstFriendship, secondFriendship } = friendship;
   const { Nombre, Apellidos, Email, Celular, Imagen } = viewOnlyUserProfile;
 
-  const payload = {
-    followed: selectedUserNickname,
-    follower: auth.user,
-  };
+  const [payload, setPayload] = useState(null);
+  const [readyToUpdateUI, setReadyToUpdateUI] = useState(false);
 
   const handleOpenDropdown = (event) => {
     setAnchorEl(event.currentTarget);
@@ -42,27 +38,36 @@ const SearchUserPopup = ({ openPopup, handleClosePopup, }) => {
     setAnchorEl(null);
   };
 
-  const handleSelectUser = (name, surnames, nickname) => {
+  const handleSelectUser = async (name, surnames, nickname) => {
     setSelectedUser(name + " " + surnames);
-    setSelectedUserNickname(nickname);
-    checkFriendship(payload);
-
-    if(firstFriendship===1 && secondFriendship===1) {
-      setIsFollowButtonVisible(false);
-      setIsUnfollowButtonVisible(true);
-      setIsSeeProfileButtonVisible(true);
-    } else if(firstFriendship===1 && secondFriendship===0) {
-      setIsFollowButtonVisible(false);
-      setIsUnfollowButtonVisible(true);
-      setIsSeeProfileButtonVisible(false);
-    } else {
-      setIsFollowButtonVisible(true);
-      setIsUnfollowButtonVisible(false);
-      setIsSeeProfileButtonVisible(false);
-    }
-
+    const newPayload = {
+      followed: nickname,
+      follower: auth.user,
+    };
+    setPayload(newPayload);
+    await checkFriendship(newPayload);
+    setReadyToUpdateUI(true);
     handleCloseDropdown();
   };
+
+  useEffect(() => {
+    if (readyToUpdateUI) {
+      if (firstFriendship === 1 && secondFriendship === 1) {
+        setIsFollowButtonVisible(false);
+        setIsUnfollowButtonVisible(true);
+        setIsSeeProfileButtonVisible(true);
+      } else if (firstFriendship === 1 && secondFriendship === 0) {
+        setIsFollowButtonVisible(false);
+        setIsUnfollowButtonVisible(true);
+        setIsSeeProfileButtonVisible(false);
+      } else {
+        setIsFollowButtonVisible(true);
+        setIsUnfollowButtonVisible(false);
+        setIsSeeProfileButtonVisible(false);
+      }
+      setReadyToUpdateUI(false);
+    }
+  }, [firstFriendship, secondFriendship, readyToUpdateUI]);
 
   const handleFollow = () => {
     sendNewFollow(payload);
@@ -73,7 +78,7 @@ const SearchUserPopup = ({ openPopup, handleClosePopup, }) => {
   }
 
   const handleSeeProfile = () => {
-    getViewOnlyUserProfile(selectedUserNickname);
+    getViewOnlyUserProfile(payload.followed);
     console.log(viewOnlyUserProfile);
   }
 
@@ -104,14 +109,14 @@ const SearchUserPopup = ({ openPopup, handleClosePopup, }) => {
         >
           {accounts.map((account) => (
             <MenuItem
-            key={account.Nombre}
-            onClick={() =>
-              handleSelectUser(account.Nombre, account.Apellidos, account.Nickname)
-            }
-          >
-            {account.Nombre + " " + account.Apellidos}
-          </MenuItem>
-        ))}
+              key={account.Nombre}
+              onClick={() =>
+                handleSelectUser(account.Nombre, account.Apellidos, account.Nickname)
+              }
+            >
+              {account.Nombre + " " + account.Apellidos}
+            </MenuItem>
+          ))}
         </Menu>
       </DialogContent>
     </Dialog>
