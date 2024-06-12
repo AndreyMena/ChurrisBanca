@@ -14,12 +14,15 @@ var fs = require("fs");
 const https = require("https");
 const mariadb = require("mariadb");
 const { Certificate } = require("crypto");
-//const connectDB = require('./config/dbConn');  //Aqui ira la conexion con mariadb
 
-// Se llamara al metodo de dbConn a MariaDB
-//connectDB();
-
-/* MIDDLEWARE app.use() */
+// Middleware para verificar la cabecera Origin
+app.use((req, res, next) => {
+  const origin = req.headers['origin'];
+  if (origin !== `${process.env.REACT_APP_ORIGIN}`) {
+    return res.status(403).send('Access denied');
+  }
+  next();
+});
 
 // Verifica credentials en el header de cada entrada
 app.use(credentials);
