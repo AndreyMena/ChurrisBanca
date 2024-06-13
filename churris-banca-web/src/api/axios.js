@@ -2,20 +2,15 @@ import axios from 'axios';
 
 // Usar variables de entorno para la configuración
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const SECRETCONNECTION = process.env.SECRET_CONNECTION_REACT;
 
-const axiosInstance = axios.create({
-  baseURL: BASE_URL,
-  headers: { 'X-Custom-Header': SECRETCONNECTION }
+export default axios.create({
+  baseURL: BASE_URL
 });
-
-export default axiosInstance;
 
 export const axiosPrivate = axios.create({
   baseURL: BASE_URL,
   headers: {
-    'Content-Type': 'application/json',
-    'X-Custom-Header': SECRETCONNECTION
+    'Content-Type': 'application/json'
   },
   withCredentials: true
 });
