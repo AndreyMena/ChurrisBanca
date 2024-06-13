@@ -2,7 +2,6 @@ import axios from 'axios';
 
 // Usar variables de entorno para la configuración
 const BASE_URL = process.env.REACT_APP_BASE_URL;
-const ORIGIN = process.env.REACT_APP_ORIGIN;
 const SECRETCONNECTION = process.env.SECRET_CONNECTION_REACT;
 
 const axiosInstance = axios.create({
