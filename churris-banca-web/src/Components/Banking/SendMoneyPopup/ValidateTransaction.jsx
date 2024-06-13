@@ -33,7 +33,6 @@ const ValidateTransaction = ({ selectedContact, amount, handlePrevStage, handleN
   };
 
   useEffect(() => {
-    console.log(resMsg);
     if (resMsg === "Transaction successful") {
       handleNewTransaction(amount);
     }
@@ -81,7 +80,7 @@ const ValidateTransaction = ({ selectedContact, amount, handlePrevStage, handleN
           variant="contained" 
           className="btn" 
           type="submit" 
-          disabled={!keyFile} 
+          disabled={!keyFile || showResMsg} 
         >
             Submit Transaction
         </Button>
