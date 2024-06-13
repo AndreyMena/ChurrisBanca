@@ -50,7 +50,7 @@ const Login = () => {
   return (
     <section id="container-login">
       <div id="card">
-        <h1>Sign in</h1>
+        <h1>Welcome to Churris Banca</h1>
         <form onSubmit={handleSumbit}>
           <input
             className="input"
