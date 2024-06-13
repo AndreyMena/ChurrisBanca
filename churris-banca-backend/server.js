@@ -15,15 +15,6 @@ const https = require("https");
 const mariadb = require("mariadb");
 const { Certificate } = require("crypto");
 
-// Middleware para verificar la cabecera personalizada
-app.use((req, res, next) => {
-  const customHeader = req.headers['x-custom-header'];
-  if (customHeader !== `${process.env.SECRET_CONNECTION_REACT}`) {
-    return res.status(403).send('Access denied');
-  }
-  next();
-});
-
 // Verifica credentials en el header de cada entrada
 app.use(credentials);
 
