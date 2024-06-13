@@ -1,13 +1,15 @@
 const allowedOrigins = [
-  'http://localhost:443',  //App react
-  'http://localhost:8443',  //Mismo node, Quitar?
-  'http://localhost:80',
-  'http://localhost:3000',
-  'http://localhost',  
-  'http://172.24.131.193:443',
-  'http://172.24.131.193:8443', 
-  'http://172.24.131.193:80',
-  'http://172.24.131.193' 
+  'https://localhost:443',  //App react
+  'https://localhost:8443',  //Mismo node, Quitar?
+  'https://localhost:80',
+  'https://localhost:3000',
+  'https://localhost',
+  'https://172.24.131.193:443',
+  'https://172.24.131.193:8443',
+  'https://172.24.131.193:80',
+  'https://172.24.131.193',
+  'https://api.cloudinary.com/v1_1/churris-banca/upload',
+  'https://www.churrisbancag3.ucr.ac.cr'
 ];
 
 module.exports = allowedOrigins;

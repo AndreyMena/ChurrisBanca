@@ -15,10 +15,10 @@ const https = require("https");
 const mariadb = require("mariadb");
 const { Certificate } = require("crypto");
 
-// Middleware para verificar la cabecera Origin
+// Middleware para verificar la cabecera personalizada
 app.use((req, res, next) => {
-  const origin = req.headers['origin'];
-  if (origin !== `${process.env.REACT_APP_ORIGIN}`) {
+  const customHeader = req.headers['x-custom-header'];
+  if (customHeader !== `${process.env.SECRET_CONNECTION_REACT}`) {
     return res.status(403).send('Access denied');
   }
   next();
@@ -27,7 +27,7 @@ app.use((req, res, next) => {
 // Verifica credentials en el header de cada entrada
 app.use(credentials);
 
-// Cross Origin Resource Sharing, resuelve errores en el front de COR
+// Cross Origin Resource Sharing, resuelve errores en el front de CORS allowed origins
 app.use(cors(corsOptions));
 
 // Express formateo de las URLs
@@ -47,11 +47,10 @@ app.use(cookieParser());
 /* RUTAS */
 app.use("/", require("./routes/root"));
 app.use("/auth", require("./routes/auth"));
-//app.use('/register', require('./routes/register'));  //TODO, mejor implementarlo para agregar y hashear pass de nuevos users
 app.use("/refresh", require("./routes/refresh"));
 app.use("/logout", require("./routes/logout"));
 
-//Impide hacer post sin sin estar logeado a las rutas que se encuentren abajo
+//Impide hacer post sin cookie a las rutas que se encuentren abajo
 app.use(verifyJWT);
 app.use("/social", require("./routes/social"));
 app.use("/bank", require("./routes/bank"));
@@ -70,9 +69,9 @@ app.all("*", (req, res) => {
 
 // Escuchar peticiones
 https.createServer({
-  cert: fs.readFileSync("churris-banca.crt"),
-  key: fs.readFileSync("churris-banca.key")//,
-  //ca: fs.readFileSync("rootCACert.crt"),  // Imprecindible al montar en apache
+  cert: fs.readFileSync(`${process.env.CHURRISBANCACRT}`),
+  key: fs.readFileSync(`${process.env.CHURRISBANCAKEY}`),//,
+  ca: fs.readFileSync(`${process.env.CA}`),  // Imprecindible al montar en apache
 }, app).listen(process.env.PORT, () =>
   console.log(`Server running on port ${process.env.PORT}`)
 );
