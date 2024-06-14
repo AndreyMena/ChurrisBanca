@@ -18,6 +18,13 @@ const TransactionList = () => {
 
   useEffect(() => {
     startLoadingTransactions(auth.user);
+
+    const intervalId = setInterval(() => {
+      startLoadingTransactions(auth.user);
+      console.log("new transactions");
+    }, 15000);
+    
+    return () => clearInterval(intervalId);
   }, []);
   
   const handlePageChange = (pageNumber) => {
