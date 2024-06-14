@@ -15,6 +15,9 @@ const https = require("https");
 const mariadb = require("mariadb");
 const { Certificate } = require("crypto");
 
+const helmet = require('helmet');
+app.use(helmet());
+
 // Verifica credentials en el header de cada entrada
 app.use(credentials);
 
