@@ -87,14 +87,14 @@ const SearchUserPopup = ({ openPopup, handleClosePopup }) => {
     await sendNewFollow(payload);
     await checkFriendship(payload);
     updateButtonVisibility();
-    await refresh();
+    window.location.reload();
   };
 
   const handleUnfollow = async () => {
     await sendRemoveFollow(payload);
     await checkFriendship(payload);
     updateButtonVisibility();
-    await refresh();
+    window.location.reload();
   };
 
   const handleSeeProfile = () => {

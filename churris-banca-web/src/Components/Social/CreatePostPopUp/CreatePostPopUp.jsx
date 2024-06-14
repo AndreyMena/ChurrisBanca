@@ -43,7 +43,7 @@ const CreatePostPopUp = ({ openPopup, handleClosePopup }) => {
     
     await sendNewPost(payload, formData);
     await handleClosePopup();
-    await refresh();
+    window.location.reload();
   }
 
   return (
