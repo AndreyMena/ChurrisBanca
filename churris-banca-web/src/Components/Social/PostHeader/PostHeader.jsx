@@ -31,7 +31,7 @@ const PostHeader = ({
     };
 
     await startDeletingPost(payload);
-    window.location.reload();
+    //window.location.reload();
   };
 
   return (
