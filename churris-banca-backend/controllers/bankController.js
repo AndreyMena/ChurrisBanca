@@ -285,7 +285,7 @@ const puTransaction = async (req, res = response) => {
         { amount, userName, destinationAccountNickname },
         "transactionLog.txt"
       );
-      res.status(200).json({ message: "Transaction succesful" });
+      res.status(200).json({ message: "Transaction successful" });
     } else {
       res.status(400).json({ message: "Transaction failed", details: pData });
     }
