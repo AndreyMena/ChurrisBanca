@@ -10,6 +10,7 @@ import InsertPhotoOutlinedIcon from '@mui/icons-material/InsertPhotoOutlined';
 import useAuth from "../../../hooks/useAuth";
 import useSocialStore from "../../../hooks/useSocialStore";
 import "./CreatePostPopUp.css";
+import useRefreshToken from "../../../hooks/useRefreshToken";
 
 const CreatePostPopUp = ({ openPopup, handleClosePopup }) => {
   const { auth } = useAuth();
@@ -17,6 +18,7 @@ const CreatePostPopUp = ({ openPopup, handleClosePopup }) => {
   const [image, setImage] = useState(null);
   const fileInputRef = useRef();
   const { sendNewPost } = useSocialStore();
+  const refresh = useRefreshToken();
 
   const handleTextChange = (event) => {
     setText(event.target.value);
@@ -26,7 +28,7 @@ const CreatePostPopUp = ({ openPopup, handleClosePopup }) => {
     setImage(event.target.files[0]);
   }
 
-  const handleSendPost = () => {
+  const handleSendPost = async () => {
     const payload = {
       userName: auth.user,
       content: text,
@@ -39,8 +41,9 @@ const CreatePostPopUp = ({ openPopup, handleClosePopup }) => {
       formData.append("upload_preset", process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET);
     }
     
-    sendNewPost(payload, formData);
-    handleClosePopup();
+    await sendNewPost(payload, formData);
+    await handleClosePopup();
+    await refresh();
   }
 
   return (

@@ -10,11 +10,24 @@ import {
 import useAuth from "../../../hooks/useAuth";
 import useSocialStore from "../../../hooks/useSocialStore";
 import ViewOnlyUserProfilePopup from "./ViewOnlyUserProfilePopup/ViewOnlyUserProfilePopup";
+import useRefreshToken from "../../../hooks/useRefreshToken";
+
 const SearchUserPopup = ({ openPopup, handleClosePopup }) => {
   const { auth } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedUser, setSelectedUser] = useState("Select user");
-  const { startLoadingAccounts, accounts, setAccounts, friendship, checkFriendship, sendNewFollow, sendRemoveFollow, viewOnlyUserProfile, getViewOnlyUserProfile } = useSocialStore();
+  const refresh = useRefreshToken();
+  const {
+    startLoadingAccounts,
+    accounts,
+    setAccounts,
+    friendship,
+    checkFriendship,
+    sendNewFollow,
+    sendRemoveFollow,
+    viewOnlyUserProfile,
+    getViewOnlyUserProfile,
+  } = useSocialStore();
   const [isFollowButtonVisible, setIsFollowButtonVisible] = useState(false);
   const [isSeeProfileButtonVisible, setIsSeeProfileButtonVisible] = useState(false);
   const [isUnfollowButtonVisible, setIsUnfollowButtonVisible] = useState(false);
@@ -74,12 +87,14 @@ const SearchUserPopup = ({ openPopup, handleClosePopup }) => {
     await sendNewFollow(payload);
     await checkFriendship(payload);
     updateButtonVisibility();
+    await refresh();
   };
 
   const handleUnfollow = async () => {
     await sendRemoveFollow(payload);
     await checkFriendship(payload);
     updateButtonVisibility();
+    await refresh();
   };
 
   const handleSeeProfile = () => {
@@ -94,7 +109,7 @@ const SearchUserPopup = ({ openPopup, handleClosePopup }) => {
   useEffect(() => {
     startLoadingAccounts();
   }, []);
-  
+
   return (
     <Dialog open={openPopup} onClose={handleClosePopup}>
       <DialogTitle align="center">Who are you looking for?</DialogTitle>

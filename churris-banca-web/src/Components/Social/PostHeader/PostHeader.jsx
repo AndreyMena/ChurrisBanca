@@ -7,6 +7,7 @@ import useAuth from "../../../hooks/useAuth";
 import useSocialStore from "../../../hooks/useSocialStore";
 import "./PostHeader.css";
 import "../../../App.css"
+import useRefreshToken from "../../../hooks/useRefreshToken";
 
 const PostHeader = ({
   postUserImage,
@@ -19,8 +20,8 @@ const PostHeader = ({
 }) => {
   const { auth } = useAuth();
   const { startDeletingPost } = useSocialStore();
-
-  const handleDeleteClick = () => {
+  const refresh = useRefreshToken();
+  const handleDeleteClick = async () => {
     const payload = {
       id: postId,
       nickname: postUser,
@@ -29,7 +30,8 @@ const PostHeader = ({
       dateTime: postDateTime,
     };
 
-    startDeletingPost(payload);
+    await startDeletingPost(payload);
+    await refresh();
   };
 
   return (
